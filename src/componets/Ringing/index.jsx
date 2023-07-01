@@ -6,9 +6,8 @@ export function Ringing() {
   return (
     <View>
       <Text style={styles.name}>
-        Toque 4
+        Toque 1
       </Text>
     </View>
-    
   )
-} 
+}
