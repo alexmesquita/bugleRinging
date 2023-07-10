@@ -39,6 +39,7 @@ export function AudioPlayer() {
   useEffect(() => {
     return sound
       ? () => {
+          console.log('UNLOAD SOUND....')
           sound.unloadAsync()
         }
       : undefined
@@ -64,6 +65,44 @@ export function AudioPlayer() {
     setPlay(true)
   }
 
+  async function playSound() {
+    if (sound && playing) {
+      await sound.pauseAsync()
+      setPlay(false)
+      return
+    }
+
+    if (sound && !playing) {
+      await sound.playAsync()
+      setPlay(true)
+      return
+    }
+
+    await loadAudio({ uri: assets[0].uri })
+  }
+
+  const setTrackPosition = async (positionMillis: number) => {
+    if (sound) {
+      await sound.setPositionAsync(positionMillis)
+    }
+  }
+
+  const onSlidingComplete = (sliderValue: number) => {
+    if (isDraggingSlider) {
+      setIsDraggingSlider(false)
+    }
+    setTrackPosition(sliderValue)
+  }
+
+  const onSliderChange = () => {
+    if (!isDraggingSlider) {
+      setIsDraggingSlider(true)
+    }
+  }
+
+  // useEffect(() => {
+  //   loadAudio({ uri: assets[0].uri })
+  // })
   async function handleAudioPlay() {
     const source: AVPlaybackSource = { uri: assets[0].uri }
 
@@ -77,13 +116,14 @@ export function AudioPlayer() {
     <View>
       <Pressable style={styles.button}>
         <MaterialIcons
-          name="play-arrow"
+          name={playing ? 'pause' : 'play-arrow'}
           size={44}
-          color="#F2F"
-          onPress={handleAudioPlay}
+          color={playing ? '#F2F' : '#1ff'}
+          onPress={playSound}
         />
       </Pressable>
-      <Text>Tempo: </Text>
+
+      <Text>Tempo: {sliderPositionMillis}</Text>
     </View>
   )
 }
