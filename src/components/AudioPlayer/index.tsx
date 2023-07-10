@@ -123,7 +123,10 @@ export function AudioPlayer() {
         />
       </Pressable>
 
-      <Text>Tempo: {sliderPositionMillis}</Text>
+      {loading && <Text>Carregando...</Text>}
+      <Text>
+        Tempo: {sliderPositionMillis} - {durationMillis}{' '}
+      </Text>
     </View>
   )
 }
