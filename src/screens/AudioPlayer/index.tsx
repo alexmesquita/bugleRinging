@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react'
+import { FlatList, Image, Text, View } from 'react-native'
+import { useAssets } from 'expo-asset'
 
-import { View, Pressable, Text } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons'
 import { Audio } from 'expo-av'
-
 import type { AVPlaybackSource, AVPlaybackStatus } from 'expo-av/build/AV'
 import type { Sound } from 'expo-av/build/Audio/Sound'
 
+import { AudioInfo } from '../../components/AudioInfo'
+import { AudioControl } from '../../components/AudioControl'
+import { AudioSlider } from '../../components/AudioSlider'
+
 import { styles } from './styles'
-import { useAssets } from 'expo-asset'
-import { AudioSlider } from '../AudioSlider'
+
+import { playListData } from '../../constants'
 
 export function AudioPlayer() {
   const [sound, setSound] = useState<Sound>()
@@ -81,6 +84,9 @@ export function AudioPlayer() {
     await loadAudio({ uri })
   }
 
+  async function skipToNext() {}
+  async function skipToPrevious() {}
+
   const setTrackPosition = async (positionMillis: number) => {
     if (sound) {
       await sound.setPositionAsync(positionMillis)
@@ -100,22 +106,45 @@ export function AudioPlayer() {
     }
   }
 
+  const renderArtWork = () => {
+    const artwork =
+      'https://c.saavncdn.com/734/Champagne-Talk-Hindi-2022-20221008011951-500x500.jpg'
+    return (
+      <View style={styles.listArtWrapper}>
+        <View style={styles.albumContainer}>
+          {artwork && (
+            <Image
+              style={styles.albumArtImg}
+              source={{ uri: artwork?.toString() }}
+              alt="Album image"
+            />
+          )}
+        </View>
+      </View>
+    )
+  }
+
   return (
-    <View>
-      <Pressable style={styles.button}>
-        <MaterialIcons
-          name={playing ? 'pause' : 'play-arrow'}
-          size={44}
-          color={playing ? '#F2F' : '#1ff'}
-          onPress={playSound}
-        />
-      </Pressable>
+    <View style={styles.container}>
+      <FlatList
+        horizontal
+        data={playListData}
+        renderItem={renderArtWork}
+        keyExtractor={(song) => song.id.toString()}
+      />
 
       {loading && <Text>Carregando...</Text>}
 
+      <AudioInfo album="album info" artist="Jamile" title="Mil e uma noites" />
       <AudioSlider
         sliderPositionMillis={sliderPositionMillis}
         durationMillis={durationMillis}
+      />
+      <AudioControl
+        playSound={playSound}
+        playing={playing}
+        skipToNext={skipToNext}
+        skipToPrevious={skipToPrevious}
       />
     </View>
   )

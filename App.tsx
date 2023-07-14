@@ -2,8 +2,8 @@ import React from 'react'
 
 import { StyleSheet, View } from 'react-native'
 
-import { RingingList } from './src/screens/RingingList'
-import { AudioPlayer } from './src/components/AudioPlayer'
+// import { RingingList } from './src/screens/RingingList'
+import { AudioPlayer } from './src/screens/AudioPlayer'
 
 export default function App() {
   return (

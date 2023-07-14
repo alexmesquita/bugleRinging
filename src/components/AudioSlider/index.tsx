@@ -1,12 +1,24 @@
 import Slider from '@react-native-community/slider'
-import React from 'react'
+import React, { PropsWithChildren } from 'react'
 import { View, Text } from 'react-native'
 
 import { styles } from './styles'
 
-interface SliderProps {
+type SliderProps = PropsWithChildren<{
   sliderPositionMillis: number
   durationMillis: number
+}>
+
+function millisToMinutesAndSeconds(millis: number) {
+  const minutes = Math.floor(millis / 60000)
+  const seconds = Math.trunc((millis % 60000) / 1000)
+  return (
+    (minutes < 10 ? '0' : '') +
+    minutes +
+    ':' +
+    (seconds < 10 ? '0' : '') +
+    seconds
+  )
 }
 
 export function AudioSlider({
@@ -25,18 +37,10 @@ export function AudioSlider({
       />
       <View style={styles.timeContainer}>
         <Text style={styles.time}>
-          {new Date(sliderPositionMillis * 1000)
-            .toISOString()
-            .substring(15, 19)}
+          {millisToMinutesAndSeconds(sliderPositionMillis)}
         </Text>
         <Text style={styles.time}>
-          {new Date((durationMillis - sliderPositionMillis) * 1000)
-            .toISOString()
-            .substring(15, 19)}
-        </Text>
-
-        <Text>
-          Tempo: {sliderPositionMillis} - {durationMillis}{' '}
+          {millisToMinutesAndSeconds(durationMillis - sliderPositionMillis)}
         </Text>
       </View>
     </View>
