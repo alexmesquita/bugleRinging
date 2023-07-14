@@ -9,11 +9,9 @@ import type { Sound } from 'expo-av/build/Audio/Sound'
 
 import { styles } from './styles'
 import { useAssets } from 'expo-asset'
+import { AudioSlider } from '../AudioSlider'
 
 export function AudioPlayer() {
-  const [audioFileUri, setAudioFileUri] = useState<string | null>(
-    './assets/audio/two.mp3',
-  )
   const [sound, setSound] = useState<Sound>()
   const [playing, setPlay] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -78,7 +76,9 @@ export function AudioPlayer() {
       return
     }
 
-    await loadAudio({ uri: assets[0].uri })
+    const uri = assets ? assets[0].uri : ''
+
+    await loadAudio({ uri })
   }
 
   const setTrackPosition = async (positionMillis: number) => {
@@ -100,18 +100,6 @@ export function AudioPlayer() {
     }
   }
 
-  // useEffect(() => {
-  //   loadAudio({ uri: assets[0].uri })
-  // })
-  async function handleAudioPlay() {
-    const source: AVPlaybackSource = { uri: assets[0].uri }
-
-    const { sound } = await Audio.Sound.createAsync(source)
-    console.log('carregou')
-    await sound.setPositionAsync(0)
-    await sound.playAsync()
-  }
-
   return (
     <View>
       <Pressable style={styles.button}>
@@ -124,9 +112,11 @@ export function AudioPlayer() {
       </Pressable>
 
       {loading && <Text>Carregando...</Text>}
-      <Text>
-        Tempo: {sliderPositionMillis} - {durationMillis}{' '}
-      </Text>
+
+      <AudioSlider
+        sliderPositionMillis={sliderPositionMillis}
+        durationMillis={durationMillis}
+      />
     </View>
   )
 }
