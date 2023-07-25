@@ -3,9 +3,14 @@ export default {
     WHITE: '#FFFFFF',
     BLACK: '#000000',
 
-    ORANGE_700: '#E88A25',
-    ORANGE_500: '#F9E14B',
-    ORANGE_300: '#EFED89',
+    BACK_GROUND: '#001114',
+
+    ORANGE_700: '#E55807',
+    ORANGE_600: '#E57C23',
+    ORANGE_500: '#E8AA42',
+    ORANGE_300: '#F1C27B',
+    ORANGE_200: '#FFD89C',
+    ORANGE_100: '#FFFEC4',
 
     GREEN: '#7ABF66',
     RED: '#DB3026',

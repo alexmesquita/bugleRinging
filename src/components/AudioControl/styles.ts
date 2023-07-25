@@ -2,7 +2,7 @@ import styled from 'styled-components/native'
 import { MaterialIcons } from '@expo/vector-icons'
 
 export const Icon = styled(MaterialIcons)`
-  color: ${({ theme }) => theme.COLORS.GRAY_100};
+  color: ${({ theme }) => theme.COLORS.ORANGE_100};
 `
 
 export const Container = styled.View`

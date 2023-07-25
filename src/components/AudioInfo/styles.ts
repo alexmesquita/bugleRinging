@@ -11,7 +11,7 @@ export const Container = styled.View`
 export const Name = styled.Text`
   margin-bottom: 8px;
   text-align: center;
-  color: ${({ theme }) => theme.COLORS.ORANGE_700};
+  color: ${({ theme }) => theme.COLORS.ORANGE_600};
   font-size: 24px;
   font-weight: 800;
 `

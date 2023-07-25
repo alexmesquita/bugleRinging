@@ -3,7 +3,7 @@ import Slider from '@react-native-community/slider'
 
 export const SliderContainer = styled(Slider).attrs(({ theme }) => ({
   thumbTintColor: theme.COLORS.ORANGE_700,
-  maximumTrackTintColor: theme.COLORS.ORANGE_500,
+  maximumTrackTintColor: theme.COLORS.ORANGE_300,
   minimumTrackTintColor: theme.COLORS.ORANGE_700,
 }))`
   width: 350px;
@@ -21,7 +21,7 @@ export const TimeContainer = styled.View`
 `
 
 export const Time = styled.Text`
-  color: ${({ theme }) => theme.COLORS.GRAY_100};
+  color: ${({ theme }) => theme.COLORS.ORANGE_200};
 `
 
 export const LoadingIndicator = styled.ActivityIndicator``
