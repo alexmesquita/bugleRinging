@@ -11,12 +11,12 @@ export const Container = styled.View`
 export const Name = styled.Text`
   margin-bottom: 8px;
   text-align: center;
-  color: #aaa;
+  color: ${({ theme }) => theme.COLORS.ORANGE_700};
   font-size: 24px;
   font-weight: 800;
 `
 
 export const Artist = styled.Text`
-  color: #c89;
+  color: ${({ theme }) => theme.COLORS.ORANGE_300};
   text-align: center;
 `

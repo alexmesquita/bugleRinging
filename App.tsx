@@ -1,18 +1,33 @@
+/* eslint-disable camelcase */
 import React from 'react'
+import { StyleSheet, View, StatusBar } from 'react-native'
+import { ThemeProvider } from 'styled-components'
+import {
+  useFonts,
+  Roboto_400Regular,
+  Roboto_700Bold,
+} from '@expo-google-fonts/roboto'
 
-import { StyleSheet, View } from 'react-native'
+import theme from './src/theme'
 
-// import { RingingList } from './src/screens/RingingList'
 import { AudioPlayer } from './src/screens/AudioPlayer'
+import { Loading } from './src/components/Loading'
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <AudioPlayer />
-    </View>
-  )
+  const [fontsLoader] = useFonts({ Roboto_400Regular, Roboto_700Bold })
 
-  // return <RingingList />
+  return (
+    <ThemeProvider theme={theme}>
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent
+      />
+      <View style={styles.container}>
+        {fontsLoader ? <AudioPlayer /> : <Loading />}
+      </View>
+    </ThemeProvider>
+  )
 }
 
 const styles = StyleSheet.create({

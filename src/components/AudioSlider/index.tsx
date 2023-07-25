@@ -30,8 +30,6 @@ export function AudioSlider({
         value={sliderPositionMillis}
         minimumValue={0}
         maximumValue={durationMillis}
-        thumbTintColor="#30F"
-        maximumTrackTintColor="#FF0"
       />
       <TimeContainer>
         <Time>{millisToMinutesAndSeconds(sliderPositionMillis)}</Time>
