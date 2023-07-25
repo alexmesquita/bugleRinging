@@ -6,6 +6,7 @@ import { SliderContainer, Time, TimeContainer } from './styles'
 type SliderProps = PropsWithChildren<{
   sliderPositionMillis: number
   durationMillis: number
+  onSliderChange: Function
 }>
 
 function millisToMinutesAndSeconds(millis: number) {
@@ -23,6 +24,7 @@ function millisToMinutesAndSeconds(millis: number) {
 export function AudioSlider({
   sliderPositionMillis,
   durationMillis,
+  onSliderChange,
 }: SliderProps) {
   return (
     <View>
@@ -30,6 +32,9 @@ export function AudioSlider({
         value={sliderPositionMillis}
         minimumValue={0}
         maximumValue={durationMillis}
+        onValueChange={(value) => {
+          onSliderChange(value)
+        }}
       />
       <TimeContainer>
         <Time>{millisToMinutesAndSeconds(sliderPositionMillis)}</Time>

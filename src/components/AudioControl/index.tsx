@@ -1,6 +1,5 @@
 import React, { PropsWithChildren } from 'react'
-import { View, Pressable } from 'react-native'
-import { MaterialIcons } from '@expo/vector-icons'
+import { Pressable } from 'react-native'
 
 import { Icon, Container } from './styles'
 

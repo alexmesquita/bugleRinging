@@ -114,10 +114,11 @@ export function AudioPlayer() {
     setTrackPosition(sliderValue)
   }
 
-  const onSliderChange = () => {
+  const onSliderChange = (value: number) => {
     if (!isDraggingSlider) {
       setIsDraggingSlider(true)
     }
+    setTrackPosition(value)
   }
 
   const renderArtWork = () => {
@@ -155,6 +156,7 @@ export function AudioPlayer() {
       <AudioSlider
         sliderPositionMillis={sliderPositionMillis}
         durationMillis={durationMillis}
+        onSliderChange={onSliderChange}
       />
       <AudioControl
         playSound={playSound}

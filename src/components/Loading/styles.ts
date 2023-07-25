@@ -9,5 +9,5 @@ export const Container = styled.View`
 `
 
 export const LoadingIndicator = styled.ActivityIndicator.attrs(({ theme }) => ({
-  color: theme.COLORS.ORANGE_700,
+  color: theme.COLORS.ORANGE_600,
 }))``
