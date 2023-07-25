@@ -12,7 +12,8 @@ import { AudioSlider } from '../../components/AudioSlider'
 
 import { styles } from './styles'
 
-import { playListData } from '../../constants'
+import { playListData } from '../../audiosInfos'
+import { playListUrl } from '../../audiosUrl'
 
 export function AudioPlayer() {
   const [sound, setSound] = useState<Sound>()
@@ -21,7 +22,8 @@ export function AudioPlayer() {
   const [durationMillis, setDurationMillis] = useState(1)
   const [isDraggingSlider, setIsDraggingSlider] = useState(false)
   const [sliderPositionMillis, setSliderPositionMillis] = useState(0)
-  const [assets, error] = useAssets([require('../../../assets/audio/one.mp3')])
+  const [currentAudioIndex, setCurrentAudioIndex] = useState(0)
+  const [assets, error] = useAssets(playListUrl)
 
   const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
     if (status.isLoaded) {
@@ -79,12 +81,21 @@ export function AudioPlayer() {
       return
     }
 
-    const uri = assets ? assets[0].uri : ''
+    const uri = assets ? assets[currentAudioIndex].uri : ''
 
     await loadAudio({ uri })
   }
 
-  async function skipToNext() {}
+  async function skipToNext() {
+    // if (currentAudioIndex + 1 >= playListUrl.length) {
+    //   return
+    // }
+
+    // await playSound()
+    // await sound.unloadAsync()
+    // setCurrentAudioIndex(currentAudioIndex + 1)
+    // playSound()
+  }
   async function skipToPrevious() {}
 
   const setTrackPosition = async (positionMillis: number) => {
@@ -107,8 +118,7 @@ export function AudioPlayer() {
   }
 
   const renderArtWork = () => {
-    const artwork =
-      'https://c.saavncdn.com/734/Champagne-Talk-Hindi-2022-20221008011951-500x500.jpg'
+    const artwork = playListData[currentAudioIndex].artwork
     return (
       <View style={styles.listArtWrapper}>
         <View style={styles.albumContainer}>
@@ -135,7 +145,11 @@ export function AudioPlayer() {
 
       {loading && <Text>Carregando...</Text>}
 
-      <AudioInfo album="album info" artist="Jamile" title="Mil e uma noites" />
+      <AudioInfo
+        album={playListData[currentAudioIndex].album}
+        artist={playListData[currentAudioIndex].artist}
+        title={playListData[currentAudioIndex].title}
+      />
       <AudioSlider
         sliderPositionMillis={sliderPositionMillis}
         durationMillis={durationMillis}

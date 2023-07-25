@@ -1,6 +1,13 @@
-import { Track } from 'react-native-track-player'
-
-export const playListData: Track[] = [
+export const playListData = [
+  {
+    id: 0,
+    title: 'Besharam Rang',
+    artist: 'Vishal & Shekhar, Shilpa Rao',
+    album: 'Pathaan',
+    artwork:
+      'https://c.saavncdn.com/807/Pathaan-Hindi-2022-20221222104158-500x500.jpg',
+    url: require('../assets/audio/zero.mp3'),
+  },
   {
     id: 1,
     title: 'Maan Meri Jaan',
@@ -36,14 +43,5 @@ export const playListData: Track[] = [
     artwork:
       'https://c.saavncdn.com/328/Pal-Pal-Dil-Ke-Paas-Hindi-2019-20200420150444-500x500.jpg',
     url: require('../assets/audio/four.mp3'),
-  },
-  {
-    id: 5,
-    title: 'Besharam Rang',
-    artist: 'Vishal & Shekhar, Shilpa Rao',
-    album: 'Pathaan',
-    artwork:
-      'https://c.saavncdn.com/807/Pathaan-Hindi-2022-20221222104158-500x500.jpg',
-    url: require('../assets/audio/five.mp3'),
   },
 ]
