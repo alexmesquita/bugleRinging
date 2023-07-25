@@ -38,9 +38,7 @@ export function AudioSlider({
       />
       <TimeContainer>
         <Time>{millisToMinutesAndSeconds(sliderPositionMillis)}</Time>
-        <Time>
-          {millisToMinutesAndSeconds(durationMillis - sliderPositionMillis)}
-        </Time>
+        <Time>{millisToMinutesAndSeconds(durationMillis)}</Time>
       </TimeContainer>
     </View>
   )
