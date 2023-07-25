@@ -1,20 +1,21 @@
-import { StyleSheet } from 'react-native'
+import styled from 'styled-components/native'
+import Slider from '@react-native-community/slider'
 
-export const styles = StyleSheet.create({
-  sliderContainer: {
-    width: 350,
-    height: 40,
-    marginTop: 25,
+export const SliderContainer = styled(Slider)`
+  width: 350px;
+  height: 40px;
+  margin-top: 25px;
 
-    flexDirection: 'row',
-  },
-  timeContainer: {
-    width: 340,
+  flex-direction: row;
+`
 
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  time: {
-    color: '#444',
-  },
-})
+export const TimeContainer = styled.View`
+  width: 340px;
+
+  flex-direction: row;
+  justify-content: space-between;
+`
+
+export const Time = styled.Text`
+  color: #ccc;
+`

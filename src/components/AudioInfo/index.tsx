@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 
-import { styles } from './styles'
+import { Container, Name, Artist } from './styles'
 
 type SongInfoProps = PropsWithChildren<{
   title: string
@@ -11,13 +11,13 @@ type SongInfoProps = PropsWithChildren<{
 
 export function AudioInfo({ title, artist, album }: SongInfoProps) {
   return (
-    <View style={styles.container}>
+    <Container>
       <View>
-        <Text style={styles.name}>{title}</Text>
-        <Text style={styles.artist}>
+        <Name>{title}</Name>
+        <Artist>
           {artist} . {album}
-        </Text>
+        </Artist>
       </View>
-    </View>
+    </Container>
   )
 }

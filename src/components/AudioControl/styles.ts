@@ -1,17 +1,14 @@
-import { StyleSheet } from 'react-native'
+import styled from 'styled-components/native'
+import { MaterialIcons } from '@expo/vector-icons'
 
-export const styles = StyleSheet.create({
-  container: {
-    marginBottom: 56,
+export const Icon = styled(MaterialIcons)`
+  color: #ccc;
+`
 
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  icon: {
-    color: '#aaa',
-  },
-  playButton: {
-    marginHorizontal: 24,
-  },
-})
+export const Container = styled.View`
+  margin-bottom: 56px;
+
+  flex: 1;
+  flex-direction: row;
+  align-items: center;
+`

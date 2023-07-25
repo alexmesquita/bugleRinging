@@ -1,25 +1,26 @@
-import { Dimensions, StyleSheet } from 'react-native'
+import styled from 'styled-components/native'
+import { Dimensions, Image } from 'react-native'
 
 const { width } = Dimensions.get('window')
 
-export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#001d23',
-  },
-  listArtWrapper: {
-    width,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  albumContainer: {
-    width: 300,
-    height: 300,
-  },
-  albumArtImg: {
-    height: '100%',
-    borderRadius: 4,
-  },
-})
+export const Container = styled.View`
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  background-color: #001d23;
+`
+
+export const ListArtWrapper = styled.View`
+  width: ${width}px;
+  justify-content: center;
+  align-items: center;
+`
+
+export const AlbumContainer = styled.View`
+  width: 300px;
+  height: 300px;
+`
+export const AlbumArtImg = styled(Image)`
+  height: 100%;
+  border-radius: 4px;
+`

@@ -1,8 +1,7 @@
-import Slider from '@react-native-community/slider'
 import React, { PropsWithChildren } from 'react'
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 
-import { styles } from './styles'
+import { SliderContainer, Time, TimeContainer } from './styles'
 
 type SliderProps = PropsWithChildren<{
   sliderPositionMillis: number
@@ -27,22 +26,19 @@ export function AudioSlider({
 }: SliderProps) {
   return (
     <View>
-      <Slider
+      <SliderContainer
         value={sliderPositionMillis}
         minimumValue={0}
         maximumValue={durationMillis}
-        thumbTintColor="#3FF"
-        maximumTrackTintColor="#F3F"
-        style={styles.sliderContainer}
+        thumbTintColor="#30F"
+        maximumTrackTintColor="#FF0"
       />
-      <View style={styles.timeContainer}>
-        <Text style={styles.time}>
-          {millisToMinutesAndSeconds(sliderPositionMillis)}
-        </Text>
-        <Text style={styles.time}>
+      <TimeContainer>
+        <Time>{millisToMinutesAndSeconds(sliderPositionMillis)}</Time>
+        <Time>
           {millisToMinutesAndSeconds(durationMillis - sliderPositionMillis)}
-        </Text>
-      </View>
+        </Time>
+      </TimeContainer>
     </View>
   )
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FlatList, Image, Text, View } from 'react-native'
+import { FlatList, Text } from 'react-native'
 import { useAssets } from 'expo-asset'
 
 import { Audio } from 'expo-av'
@@ -10,7 +10,12 @@ import { AudioInfo } from '../../components/AudioInfo'
 import { AudioControl } from '../../components/AudioControl'
 import { AudioSlider } from '../../components/AudioSlider'
 
-import { styles } from './styles'
+import {
+  Container,
+  ListArtWrapper,
+  AlbumContainer,
+  AlbumArtImg,
+} from './styles'
 
 import { playListData } from '../../audiosInfos'
 import { playListUrl } from '../../audiosUrl'
@@ -42,7 +47,6 @@ export function AudioPlayer() {
   useEffect(() => {
     return sound
       ? () => {
-          console.log('UNLOAD SOUND....')
           sound.unloadAsync()
         }
       : undefined
@@ -90,7 +94,6 @@ export function AudioPlayer() {
     // if (currentAudioIndex + 1 >= playListUrl.length) {
     //   return
     // }
-
     // await playSound()
     // await sound.unloadAsync()
     // setCurrentAudioIndex(currentAudioIndex + 1)
@@ -120,22 +123,21 @@ export function AudioPlayer() {
   const renderArtWork = () => {
     const artwork = playListData[currentAudioIndex].artwork
     return (
-      <View style={styles.listArtWrapper}>
-        <View style={styles.albumContainer}>
+      <ListArtWrapper>
+        <AlbumContainer>
           {artwork && (
-            <Image
-              style={styles.albumArtImg}
+            <AlbumArtImg
               source={{ uri: artwork?.toString() }}
               alt="Album image"
             />
           )}
-        </View>
-      </View>
+        </AlbumContainer>
+      </ListArtWrapper>
     )
   }
 
   return (
-    <View style={styles.container}>
+    <Container>
       <FlatList
         horizontal
         data={playListData}
@@ -160,6 +162,6 @@ export function AudioPlayer() {
         skipToNext={skipToNext}
         skipToPrevious={skipToPrevious}
       />
-    </View>
+    </Container>
   )
 }

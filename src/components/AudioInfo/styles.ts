@@ -1,24 +1,22 @@
-import { StyleSheet } from 'react-native'
+import styled from 'styled-components/native'
 
-export const styles = StyleSheet.create({
-  container: {
-    width: '90%',
-    marginTop: 18,
+export const Container = styled.View`
+  width: 90%;
+  margin-top: 18px;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: center;
+`
 
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    justifyContent: 'center',
-  },
-  name: {
-    marginBottom: 8,
-    textAlign: 'center',
+export const Name = styled.Text`
+  margin-bottom: 8px;
+  text-align: center;
+  color: #aaa;
+  font-size: 24px;
+  font-weight: 800;
+`
 
-    color: '#aaa',
-    fontSize: 24,
-    fontWeight: '800',
-  },
-  artist: {
-    color: '#ccc',
-    textAlign: 'center',
-  },
-})
+export const Artist = styled.Text`
+  color: #c89;
+  text-align: center;
+`
