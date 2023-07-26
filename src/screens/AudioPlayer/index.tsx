@@ -19,6 +19,7 @@ import {
 
 import { playListData } from '../../audiosInfos'
 import { playListUrl } from '../../audiosUrl'
+import { Header } from '../../components/Header'
 
 export function AudioPlayer() {
   const [sound, setSound] = useState<Sound>()
@@ -143,6 +144,7 @@ export function AudioPlayer() {
 
   return (
     <Container>
+      <Header showBackButton />
       <FlatList
         horizontal
         data={playListData}
