@@ -91,7 +91,9 @@ export function AudioPlayer() {
   }
 
   async function skipToNext() {
+    console.log('indo pra próxima')
     // if (currentAudioIndex + 1 >= playListUrl.length) {
+    //   console.log('Não tem mais')
     //   return
     // }
     // await playSound()
@@ -107,11 +109,13 @@ export function AudioPlayer() {
     }
   }
 
-  const onSlidingComplete = (sliderValue: number) => {
-    if (isDraggingSlider) {
-      setIsDraggingSlider(false)
+  const onSlidingComplete = () => {
+    if (currentAudioIndex + 1 >= playListUrl.length) {
+      setTrackPosition(0)
+      playSound()
+    } else {
+      skipToNext()
     }
-    setTrackPosition(sliderValue)
   }
 
   const onSliderChange = (value: number) => {
@@ -157,6 +161,7 @@ export function AudioPlayer() {
         sliderPositionMillis={sliderPositionMillis}
         durationMillis={durationMillis}
         onSliderChange={onSliderChange}
+        onSlidingComplete={onSlidingComplete}
       />
       <AudioControl
         playSound={playSound}
