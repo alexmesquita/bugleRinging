@@ -20,6 +20,7 @@ import {
 import { playListData } from '../../audiosInfos'
 import { playListUrl } from '../../audiosUrl'
 import { Header } from '../../components/Header'
+import { Button } from '../../components/Button'
 
 export function AudioPlayer() {
   const [sound, setSound] = useState<Sound>()
@@ -171,6 +172,7 @@ export function AudioPlayer() {
         skipToNext={skipToNext}
         skipToPrevious={skipToPrevious}
       />
+      {/* <Button title="Salvar Playlist" type="SECONDARY" /> */}
     </Container>
   )
 }
