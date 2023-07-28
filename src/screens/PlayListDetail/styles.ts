@@ -27,3 +27,18 @@ export const Form = styled.View`
   justify-content: center;
   border-radius: 6px;
 `
+
+export const HeaderList = styled.View`
+  width: 100%;
+  flex-direction: row;
+
+  margin: 32px 0 12px;
+`
+export const NumberOfPlaylists = styled.Text`
+  ${({ theme }) => css`
+    color: ${theme.COLORS.GRAY_200};
+
+    font-size: ${theme.FONT_SIZE.SM}px;
+    font-family: ${theme.FONT_FAMILY.BOLD};
+  `}
+`

@@ -12,8 +12,10 @@ export default {
     ORANGE_200: '#FFD89C',
     ORANGE_100: '#FFFEC4',
 
-    GREEN: '#7ABF66',
-    RED: '#DB3026',
+    GREEN_700: '#00875F',
+    GREEN_500: '#00B37E',
+    RED_700: '#AA2834',
+    RED_500: '#F75A68',
 
     GRAY_700: '#121214',
     GRAY_500: '#29292E',
