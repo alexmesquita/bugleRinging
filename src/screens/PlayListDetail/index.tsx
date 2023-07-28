@@ -7,6 +7,8 @@ import { Input } from '../../components/Input'
 import { Filter } from '../../components/Filter'
 import { useState } from 'react'
 import { AudioCard } from '../../components/AudioCard'
+import { ListEmpty } from '../../components/ListEmpty'
+import { Button } from '../../components/Button'
 
 export function PlayListDetail() {
   const [playList, setPlayList] = useState('PlayList 1')
@@ -16,7 +18,16 @@ export function PlayListDetail() {
     'PlayList 3',
     'PlayList 4',
   ])
-  const [audios, setAudios] = useState(['toque 1', 'toque 2', 'toque 3'])
+  const [audios, setAudios] = useState([
+    'toque 1',
+    'toque 2',
+    'toque 3',
+    'toque 4',
+    'toque 5',
+    'toque 6',
+    'toque 7',
+    'toque 8',
+  ])
 
   return (
     <Container>
@@ -48,7 +59,21 @@ export function PlayListDetail() {
       <FlatList
         data={audios}
         keyExtractor={(item) => item}
-        renderItem={({ item }) => <AudioCard name={item} />}
+        renderItem={({ item }) => <AudioCard name={item} onRemove={() => {}} />}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[
+          { paddingBottom: 100 },
+          audios.length === 0 && { flex: 1 },
+        ]}
+        ListEmptyComponent={() => (
+          <ListEmpty message="Não há toques cadastrados" />
+        )}
+      />
+
+      <Button
+        title="Remover Playlist"
+        type="SECONDARY"
+        style={{ marginTop: 10 }}
       />
     </Container>
   )
