@@ -3,7 +3,7 @@ export default {
     WHITE: '#FFFFFF',
     BLACK: '#000000',
 
-    BACK_GROUND: '#001114',
+    BACKGROUND: '#202024',
 
     ORANGE_700: '#E55807',
     ORANGE_600: '#E57C23',

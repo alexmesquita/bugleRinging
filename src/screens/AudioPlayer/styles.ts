@@ -7,7 +7,7 @@ export const Container = styled.View`
   flex: 1;
   align-items: center;
   justify-content: center;
-  background-color: ${({ theme }) => theme.COLORS.BACK_GROUND};
+  background-color: ${({ theme }) => theme.COLORS.BACKGROUND};
 `
 
 export const ListArtWrapper = styled.View`

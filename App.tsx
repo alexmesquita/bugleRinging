@@ -10,7 +10,7 @@ import {
 
 import theme from './src/theme'
 
-import { AudioPlayer } from './src/screens/AudioPlayer'
+import { PlayListDetail } from './src/screens/PlayListDetail'
 import { Loading } from './src/components/Loading'
 
 export default function App() {
@@ -24,7 +24,7 @@ export default function App() {
         translucent
       />
       <View style={styles.container}>
-        {fontsLoader ? <AudioPlayer /> : <Loading />}
+        {fontsLoader ? <PlayListDetail /> : <Loading />}
       </View>
     </ThemeProvider>
   )
