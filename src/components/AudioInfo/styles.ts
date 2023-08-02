@@ -13,19 +13,19 @@ export const Name = styled.Text`
   text-align: center;
 
   ${({ theme }) => css`
-    color: ${theme.COLORS.ORANGE_600};
+    color: ${theme.colors.orange_600};
 
-    font-size: ${theme.FONT_SIZE.XL}px;
-    font-family: ${theme.FONT_FAMILY.BOLD};
+    font-size: ${theme.fontSizes.xl}px;
+    font-family: ${theme.fonts.heading};
   `}
   font-weight: 800;
 `
 
 export const Artist = styled.Text`
   ${({ theme }) => css`
-    color: ${theme.COLORS.ORANGE_300};
-    font-size: ${theme.FONT_SIZE.MD}px;
-    font-family: ${theme.FONT_FAMILY.REGULAR};
+    color: ${theme.colors.orange_300};
+    font-size: ${theme.fontSizes.md}px;
+    font-family: ${theme.fonts.body};
   `}
 
   text-align: center;

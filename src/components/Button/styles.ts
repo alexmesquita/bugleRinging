@@ -15,7 +15,7 @@ export const Container = styled(TouchableOpacity)<Props>`
   width: 100%;
 
   background-color: ${({ theme, type }) =>
-    type === 'PRIMARY' ? theme.COLORS.GREEN_700 : theme.COLORS.RED_500};
+    type === 'PRIMARY' ? theme.colors.green_700 : theme.colors.red_500};
 
   border-radius: 6px;
   justify-content: center;
@@ -24,8 +24,8 @@ export const Container = styled(TouchableOpacity)<Props>`
 
 export const Title = styled.Text`
   ${({ theme }) => css`
-    font-size: ${theme.FONT_SIZE.MD}px;
-    color: ${theme.COLORS.WHITE};
-    font-family: ${theme.FONT_FAMILY.BOLD};
+    font-size: ${theme.fontSizes.md}px;
+    color: ${theme.colors.white};
+    font-family: ${theme.fonts.heading};
   `}
 `

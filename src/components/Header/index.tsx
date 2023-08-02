@@ -1,6 +1,8 @@
-import { Container, Logo, BackIcon, BackButton } from './styles'
+import { MaterialIcons } from '@expo/vector-icons'
 
 import logoImg from '../../../assets/images/logo.png'
+import { HStack, Image } from 'native-base'
+import { IconButton } from '../IconButton'
 
 type Props = {
   showBackButton?: boolean
@@ -8,14 +10,20 @@ type Props = {
 
 export function Header({ showBackButton = false }: Props) {
   return (
-    <Container>
+    <HStack
+      w="100%"
+      alignItems="center"
+      justifyContent={showBackButton ? 'space-between' : 'center'}
+    >
       {showBackButton && (
-        <BackButton>
-          <BackIcon size={32} />
-        </BackButton>
+        <IconButton
+          onPress={() => console.log("I'm Pressed back button")}
+          name="arrow-back-ios"
+          color="white"
+          size={9}
+        />
       )}
-
-      <Logo source={logoImg} />
-    </Container>
+      <Image source={logoImg} w={12} h={16} alt="Bugle logo" />
+    </HStack>
   )
 }

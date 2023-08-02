@@ -2,9 +2,9 @@ import styled from 'styled-components/native'
 import Slider from '@react-native-community/slider'
 
 export const SliderContainer = styled(Slider).attrs(({ theme }) => ({
-  thumbTintColor: theme.COLORS.ORANGE_700,
-  maximumTrackTintColor: theme.COLORS.ORANGE_300,
-  minimumTrackTintColor: theme.COLORS.ORANGE_700,
+  thumbTintColor: theme.colors.orange_700,
+  maximumTrackTintColor: theme.colors.orange_300,
+  minimumTrackTintColor: theme.colors.orange_700,
 }))`
   width: 350px;
   height: 40px;
@@ -21,7 +21,7 @@ export const TimeContainer = styled.View`
 `
 
 export const Time = styled.Text`
-  color: ${({ theme }) => theme.COLORS.ORANGE_200};
+  color: ${({ theme }) => theme.colors.orange_200};
 `
 
 export const LoadingIndicator = styled.ActivityIndicator``

@@ -1,4 +1,4 @@
-import { ButtonIcon } from '../ButtonIcon'
+import { IconButton } from '../IconButton'
 import { Container, Name, Icon } from './styles'
 
 type Props = {
@@ -11,7 +11,7 @@ export function AudioCard({ name, onRemove }: Props) {
     <Container>
       <Icon name="audiotrack" />
       <Name>{name}</Name>
-      <ButtonIcon icon="delete" type="SECONDARY" onPress={onRemove} />
+      <IconButton name="delete" color="red.700" onPress={onRemove} />
     </Container>
   )
 }
