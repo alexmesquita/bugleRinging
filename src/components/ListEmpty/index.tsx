@@ -1,4 +1,4 @@
-import { Container, Message } from './styles'
+import { Box, Center, Text } from 'native-base'
 
 type Props = {
   message: string
@@ -6,8 +6,10 @@ type Props = {
 
 export function ListEmpty({ message }: Props) {
   return (
-    <Container>
-      <Message>{message}</Message>
-    </Container>
+    <Box flex={1} justifyContent="center">
+      <Center>
+        <Text color="gray.300">{message}</Text>
+      </Center>
+    </Box>
   )
 }

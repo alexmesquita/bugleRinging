@@ -98,11 +98,7 @@ export function PlayLists() {
         )}
       />
 
-      <Button
-        title="Remover Playlist"
-        type="SECONDARY"
-        style={{ marginTop: 10 }}
-      />
+      <Button title="Remover Playlist" type="SECONDARY" mt={2} />
     </Box>
   )
 }
