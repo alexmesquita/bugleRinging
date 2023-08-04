@@ -2,6 +2,7 @@ import React, { PropsWithChildren } from 'react'
 import { View } from 'react-native'
 
 import { SliderContainer, Time, TimeContainer } from './styles'
+import { millisToMinutesAndSeconds } from '../../utils/dateTime'
 
 type SliderProps = PropsWithChildren<{
   sliderPositionMillis: number
@@ -9,18 +10,6 @@ type SliderProps = PropsWithChildren<{
   onSliderChange: Function
   onSlidingComplete: Function
 }>
-
-function millisToMinutesAndSeconds(millis: number) {
-  const minutes = Math.floor(millis / 60000)
-  const seconds = Math.trunc((millis % 60000) / 1000)
-  return (
-    (minutes < 10 ? '0' : '') +
-    minutes +
-    ':' +
-    (seconds < 10 ? '0' : '') +
-    seconds
-  )
-}
 
 export function AudioSlider({
   sliderPositionMillis,

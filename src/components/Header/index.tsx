@@ -1,5 +1,3 @@
-import { MaterialIcons } from '@expo/vector-icons'
-
 import logoImg from '../../../assets/images/logo.png'
 import { HStack, Image } from 'native-base'
 import { IconButton } from '../IconButton'
@@ -11,6 +9,7 @@ type Props = {
 export function Header({ showBackButton = false }: Props) {
   return (
     <HStack
+      mt={6}
       w="100%"
       alignItems="center"
       justifyContent={showBackButton ? 'space-between' : 'center'}

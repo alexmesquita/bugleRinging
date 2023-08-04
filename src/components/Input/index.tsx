@@ -1,6 +1,10 @@
-import { Input as NativeBaseInput, IInputProps } from 'native-base'
+import { Input as NativeBaseInput, IInputProps, Icon } from 'native-base'
+import { MaterialIcons } from '@expo/vector-icons'
 
-export function Input({ ...rest }: IInputProps) {
+type Props = IInputProps & {
+  leftIcon?: string
+}
+export function Input({ leftIcon = '', ...rest }: Props) {
   return (
     <NativeBaseInput
       flex={1}
@@ -15,6 +19,11 @@ export function Input({ ...rest }: IInputProps) {
       _focus={{
         backgroundColor: 'gray.500',
       }}
+      InputLeftElement={
+        leftIcon !== '' ? (
+          <Icon as={<MaterialIcons name={leftIcon} />} size={6} color="white" />
+        ) : undefined
+      }
       {...rest}
     />
   )

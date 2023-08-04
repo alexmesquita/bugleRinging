@@ -91,7 +91,7 @@ export function PlayLists() {
   }, [])
 
   return (
-    <Box flex={1} bg="background">
+    <Box flex={1} bg="background" px={2} pb={2}>
       <Header showBackButton />
 
       <Center>
