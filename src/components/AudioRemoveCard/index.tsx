@@ -1,29 +1,27 @@
-import { Box, HStack, Text } from 'native-base'
+import { Box, HStack, Icon, Text } from 'native-base'
 import { IconButton } from '../IconButton'
 import { MaterialIcons } from '@expo/vector-icons'
 
 type Props = {
   name: string
-  onPlayPause: () => void
-  playing?: boolean
+  onRemove: () => void
 }
 
-export function AudioCard({ name, onPlayPause, playing = false }: Props) {
+export function AudioRemoveCard({ name, onRemove }: Props) {
   return (
     <Box w="full" h={14} bg="gray.500" rounded="md" mt={2}>
       <HStack alignItems="center">
-        <IconButton
+        <Icon
           as={MaterialIcons}
-          name={playing ? 'pause' : 'play-arrow'}
-          size={8}
+          name="audiotrack"
+          size={7}
           alignItems="center"
           mx={1}
-          onPress={onPlayPause}
-          color="white"
         />
         <Text color="gray.200" flex={1} fontSize="lg">
           {name}
         </Text>
+        <IconButton name="delete" color="red.700" onPress={onRemove} />
       </HStack>
     </Box>
   )

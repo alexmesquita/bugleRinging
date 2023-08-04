@@ -10,7 +10,7 @@ import {
 } from '@expo-google-fonts/roboto'
 
 import { THEME } from './src/theme'
-import { PlayLists } from './src/screens/PlayLists'
+import { Audios } from './src/screens/Audios'
 import { Loading } from './src/components/Loading'
 
 export default function App() {
@@ -24,7 +24,7 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
-        {fontsLoader ? <PlayLists /> : <Loading />}
+        {fontsLoader ? <Audios /> : <Loading />}
       </ThemeProvider>
     </NativeBaseProvider>
   )

@@ -10,7 +10,7 @@ import { Header } from '../../components/Header'
 import { Input } from '../../components/Input'
 import { IconButton } from '../../components/IconButton'
 import { Filter } from '../../components/Filter'
-import { AudioCard } from '../../components/AudioCard'
+import { AudioRemoveCard } from '../../components/AudioRemoveCard'
 import { ListEmpty } from '../../components/ListEmpty'
 import { Button } from '../../components/Button'
 import { Alert, FlatList } from 'react-native'
@@ -43,7 +43,7 @@ export function PlayLists() {
         throw new AppError('Informe o nome da playlist.')
       }
       await playlistCreate(newPlaylist)
-      await fetchPlaylists()
+      await getPlaylists()
 
       scrollToIndex(playLists.length - 1)
       setCurrentPlayList(newPlaylist)
@@ -57,7 +57,7 @@ export function PlayLists() {
     }
   }
 
-  async function fetchPlaylists() {
+  async function getPlaylists() {
     console.log('Geting playlists')
     try {
       const data = await playlistGetAll()
@@ -67,7 +67,7 @@ export function PlayLists() {
     }
   }
 
-  const removeBugle = (item: any) => {
+  const removeAudio = (item: any) => {
     console.log(`Apagar toque: ${item}`)
   }
 
@@ -81,13 +81,13 @@ export function PlayLists() {
   // useFocusEffect(
   //   useCallback(() => {
   //     console.log('useFocusEffect executou para buscar as playlists')
-  //     fetchPlaylists()
+  //     getPlaylists()
   //   }, []),
   // )
 
   useEffect(() => {
     console.log('useEffect executou para buscar as playlists')
-    fetchPlaylists()
+    getPlaylists()
   }, [])
 
   return (
@@ -136,10 +136,10 @@ export function PlayLists() {
         data={audios}
         keyExtractor={(item) => item}
         renderItem={({ item }) => (
-          <AudioCard
+          <AudioRemoveCard
             name={item}
             onRemove={() => {
-              removeBugle(item)
+              removeAudio(item)
             }}
           />
         )}
