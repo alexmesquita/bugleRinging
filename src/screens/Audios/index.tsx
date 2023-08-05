@@ -1,6 +1,7 @@
-import { Heading, Box, Text, Center, FlatList, HStack } from 'native-base'
-import { Header } from '../../components/Header'
 import { useEffect, useState } from 'react'
+import { Heading, Box, Center, FlatList, HStack } from 'native-base'
+
+import { Header } from '../../components/Header'
 import { ListEmpty } from '../../components/ListEmpty'
 import { AudioCard } from '../../components/AudioCard'
 import { Input } from '../../components/Input'

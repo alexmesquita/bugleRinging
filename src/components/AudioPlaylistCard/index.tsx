@@ -1,7 +1,6 @@
-import { Box, HStack, Icon, Text, VStack } from 'native-base'
+import { Box, HStack, Icon, Text } from 'native-base'
 import { IconButton } from '../IconButton'
 import { MaterialIcons } from '@expo/vector-icons'
-import { millisToMinutesAndSeconds } from '../../utils/dateTime'
 
 type CardTypeProps = 'ADD' | 'REMOVE'
 

@@ -1,22 +1,23 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 
-import { playlistCreate } from '../../storage/playlist/playlistCreate'
-import { playlistGetAll } from '../../storage/playlist/playlistGetAll'
+import { Alert, FlatList } from 'react-native'
 
-import { Center, Heading, Box, HStack, Text, VStack } from 'native-base'
+import { Center, Heading, Box, HStack, VStack } from 'native-base'
 
 import { Header } from '../../components/Header'
 import { IconButton } from '../../components/IconButton'
 import { AudioPlaylistCard } from '../../components/AudioPlaylistCard'
 import { ListEmpty } from '../../components/ListEmpty'
-import { Alert, FlatList } from 'react-native'
-import { AppError } from '../../utils/AppError'
 import { Input } from '../../components/Input'
+
 import { audioCreateByPlaylist } from '../../storage/audio/audioCreateByPlaylist'
 import { getAudioByPlaylist } from '../../storage/audio/getAudioByPlaylist'
 import { AudioDTO } from '../../storage/audio/AudioDTO'
 import { audioRemoveByPlaylist } from '../../storage/audio/audioRemoveByPlaylist'
+
+import { AppError } from '../../utils/AppError'
+
 
 export function PlayListDetail() {
   const [currentPlayList, setCurrentPlayList] = useState('Desfile 1')
@@ -50,7 +51,6 @@ export function PlayListDetail() {
 
   async function getAudios() {
     try {
-      // const data = await playlistGetAll()
       const data = [
         { id: '0', name: 'toque 1' },
         { id: '1', name: 'toque 2' },

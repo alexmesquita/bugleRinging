@@ -1,19 +1,20 @@
 import React, { useCallback, useState, useEffect } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
-
-import { playlistCreate } from '../../storage/playlist/playlistCreate'
-import { playlistGetAll } from '../../storage/playlist/playlistGetAll'
+import { Alert, FlatList, Keyboard } from 'react-native'
 
 import { Center, Heading, Box, HStack } from 'native-base'
+
+import { playlistCreate } from '../../storage/playlist/playlistCreate'
+import { playlistRemove } from '../../storage/playlist/playlistRemove'
+import { playlistGetAll } from '../../storage/playlist/playlistGetAll'
 
 import { Header } from '../../components/Header'
 import { Input } from '../../components/Input'
 import { IconButton } from '../../components/IconButton'
 import { ListEmpty } from '../../components/ListEmpty'
-import { Alert, FlatList, Keyboard } from 'react-native'
-import { AppError } from '../../utils/AppError'
 import { PlaylistCard } from '../../components/PlaylistCard'
-import { playlistRemove } from '../../storage/playlist/playlistRemove'
+
+import { AppError } from '../../utils/AppError'
 
 export function PlayLists() {
   const [newPlaylist, setNewPlaylist] = useState('')
@@ -66,6 +67,13 @@ export function PlayLists() {
         console.log(error)
       }
     }
+  }
+
+  async function handleRemovePlaylist(name: string) {
+    Alert.alert('Remover', 'Deseja Remover a playlist?', [
+      { text: 'Não', style: 'cancel' },
+      { text: 'sim', onPress: () => removePlaylist(name) },
+    ])
   }
 
   async function editPlaylist(name: string) {
@@ -125,7 +133,7 @@ export function PlayLists() {
               editPlaylist(item)
             }}
             onRemove={() => {
-              removePlaylist(item)
+              handleRemovePlaylist(item)
             }}
           />
         )}
