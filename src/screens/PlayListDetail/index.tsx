@@ -17,7 +17,7 @@ import { AudioDTO } from '../../storage/audio/AudioDTO'
 import { audioRemoveByPlaylist } from '../../storage/audio/audioRemoveByPlaylist'
 
 import { AppError } from '../../utils/AppError'
-
+import { Loading } from '../../components/Loading'
 
 export function PlayListDetail() {
   const [currentPlayList, setCurrentPlayList] = useState('Desfile 1')
@@ -29,8 +29,12 @@ export function PlayListDetail() {
   const [filteredAudios, setFilteredAudios] = useState(audios)
   const [searchText, setSearchText] = useState('')
   const [orderToSort, setOrderToSort] = useState(1)
+  const [isLoadingPlaylistAudios, setIsloadingPlaylistAudios] = useState(false)
+  const [isLoadingExceptAudios, setIsloadingExceptAudios] = useState(false)
 
   function orderList() {
+    setIsloadingExceptAudios(true)
+
     setFilteredAudios(
       filteredAudios.sort((a, b) =>
         a.name > b.name ? orderToSort : b.name > a.name ? orderToSort * -1 : 0,
@@ -38,19 +42,42 @@ export function PlayListDetail() {
     )
 
     setOrderToSort(orderToSort * -1)
+    setIsloadingExceptAudios(false)
+  }
+
+  function filterList() {
+    setIsloadingExceptAudios(true)
+
+    if (searchText === '') {
+      setFilteredAudios(exceptAudios)
+    } else {
+      setFilteredAudios(
+        exceptAudios.filter(
+          (item) =>
+            item.name.toUpperCase().indexOf(searchText.toUpperCase()) > -1,
+        ),
+      )
+    }
+    setIsloadingExceptAudios(false)
   }
 
   async function getAudiosByPlaylist() {
     try {
+      setIsloadingPlaylistAudios(true)
+
       const data: AudioDTO[] = await getAudioByPlaylist(currentPlayList)
       setAudiosPlaylist(data)
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsloadingPlaylistAudios(false)
     }
   }
 
   async function getAudios() {
     try {
+      setIsloadingExceptAudios(true)
+
       const data = [
         { id: '0', name: 'toque 1' },
         { id: '1', name: 'toque 2' },
@@ -72,6 +99,8 @@ export function PlayListDetail() {
       setAudios(data)
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsloadingExceptAudios(false)
     }
   }
 
@@ -131,22 +160,15 @@ export function PlayListDetail() {
   }, [])
 
   useEffect(() => {
+    setIsloadingExceptAudios(true)
     setExceptAudios(
       audios.filter((a) => !audiosPlaylist.map((b) => b.id).includes(a.id)),
     )
+    setIsloadingExceptAudios(false)
   }, [audios, audiosPlaylist])
 
   useEffect(() => {
-    if (searchText === '') {
-      setFilteredAudios(exceptAudios)
-    } else {
-      setFilteredAudios(
-        exceptAudios.filter(
-          (item) =>
-            item.name.toUpperCase().indexOf(searchText.toUpperCase()) > -1,
-        ),
-      )
-    }
+    filterList()
   }, [searchText, exceptAudios])
 
   return (
@@ -162,28 +184,32 @@ export function PlayListDetail() {
       <Box flex={1}>
         <VStack flex={1}>
           <Box flex={0.4} p={2} mb={1} bg="gray.500">
-            <FlatList
-              data={audiosPlaylist}
-              keyExtractor={(item) => item.id.toString()}
-              ref={flatListRef}
-              renderItem={({ item }) => (
-                <AudioPlaylistCard
-                  name={item.name}
-                  type="REMOVE"
-                  action={() => {
-                    removeAudio(item)
-                  }}
-                />
-              )}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={[
-                { paddingBottom: 100 },
-                audios.length === 0 && { flex: 1 },
-              ]}
-              ListEmptyComponent={() => (
-                <ListEmpty message="Não há toques cadastrados" />
-              )}
-            />
+            {isLoadingPlaylistAudios ? (
+              <Loading />
+            ) : (
+              <FlatList
+                data={audiosPlaylist}
+                keyExtractor={(item) => item.id.toString()}
+                ref={flatListRef}
+                renderItem={({ item }) => (
+                  <AudioPlaylistCard
+                    name={item.name}
+                    type="REMOVE"
+                    action={() => {
+                      removeAudio(item)
+                    }}
+                  />
+                )}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={[
+                  { paddingBottom: 100 },
+                  audios.length === 0 && { flex: 1 },
+                ]}
+                ListEmptyComponent={() => (
+                  <ListEmpty message="Não há toques cadastrados" />
+                )}
+              />
+            )}
           </Box>
 
           <HStack>
@@ -205,27 +231,31 @@ export function PlayListDetail() {
           </HStack>
 
           <Box flex={0.6} p={2} mt={1} bg="gray.500">
-            <FlatList
-              data={filteredAudios}
-              keyExtractor={(item) => item.id.toString()}
-              renderItem={({ item }) => (
-                <AudioPlaylistCard
-                  name={item.name}
-                  type="ADD"
-                  action={() => {
-                    addAudio(item)
-                  }}
-                />
-              )}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={[
-                { paddingBottom: 100 },
-                audios.length === 0 && { flex: 1 },
-              ]}
-              ListEmptyComponent={() => (
-                <ListEmpty message="Não há toques cadastrados" />
-              )}
-            />
+            {isLoadingExceptAudios ? (
+              <Loading />
+            ) : (
+              <FlatList
+                data={filteredAudios}
+                keyExtractor={(item) => item.id.toString()}
+                renderItem={({ item }) => (
+                  <AudioPlaylistCard
+                    name={item.name}
+                    type="ADD"
+                    action={() => {
+                      addAudio(item)
+                    }}
+                  />
+                )}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={[
+                  { paddingBottom: 100 },
+                  audios.length === 0 && { flex: 1 },
+                ]}
+                ListEmptyComponent={() => (
+                  <ListEmpty message="Não há toques cadastrados" />
+                )}
+              />
+            )}
           </Box>
         </VStack>
       </Box>

@@ -15,14 +15,17 @@ import { ListEmpty } from '../../components/ListEmpty'
 import { PlaylistCard } from '../../components/PlaylistCard'
 
 import { AppError } from '../../utils/AppError'
+import { Loading } from '../../components/Loading'
 
 export function PlayLists() {
   const [newPlaylist, setNewPlaylist] = useState('')
   const [playLists, setPlayLists] = useState<string[]>([])
   const flatListRef = React.useRef<FlatList>(null)
+  const [isLoading, setIsloading] = useState(false)
 
   async function createPlaylist() {
     try {
+      setIsloading(true)
       if (newPlaylist.trim().length === 0) {
         throw new AppError('Informe o nome da playlist.')
       }
@@ -39,21 +42,26 @@ export function PlayLists() {
         Alert.alert('Nova Playlist', 'Não foi possível cadastrar a playlist.')
         console.log(error)
       }
+    } finally {
+      setIsloading(false)
     }
   }
 
   async function getPlaylists() {
-    console.log('Geting playlists')
     try {
+      setIsloading(true)
       const data = await playlistGetAll()
       await setPlayLists(data)
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsloading(false)
     }
   }
 
   async function removePlaylist(name: string) {
     try {
+      setIsloading(true)
       await playlistRemove(name)
       await getPlaylists()
     } catch (error) {
@@ -66,6 +74,8 @@ export function PlayLists() {
         )
         console.log(error)
       }
+    } finally {
+      setIsloading(false)
     }
   }
 
@@ -95,7 +105,6 @@ export function PlayLists() {
   // )
 
   useEffect(() => {
-    console.log('useEffect executou para buscar as playlists')
     getPlaylists()
   }, [])
 
@@ -122,30 +131,34 @@ export function PlayLists() {
         </HStack>
       </Box>
 
-      <FlatList
-        data={playLists}
-        keyExtractor={(item) => item}
-        ref={flatListRef}
-        renderItem={({ item }) => (
-          <PlaylistCard
-            name={item}
-            onEdit={() => {
-              editPlaylist(item)
-            }}
-            onRemove={() => {
-              handleRemovePlaylist(item)
-            }}
-          />
-        )}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[
-          { paddingBottom: 100 },
-          playLists.length === 0 && { flex: 1 },
-        ]}
-        ListEmptyComponent={() => (
-          <ListEmpty message="Não há toques cadastrados" />
-        )}
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <FlatList
+          data={playLists}
+          keyExtractor={(item) => item}
+          ref={flatListRef}
+          renderItem={({ item }) => (
+            <PlaylistCard
+              name={item}
+              onEdit={() => {
+                editPlaylist(item)
+              }}
+              onRemove={() => {
+                handleRemovePlaylist(item)
+              }}
+            />
+          )}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[
+            { paddingBottom: 100 },
+            playLists.length === 0 && { flex: 1 },
+          ]}
+          ListEmptyComponent={() => (
+            <ListEmpty message="Não há toques cadastrados" />
+          )}
+        />
+      )}
     </Box>
   )
 }

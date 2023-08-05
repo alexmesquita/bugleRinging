@@ -6,6 +6,7 @@ import { ListEmpty } from '../../components/ListEmpty'
 import { AudioCard } from '../../components/AudioCard'
 import { Input } from '../../components/Input'
 import { IconButton } from '../../components/IconButton'
+import { Loading } from '../../components/Loading'
 
 export function Audios() {
   const [audios, setAudios] = useState([
@@ -29,35 +30,49 @@ export function Audios() {
   const [filteredAudios, setFilteredAudios] = useState(audios)
   const [searchText, setSearchText] = useState('')
   const [orderToSort, setOrderToSort] = useState(1)
+  const [isLoading, setIsloading] = useState(false)
 
   async function getAudios() {
     try {
+      setIsloading(true)
       console.log('Getting bubles')
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsloading(false)
     }
   }
 
   function orderList() {
+    setIsloading(true)
     setFilteredAudios(
       filteredAudios.sort((a, b) =>
         a.name > b.name ? orderToSort : b.name > a.name ? orderToSort * -1 : 0,
       ),
     )
+    setIsloading(false)
 
     setOrderToSort(orderToSort * -1)
   }
 
   useEffect(() => {
-    if (searchText === '') {
-      setFilteredAudios(audios)
-    } else {
-      setFilteredAudios(
-        audios.filter(
-          (item) =>
-            item.name.toUpperCase().indexOf(searchText.toUpperCase()) > -1,
-        ),
-      )
+    try {
+      setIsloading(true)
+
+      if (searchText === '') {
+        setFilteredAudios(audios)
+      } else {
+        setFilteredAudios(
+          audios.filter(
+            (item) =>
+              item.name.toUpperCase().indexOf(searchText.toUpperCase()) > -1,
+          ),
+        )
+      }
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsloading(false)
     }
   }, [searchText])
 
@@ -90,28 +105,31 @@ export function Audios() {
           />
         </HStack>
       </Box>
-
-      <FlatList
-        data={filteredAudios}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <AudioCard
-            name={item.name}
-            duration={item.duration}
-            onPlayPause={() => {
-              console.log('play/pause: ' + item.name)
-            }}
-          />
-        )}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[
-          { paddingBottom: 100 },
-          filteredAudios.length === 0 && { flex: 1 },
-        ]}
-        ListEmptyComponent={() => (
-          <ListEmpty message="Não há toques cadastrados" />
-        )}
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <FlatList
+          data={filteredAudios}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <AudioCard
+              name={item.name}
+              duration={item.duration}
+              onPlayPause={() => {
+                console.log('play/pause: ' + item.name)
+              }}
+            />
+          )}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[
+            { paddingBottom: 100 },
+            filteredAudios.length === 0 && { flex: 1 },
+          ]}
+          ListEmptyComponent={() => (
+            <ListEmpty message="Não há toques cadastrados" />
+          )}
+        />
+      )}
     </Box>
   )
 }
