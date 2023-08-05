@@ -16,6 +16,7 @@ import { Input } from '../../components/Input'
 import { audioCreateByPlaylist } from '../../storage/audio/audioCreateByPlaylist'
 import { getAudioByPlaylist } from '../../storage/audio/getAudioByPlaylist'
 import { AudioDTO } from '../../storage/audio/AudioDTO'
+import { audioRemoveByPlaylist } from '../../storage/audio/audioRemoveByPlaylist'
 
 export function PlayListDetail() {
   const [currentPlayList, setCurrentPlayList] = useState('Desfile 1')
@@ -39,7 +40,6 @@ export function PlayListDetail() {
   }
 
   async function getAudiosByPlaylist() {
-    console.log('Geting audios by playlist')
     try {
       const data: AudioDTO[] = await getAudioByPlaylist(currentPlayList)
       setAudiosPlaylist(data)
@@ -49,7 +49,6 @@ export function PlayListDetail() {
   }
 
   async function getAudios() {
-    console.log('Geting audios')
     try {
       // const data = await playlistGetAll()
       const data = [
@@ -76,7 +75,7 @@ export function PlayListDetail() {
     }
   }
 
-  async function addAudio(item: any) {
+  async function addAudio(item: AudioDTO) {
     const newAudio = {
       name: item.name,
       id: item.id,
@@ -97,15 +96,23 @@ export function PlayListDetail() {
         console.log(error)
       }
     }
-    console.log(`Add toque: ${item}`)
   }
 
-  const removeAudio = (item: any) => {
-    console.log(`Apagar toque: ${item}`)
+  async function removeAudio(item: AudioDTO) {
+    try {
+      await audioRemoveByPlaylist(item.id, currentPlayList)
+      await getAudiosByPlaylist()
+    } catch (error) {
+      if (error instanceof AppError) {
+        Alert.alert('Remover Audio', error.message)
+      } else {
+        Alert.alert('Remover Audio', 'Não foi possível remover o Audio.')
+        console.log(error)
+      }
+    }
   }
 
   const scrollToEnd = () => {
-    console.log('scroing to end')
     flatListRef.current?.scrollToEnd({ animated: true })
   }
 
@@ -119,7 +126,6 @@ export function PlayListDetail() {
   // )
 
   useEffect(() => {
-    console.log('useEffect executou para buscar os audios')
     getAudios()
     getAudiosByPlaylist()
   }, [])
@@ -131,7 +137,6 @@ export function PlayListDetail() {
   }, [audios, audiosPlaylist])
 
   useEffect(() => {
-    console.log(searchText)
     if (searchText === '') {
       setFilteredAudios(exceptAudios)
     } else {
