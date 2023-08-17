@@ -10,8 +10,8 @@ import {
 } from '@expo-google-fonts/roboto'
 
 import { THEME } from './src/theme'
-import { PlayListDetail } from './src/screens/PlayListDetail'
 import { Loading } from './src/components/Loading'
+import { Routes } from './src/routes'
 
 export default function App() {
   const [fontsLoader] = useFonts({ Roboto_400Regular, Roboto_700Bold })
@@ -24,7 +24,7 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
-        {fontsLoader ? <PlayListDetail /> : <Loading />}
+        {fontsLoader ? <Routes /> : <Loading />}
       </ThemeProvider>
     </NativeBaseProvider>
   )

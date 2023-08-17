@@ -1,12 +1,22 @@
 import logoImg from '../../../assets/images/logo.png'
 import { HStack, Image } from 'native-base'
 import { IconButton } from '../IconButton'
+import { useNavigation } from '@react-navigation/native'
+import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 
 type Props = {
   showBackButton?: boolean
 }
 
 export function Header({ showBackButton = false }: Props) {
+  const navigation = useNavigation<AppNavigatorRoutesProps>()
+
+  function goBack() {
+    if (navigation.canGoBack()) {
+      navigation.goBack()
+    }
+  }
+
   return (
     <HStack
       mt={6}
@@ -16,7 +26,7 @@ export function Header({ showBackButton = false }: Props) {
     >
       {showBackButton && (
         <IconButton
-          onPress={() => console.log("I'm Pressed back button")}
+          onPress={goBack}
           name="arrow-back-ios"
           color="white"
           size={9}

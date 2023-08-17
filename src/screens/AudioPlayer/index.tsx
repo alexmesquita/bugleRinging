@@ -21,6 +21,8 @@ import { playListData } from '../../audiosInfos'
 import { playListUrl } from '../../audiosUrl'
 import { Header } from '../../components/Header'
 import { Button } from '../../components/Button'
+import { useNavigation } from '@react-navigation/native'
+import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 
 export function AudioPlayer() {
   const [sound, setSound] = useState<Sound>()
@@ -31,6 +33,8 @@ export function AudioPlayer() {
   const [sliderPositionMillis, setSliderPositionMillis] = useState(0)
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0)
   const [assets, error] = useAssets(playListUrl)
+  const navigation = useNavigation<AppNavigatorRoutesProps>()
+
 
   const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
     if (status.isLoaded) {
@@ -133,6 +137,7 @@ export function AudioPlayer() {
       <ListArtWrapper>
         <AlbumContainer>
           {artwork && (
+            // aula 03-04-32
             <AlbumArtImg
               source={{ uri: artwork?.toString() }}
               alt="Album image"
@@ -145,7 +150,7 @@ export function AudioPlayer() {
 
   return (
     <Container>
-      <Header showBackButton />
+      <Header showBackButton={navigation.canGoBack()} />
       <FlatList
         horizontal
         data={playListData}

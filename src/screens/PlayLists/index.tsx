@@ -1,8 +1,10 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { Alert, FlatList, Keyboard } from 'react-native'
 
-import { Center, Heading, Box, HStack } from 'native-base'
+import { Center, Heading, Box, HStack, useToast } from 'native-base'
+
+import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 
 import { playlistCreate } from '../../storage/playlist/playlistCreate'
 import { playlistRemove } from '../../storage/playlist/playlistRemove'
@@ -18,10 +20,12 @@ import { AppError } from '../../utils/AppError'
 import { Loading } from '../../components/Loading'
 
 export function PlayLists() {
+  const navigation = useNavigation<AppNavigatorRoutesProps>()
   const [newPlaylist, setNewPlaylist] = useState('')
   const [playLists, setPlayLists] = useState<string[]>([])
   const flatListRef = React.useRef<FlatList>(null)
   const [isLoading, setIsloading] = useState(false)
+  const toast = useToast()
 
   async function createPlaylist() {
     try {
@@ -37,9 +41,17 @@ export function PlayLists() {
       scrollToEnd()
     } catch (error) {
       if (error instanceof AppError) {
-        Alert.alert('Nova Playlist', error.message)
+        toast.show({
+          title: error.message,
+          placement: 'top',
+          bgColor: 'red.500',
+        })
       } else {
-        Alert.alert('Nova Playlist', 'Não foi possível cadastrar a playlist.')
+        toast.show({
+          title: 'Não foi possível cadastrar a playlist.',
+          placement: 'top',
+          bgColor: 'red.500',
+        })
         console.log(error)
       }
     } finally {
@@ -66,12 +78,17 @@ export function PlayLists() {
       await getPlaylists()
     } catch (error) {
       if (error instanceof AppError) {
-        Alert.alert('Excluir Playlist', error.message)
+        toast.show({
+          title: error.message,
+          placement: 'top',
+          bgColor: 'red.500',
+        })
       } else {
-        Alert.alert(
-          'Excluir Playlist',
-          'Não foi possível cadastrar a playlist.',
-        )
+        toast.show({
+          title: 'Não foi possível cadastrar a playlist.',
+          placement: 'top',
+          bgColor: 'red.500',
+        })
         console.log(error)
       }
     } finally {
@@ -87,6 +104,7 @@ export function PlayLists() {
   }
 
   async function editPlaylist(name: string) {
+    navigation.navigate('PlayListDetail', { playList: name })
     console.log(`editar playlist: ${name}`)
   }
 
@@ -110,7 +128,7 @@ export function PlayLists() {
 
   return (
     <Box flex={1} bg="background" px={2} pb={2}>
-      <Header showBackButton />
+      <Header showBackButton={navigation.canGoBack()} />
 
       <Center>
         <Heading mb={2} color="white">

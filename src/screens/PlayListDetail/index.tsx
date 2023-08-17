@@ -1,9 +1,13 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import { useFocusEffect } from '@react-navigation/native'
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native'
 
-import { Alert, FlatList } from 'react-native'
+import { FlatList } from 'react-native'
 
-import { Center, Heading, Box, HStack, VStack } from 'native-base'
+import { Center, Heading, Box, HStack, VStack, useToast } from 'native-base'
 
 import { Header } from '../../components/Header'
 import { IconButton } from '../../components/IconButton'
@@ -18,12 +22,21 @@ import { audioRemoveByPlaylist } from '../../storage/audio/audioRemoveByPlaylist
 
 import { AppError } from '../../utils/AppError'
 import { Loading } from '../../components/Loading'
+import { AppNavigatorRoutesProps } from '../../routes/app.routes'
+
+type RouteParamsProps = {
+  playList: string
+}
 
 export function PlayListDetail() {
-  const [currentPlayList, setCurrentPlayList] = useState('Desfile 1')
+  const route = useRoute()
+  const { playList } = route.params as RouteParamsProps
+
+  const [currentPlayList, setCurrentPlayList] = useState(playList)
   const [audios, setAudios] = useState<AudioDTO[]>([])
   const [audiosPlaylist, setAudiosPlaylist] = useState<AudioDTO[]>([])
   const flatListRef = React.useRef<FlatList>(null)
+  const toast = useToast()
 
   const [exceptAudios, setExceptAudios] = useState(audios)
   const [filteredAudios, setFilteredAudios] = useState(audios)
@@ -31,6 +44,10 @@ export function PlayListDetail() {
   const [orderToSort, setOrderToSort] = useState(1)
   const [isLoadingPlaylistAudios, setIsloadingPlaylistAudios] = useState(false)
   const [isLoadingExceptAudios, setIsloadingExceptAudios] = useState(false)
+
+  
+
+  const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   function orderList() {
     setIsloadingExceptAudios(true)
@@ -116,12 +133,17 @@ export function PlayListDetail() {
       scrollToEnd()
     } catch (error) {
       if (error instanceof AppError) {
-        Alert.alert('Novo Audio para a Playlist', error.message)
+        toast.show({
+          title: error.message,
+          placement: 'top',
+          bgColor: 'red.500',
+        })
       } else {
-        Alert.alert(
-          'Novo Audio para a Playlist',
-          'Não foi possível cadastrar o Audio.',
-        )
+        toast.show({
+          title: 'Não foi possível cadastrar o Audio.',
+          placement: 'top',
+          bgColor: 'red.500',
+        })
         console.log(error)
       }
     }
@@ -133,9 +155,17 @@ export function PlayListDetail() {
       await getAudiosByPlaylist()
     } catch (error) {
       if (error instanceof AppError) {
-        Alert.alert('Remover Audio', error.message)
+        toast.show({
+          title: error.message,
+          placement: 'top',
+          bgColor: 'red.500',
+        })
       } else {
-        Alert.alert('Remover Audio', 'Não foi possível remover o Audio.')
+        toast.show({
+          title: 'Não foi possível remover o Audio.',
+          placement: 'top',
+          bgColor: 'red.500',
+        })
         console.log(error)
       }
     }
@@ -173,7 +203,7 @@ export function PlayListDetail() {
 
   return (
     <Box flex={1} bg="background" px={2} pb={2}>
-      <Header showBackButton />
+      <Header showBackButton={navigation.canGoBack()} />
 
       <Center>
         <Heading mb={2} color="white">

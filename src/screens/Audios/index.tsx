@@ -7,6 +7,8 @@ import { AudioCard } from '../../components/AudioCard'
 import { Input } from '../../components/Input'
 import { IconButton } from '../../components/IconButton'
 import { Loading } from '../../components/Loading'
+import { useNavigation } from '@react-navigation/native'
+import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 
 export function Audios() {
   const [audios, setAudios] = useState([
@@ -31,6 +33,8 @@ export function Audios() {
   const [searchText, setSearchText] = useState('')
   const [orderToSort, setOrderToSort] = useState(1)
   const [isLoading, setIsloading] = useState(false)
+  const navigation = useNavigation<AppNavigatorRoutesProps>()
+
 
   async function getAudios() {
     try {
@@ -78,7 +82,7 @@ export function Audios() {
 
   return (
     <Box flex={1} bg="background" px={2}>
-      <Header showBackButton />
+      <Header showBackButton={navigation.canGoBack()} />
 
       <Center>
         <Heading mb={2} color="white">
