@@ -5,7 +5,7 @@ import { Center, Heading, Box } from 'native-base'
 import { Header } from '../../components/Header'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 
-export function PlayListDetail() {
+export function WhatsRinging() {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   return (
@@ -14,7 +14,7 @@ export function PlayListDetail() {
 
       <Center>
         <Heading mb={2} color="white">
-          Playlist Detail
+          Whats Ringing
         </Heading>
       </Center>
     </Box>

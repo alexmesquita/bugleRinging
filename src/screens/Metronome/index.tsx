@@ -5,7 +5,7 @@ import { Center, Heading, Box } from 'native-base'
 import { Header } from '../../components/Header'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 
-export function PlayListDetail() {
+export function Metronome() {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   return (
@@ -14,7 +14,7 @@ export function PlayListDetail() {
 
       <Center>
         <Heading mb={2} color="white">
-          Playlist Detail
+          Metronome screen
         </Heading>
       </Center>
     </Box>
