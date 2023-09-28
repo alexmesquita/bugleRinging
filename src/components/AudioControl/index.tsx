@@ -1,13 +1,14 @@
 import React, { PropsWithChildren } from 'react'
-import { Pressable } from 'react-native'
+import { MaterialIcons } from '@expo/vector-icons'
 
-import { Icon, Container } from './styles'
+import { Box, Center, HStack } from 'native-base'
+import { IconButton } from '../IconButton'
 
 type AudioControlProps = PropsWithChildren<{
   playing: boolean
-  playSound: Function
-  skipToNext: Function
-  skipToPrevious: Function
+  playSound: () => void
+  skipToNext: () => void
+  skipToPrevious: () => void
 }>
 
 export function AudioControl({
@@ -17,28 +18,38 @@ export function AudioControl({
   skipToPrevious,
 }: AudioControlProps) {
   return (
-    <Container>
-      <Pressable
-        onPress={() => {
-          skipToPrevious()
-        }}
-      >
-        <Icon name="skip-previous" size={40} />
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          playSound()
-        }}
-      >
-        <Icon name={playing ? 'pause' : 'play-arrow'} size={75} />
-      </Pressable>
-      <Pressable
-        onPress={() => {
-          skipToNext()
-        }}
-      >
-        <Icon name="skip-next" size={40} />
-      </Pressable>
-    </Container>
+    <Box mb="16" flex={1}>
+      <Center>
+        <HStack>
+          <IconButton
+            as={MaterialIcons}
+            name="skip-previous"
+            size={10}
+            alignItems="center"
+            mx={1}
+            onPress={skipToPrevious}
+            color="orange.100"
+          />
+          <IconButton
+            as={MaterialIcons}
+            name={playing ? 'pause' : 'play-arrow'}
+            size={20}
+            alignItems="center"
+            mx={1}
+            onPress={playSound}
+            color="orange.100"
+          />
+          <IconButton
+            as={MaterialIcons}
+            name="skip-next"
+            size={10}
+            alignItems="center"
+            mx={1}
+            onPress={skipToNext}
+            color="orange.100"
+          />
+        </HStack>
+      </Center>
+    </Box>
   )
 }

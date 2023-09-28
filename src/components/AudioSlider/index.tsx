@@ -1,8 +1,8 @@
 import React, { PropsWithChildren } from 'react'
-import { View } from 'react-native'
+import Slider from '@react-native-community/slider'
 
-import { SliderContainer, Time, TimeContainer } from './styles'
 import { millisToMinutesAndSeconds } from '../../utils/dateTime'
+import { Box, HStack, Text, useTheme } from 'native-base'
 
 type SliderProps = PropsWithChildren<{
   sliderPositionMillis: number
@@ -17,9 +17,11 @@ export function AudioSlider({
   onSliderChange,
   onSlidingComplete,
 }: SliderProps) {
+  const { colors } = useTheme()
+
   return (
-    <View>
-      <SliderContainer
+    <Box mt="6" mx="1">
+      <Slider
         value={sliderPositionMillis}
         minimumValue={0}
         maximumValue={durationMillis}
@@ -27,11 +29,20 @@ export function AudioSlider({
           onSliderChange(value)
         }}
         onSlidingComplete={() => onSlidingComplete()}
+        thumbTintColor={colors.orange[700]}
+        maximumTrackTintColor={colors.orange[300]}
+        minimumTrackTintColor={colors.orange[700]}
+        //   width: 350px;
       />
-      <TimeContainer>
-        <Time>{millisToMinutesAndSeconds(sliderPositionMillis)}</Time>
-        <Time>{millisToMinutesAndSeconds(durationMillis)}</Time>
-      </TimeContainer>
-    </View>
+      <HStack justifyContent="space-between">
+        {/* //   width: 340px; */}
+        <Text color="orange.200">
+          {millisToMinutesAndSeconds(sliderPositionMillis)}
+        </Text>
+        <Text color="orange.200">
+          {millisToMinutesAndSeconds(durationMillis)}
+        </Text>
+      </HStack>
+    </Box>
   )
 }

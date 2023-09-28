@@ -176,7 +176,6 @@ export function AudioPlayer() {
         skipToNext={skipToNext}
         skipToPrevious={skipToPrevious}
       />
-      {/* <Button title="Salvar Playlist" type="SECONDARY" /> */}
     </Box>
   )
 }

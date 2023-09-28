@@ -1,7 +1,5 @@
 import React, { PropsWithChildren } from 'react'
-import { View } from 'react-native'
-
-import { Container, Name, Artist } from './styles'
+import { Box, Center, HStack, Heading, Text } from 'native-base'
 
 type SongInfoProps = PropsWithChildren<{
   title: string
@@ -11,13 +9,19 @@ type SongInfoProps = PropsWithChildren<{
 
 export function AudioInfo({ title, artist, album }: SongInfoProps) {
   return (
-    <Container>
-      <View>
-        <Name>{title}</Name>
-        <Artist>
-          {artist} . {album}
-        </Artist>
-      </View>
-    </Container>
+    <Center mt={4}>
+      <HStack w="90%" justifyContent="center">
+        <Box rounded="md">
+          <Center>
+            <Heading color="orange.600" fontSize="xl" justifyContent="center">
+              {title}
+            </Heading>
+            <Text color="orange.300" fontSize="md" justifyContent="center">
+              {artist} - {album}
+            </Text>
+          </Center>
+        </Box>
+      </HStack>
+    </Center>
   )
 }
