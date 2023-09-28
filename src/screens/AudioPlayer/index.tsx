@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { FlatList, Text } from 'react-native'
+import { Dimensions, FlatList, Text } from 'react-native'
 import { useAssets } from 'expo-asset'
 
 import { Audio } from 'expo-av'
@@ -10,19 +10,12 @@ import { AudioInfo } from '../../components/AudioInfo'
 import { AudioControl } from '../../components/AudioControl'
 import { AudioSlider } from '../../components/AudioSlider'
 
-import {
-  Container,
-  ListArtWrapper,
-  AlbumContainer,
-  AlbumArtImg,
-} from './styles'
-
 import { playListData } from '../../audiosInfos'
 import { playListUrl } from '../../audiosUrl'
 import { Header } from '../../components/Header'
-import { Button } from '../../components/Button'
 import { useNavigation } from '@react-navigation/native'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
+import { Box, Center, Image } from 'native-base'
 
 export function AudioPlayer() {
   const [sound, setSound] = useState<Sound>()
@@ -34,7 +27,6 @@ export function AudioPlayer() {
   const [currentAudioIndex, setCurrentAudioIndex] = useState(0)
   const [assets, error] = useAssets(playListUrl)
   const navigation = useNavigation<AppNavigatorRoutesProps>()
-
 
   const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
     if (status.isLoaded) {
@@ -133,23 +125,30 @@ export function AudioPlayer() {
 
   const renderArtWork = () => {
     const artwork = playListData[currentAudioIndex].artwork
+    const { width } = Dimensions.get('window')
     return (
-      <ListArtWrapper>
-        <AlbumContainer>
-          {artwork && (
-            // aula 03-04-32
-            <AlbumArtImg
-              source={{ uri: artwork?.toString() }}
-              alt="Album image"
-            />
-          )}
-        </AlbumContainer>
-      </ListArtWrapper>
+      <Center mx="-2">
+        <Box w={width}>
+          <Center>
+            <Box w={80} h={80}>
+              {artwork && (
+                // aula 03-04-32
+                <Image
+                  source={{ uri: artwork?.toString() }}
+                  alt="Album image"
+                  h="100%"
+                  rounded="md"
+                />
+              )}
+            </Box>
+          </Center>
+        </Box>
+      </Center>
     )
   }
 
   return (
-    <Container>
+    <Box flex={1} bg="background" px={2}>
       <Header showBackButton={navigation.canGoBack()} />
       <FlatList
         horizontal
@@ -178,6 +177,6 @@ export function AudioPlayer() {
         skipToPrevious={skipToPrevious}
       />
       {/* <Button title="Salvar Playlist" type="SECONDARY" /> */}
-    </Container>
+    </Box>
   )
 }

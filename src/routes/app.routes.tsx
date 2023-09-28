@@ -132,7 +132,7 @@ export function AppRoutes() {
         name="AudioPlayer"
         component={AudioPlayer}
         options={{
-          tabBarLabel: 'Hinos',
+          tabBarLabel: 'Canções',
           tabBarIcon: ({ color }) => (
             <Icon
               as={MaterialIcons}
