@@ -12,6 +12,7 @@ import {
 import { THEME } from './src/theme'
 import { Loading } from './src/components/Loading'
 import { Routes } from './src/routes'
+import { AudioContextProvider } from './src/contexts/AudioContext'
 
 export default function App() {
   const [fontsLoader] = useFonts({ Roboto_400Regular, Roboto_700Bold })
@@ -24,7 +25,9 @@ export default function App() {
           backgroundColor="transparent"
           translucent
         />
-        {fontsLoader ? <Routes /> : <Loading />}
+        <AudioContextProvider>
+          {fontsLoader ? <Routes /> : <Loading />}
+        </AudioContextProvider>
       </ThemeProvider>
     </NativeBaseProvider>
   )

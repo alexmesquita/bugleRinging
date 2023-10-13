@@ -5,7 +5,7 @@ import {
 } from '@react-navigation/bottom-tabs'
 import { PlayLists } from '../screens/PlayLists'
 import { PlayListDetail } from '../screens/PlayListDetail'
-import { Audios } from '../screens/Audios'
+import { Bugles } from '../screens/Bugles'
 import { AudioPlayer } from '../screens/AudioPlayer'
 import { PlayListEdit } from '../screens/PlayListEdit'
 import { WhatsRinging } from '../screens/WhatsRinging'
@@ -19,7 +19,7 @@ import {
 import { Icon, useTheme } from 'native-base'
 
 type AppRoutesTypes = {
-  Audios: undefined
+  Bugles: undefined
   PlayLists: undefined
   PlayListDetail: { playList: string }
   PlayListEdit: { playList: string }
@@ -50,8 +50,8 @@ export function AppRoutes() {
       }}
     >
       <Screen
-        name="Audios"
-        component={Audios}
+        name="Bugles"
+        component={Bugles}
         options={{
           tabBarLabel: 'Toques',
           tabBarIcon: ({ color }) => (

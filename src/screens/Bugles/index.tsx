@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react'
-import { Heading, Box, Center, FlatList, HStack } from 'native-base'
+import { useCallback, useEffect, useState } from 'react'
+import { Heading, Box, Center, FlatList, HStack, useToast } from 'native-base'
+
+import { useAudioPlayer } from '../../hooks/useAudioPlayer'
 
 import { Header } from '../../components/Header'
 import { ListEmpty } from '../../components/ListEmpty'
@@ -7,44 +9,68 @@ import { AudioCard } from '../../components/AudioCard'
 import { Input } from '../../components/Input'
 import { IconButton } from '../../components/IconButton'
 import { Loading } from '../../components/Loading'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 
-export function Audios() {
-  const [audios, setAudios] = useState([
-    { id: 0, name: 'toque 1', duration: 10000 },
-    { id: 1, name: 'toque 2', duration: 20000 },
-    { id: 2, name: 'abc 3', duration: 3000 },
-    { id: 3, name: 'bcd 2', duration: 10000 },
-    { id: 4, name: '123', duration: 12000 },
-    { id: 5, name: '94', duration: 9000 },
-    { id: 6, name: '9iol,', duration: 15000 },
-    { id: 7, name: 'avsd', duration: 10000 },
-    { id: 8, name: 'as', duration: 18000 },
-    { id: 9, name: 'atnhsr', duration: 10000 },
-    { id: 10, name: '92334', duration: 13000 },
-    { id: 11, name: '9tyyt', duration: 10000 },
-    { id: 12, name: '1254765', duration: 2000 },
-    { id: 13, name: '9876798', duration: 1000 },
-    { id: 14, name: 'sagd', duration: 7000 },
-    { id: 15, name: 'baiukf', duration: 20000 },
-  ])
-  const [filteredAudios, setFilteredAudios] = useState(audios)
+import { buglesData } from '../../storage/audiosInfos/bugles/infos'
+import { buglesUrls } from '../../storage/audiosInfos/bugles/urls'
+import { useAssets } from 'expo-asset'
+import { selectAudio } from '../../services/AudioController'
+import { AudioDTO } from '../../dtos/AudioDTO'
+
+export function Bugles() {
+  const [filteredAudios, setFilteredAudios] = useState(buglesData)
   const [searchText, setSearchText] = useState('')
   const [orderToSort, setOrderToSort] = useState(1)
   const [isLoading, setIsloading] = useState(false)
   const navigation = useNavigation<AppNavigatorRoutesProps>()
+  const [assets, assetError] = useAssets(buglesUrls)
+  const toast = useToast()
+  const audioPlayerContext = useAudioPlayer()
 
-
-  async function getAudios() {
+  async function getAudiosUris() {
     try {
       setIsloading(true)
-      console.log('Getting bubles')
+      if (assets && assets.length === buglesData.length) {
+        buglesData.forEach((value, index) => {
+          value.uri = assets[index].uri
+        })
+        updateAudiosContext()
+      }
     } catch (error) {
+      toast.show({
+        title: 'Não foi possível buscar os Toques.',
+        placement: 'top',
+        bgColor: 'red.500',
+      })
       console.log(error)
+      console.log('assetError: ' + assetError)
     } finally {
       setIsloading(false)
     }
+  }
+
+  function updateAudiosContext() {
+    try {
+      setIsloading(true)
+      audioPlayerContext.audioPlayer.audioFiles = buglesData
+      audioPlayerContext.setAudioPlayer(audioPlayerContext.audioPlayer)
+    } catch (error) {
+      toast.show({
+        title: 'Não foi possível atualizar Toques.',
+        placement: 'top',
+        bgColor: 'red.500',
+      })
+      console.log(error)
+      console.log('assetError: ' + assetError)
+    } finally {
+      setIsloading(false)
+    }
+  }
+
+  async function handlePlayPause(bugle: AudioDTO) {
+    console.log(bugle)
+    await selectAudio(bugle, audioPlayerContext)
   }
 
   function orderList() {
@@ -64,10 +90,10 @@ export function Audios() {
       setIsloading(true)
 
       if (searchText === '') {
-        setFilteredAudios(audios)
+        setFilteredAudios(buglesData)
       } else {
         setFilteredAudios(
-          audios.filter(
+          buglesData.filter(
             (item) =>
               item.name.toUpperCase().indexOf(searchText.toUpperCase()) > -1,
           ),
@@ -79,6 +105,20 @@ export function Audios() {
       setIsloading(false)
     }
   }, [searchText])
+
+  useEffect(() => {
+    getAudiosUris()
+  }, [assets])
+
+  // TODO verificar se precisa atualizar o audioFiles do contexto quando trocar de tela
+  useFocusEffect(
+    useCallback(() => {
+      console.log(
+        'useFocusEffect executou para buscar Atualizar os audios no contexto',
+      )
+      updateAudiosContext()
+    }, []),
+  )
 
   return (
     <Box flex={1} bg="background" px={2}>
@@ -120,7 +160,7 @@ export function Audios() {
               name={item.name}
               duration={item.duration}
               onPlayPause={() => {
-                console.log('play/pause: ' + item.name)
+                handlePlayPause(item)
               }}
             />
           )}
