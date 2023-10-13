@@ -23,6 +23,7 @@ import { audioRemoveByPlaylist } from '../../storage/audio/audioRemoveByPlaylist
 import { AppError } from '../../utils/AppError'
 import { Loading } from '../../components/Loading'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
+import { useAudioPlayer } from '../../hooks/useAudioPlayer'
 
 type RouteParamsProps = {
   playList: string
@@ -32,7 +33,7 @@ export function PlayListEdit() {
   const route = useRoute()
   const { playList } = route.params as RouteParamsProps
 
-  const [currentPlayList, setCurrentPlayList] = useState(playList)
+  const [currentPlayList, setCurrentPlayList] = useState('')
   const [audios, setAudios] = useState<AudioDTO[]>([])
   const [audiosPlaylist, setAudiosPlaylist] = useState<AudioDTO[]>([])
   const flatListRef = React.useRef<FlatList>(null)
@@ -44,6 +45,7 @@ export function PlayListEdit() {
   const [orderToSort, setOrderToSort] = useState(1)
   const [isLoadingPlaylistAudios, setIsloadingPlaylistAudios] = useState(false)
   const [isLoadingExceptAudios, setIsloadingExceptAudios] = useState(false)
+  const audioPlayerContext = useAudioPlayer()
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
@@ -76,11 +78,13 @@ export function PlayListEdit() {
     setIsloadingExceptAudios(false)
   }
 
-  async function getAudiosByPlaylist() {
+  async function getAudiosByPlaylist(playListToSearch: string) {
     try {
       setIsloadingPlaylistAudios(true)
 
-      const data: AudioDTO[] = await getAudioByPlaylist(currentPlayList)
+      console.log('Buscando audios da playlist: ' + playListToSearch)
+      const data: AudioDTO[] = await getAudioByPlaylist(playListToSearch)
+      console.log('audios: ' + JSON.stringify(playListToSearch))
       setAudiosPlaylist(data)
     } catch (error) {
       console.log(error)
@@ -92,26 +96,7 @@ export function PlayListEdit() {
   async function getAudios() {
     try {
       setIsloadingExceptAudios(true)
-
-      const data = [
-        { id: '0', name: 'toque 1' },
-        { id: '1', name: 'toque 2' },
-        { id: '2', name: 'abc 3' },
-        { id: '3', name: 'bcd 2' },
-        { id: '4', name: '123' },
-        { id: '5', name: '94' },
-        { id: '6', name: '9iol,' },
-        { id: '7', name: 'avsd' },
-        { id: '8', name: 'as' },
-        { id: '9', name: 'atnhsr' },
-        { id: '10', name: '92334' },
-        { id: '11', name: '9tyyt' },
-        { id: '12', name: '1254765' },
-        { id: '13', name: '9876798' },
-        { id: '14', name: 'sagd' },
-        { id: '15', name: 'baiukf' },
-      ]
-      setAudios(data)
+      setAudios(audioPlayerContext.audioPlayer.audioFiles)
     } catch (error) {
       console.log(error)
     } finally {
@@ -119,15 +104,17 @@ export function PlayListEdit() {
     }
   }
 
-  async function addAudio(item: AudioDTO) {
+  async function addAudio(item: AudioDTO, playListToAdd: string) {
     const newAudio = {
       name: item.name,
       id: item.id,
     }
 
     try {
-      await audioCreateByPlaylist(newAudio, currentPlayList)
-      await getAudiosByPlaylist()
+      console.log('add: ' + newAudio.name)
+      console.log('para: ' + playListToAdd)
+      await audioCreateByPlaylist(newAudio, playListToAdd)
+      await getAudiosByPlaylist(playListToAdd)
       scrollToEnd()
     } catch (error) {
       if (error instanceof AppError) {
@@ -147,10 +134,10 @@ export function PlayListEdit() {
     }
   }
 
-  async function removeAudio(item: AudioDTO) {
+  async function removeAudio(item: AudioDTO, playListToRemove: string) {
     try {
-      await audioRemoveByPlaylist(item.id, currentPlayList)
-      await getAudiosByPlaylist()
+      await audioRemoveByPlaylist(item.id, playListToRemove)
+      await getAudiosByPlaylist(playListToRemove)
     } catch (error) {
       if (error instanceof AppError) {
         toast.show({
@@ -175,17 +162,14 @@ export function PlayListEdit() {
 
   // TODO usar depois de colocar a navegação
 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     console.log('useFocusEffect executou para buscar as playlists')
-  //     getPlaylists()
-  //   }, []),
-  // )
-
-  useEffect(() => {
-    getAudios()
-    getAudiosByPlaylist()
-  }, [])
+  useFocusEffect(
+    useCallback(() => {
+      setCurrentPlayList(playList)
+      getAudios()
+      getAudiosByPlaylist(playList)
+      console.log('chegou a playlist: ' + playList)
+    }, [route]),
+  )
 
   useEffect(() => {
     setIsloadingExceptAudios(true)
@@ -224,7 +208,7 @@ export function PlayListEdit() {
                     name={item.name}
                     type="REMOVE"
                     action={() => {
-                      removeAudio(item)
+                      removeAudio(item, currentPlayList)
                     }}
                   />
                 )}
@@ -247,7 +231,7 @@ export function PlayListEdit() {
               value={searchText}
               onChangeText={setSearchText}
               placeholder="Pesquise um toque de corneta"
-              pl={1}
+              pl={2}
             />
             <IconButton
               bg="gray.500"
@@ -270,7 +254,7 @@ export function PlayListEdit() {
                     name={item.name}
                     type="ADD"
                     action={() => {
-                      addAudio(item)
+                      addAudio(item, currentPlayList)
                     }}
                   />
                 )}

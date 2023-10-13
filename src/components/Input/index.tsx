@@ -21,7 +21,12 @@ export function Input({ leftIcon = '', ...rest }: Props) {
       }}
       InputLeftElement={
         leftIcon !== '' ? (
-          <Icon as={<MaterialIcons name={leftIcon} />} size={6} color="white" />
+          <Icon
+            as={<MaterialIcons name={leftIcon} />}
+            size={6}
+            color="white"
+            pl={1}
+          />
         ) : undefined
       }
       {...rest}

@@ -1,13 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import {
-  Heading,
-  Box,
-  Center,
-  FlatList,
-  HStack,
-  useToast,
-  Text,
-} from 'native-base'
+import { Heading, Box, Center, FlatList, HStack, useToast } from 'native-base'
 
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
 
@@ -156,7 +148,7 @@ export function Bugles() {
             value={searchText}
             onChangeText={setSearchText}
             placeholder="Pesquise um toque de corneta"
-            pl={1}
+            pl={2}
           />
           <IconButton
             bg="gray.500"
@@ -170,36 +162,28 @@ export function Bugles() {
       {isLoading ? (
         <Loading />
       ) : (
-        <Box>
-          <FlatList
-            data={filteredAudios}
-            keyExtractor={(item) => item.id.toString()}
-            renderItem={({ item }) => (
-              <AudioCard
-                audioId={item.id}
-                name={item.name}
-                duration={item.duration}
-                onPlayPause={() => {
-                  handlePlayPause(item)
-                }}
-              />
-            )}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={[
-              { paddingBottom: 100 },
-              filteredAudios.length === 0 && { flex: 1 },
-            ]}
-            ListEmptyComponent={() => (
-              <ListEmpty message="Não há toques cadastrados" />
-            )}
-          />
-          <Center>
-            <Heading mb={2} color="white">
-              {audioPlayerContext.audioPlayer.currentAudio.name} -
-              {audioPlayerContext.audioPlayer.currentAudio.duration}
-            </Heading>
-          </Center>
-        </Box>
+        <FlatList
+          data={filteredAudios}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <AudioCard
+              audioId={item.id}
+              name={item.name}
+              duration={item.duration}
+              onPlayPause={() => {
+                handlePlayPause(item)
+              }}
+            />
+          )}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={[
+            { paddingBottom: 100 },
+            filteredAudios.length === 0 && { flex: 1 },
+          ]}
+          ListEmptyComponent={() => (
+            <ListEmpty message="Não há toques cadastrados" />
+          )}
+        />
       )}
     </Box>
   )
