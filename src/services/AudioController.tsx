@@ -2,6 +2,7 @@ import { Audio } from 'expo-av'
 import { AudioDTO } from '../dtos/AudioDTO'
 import {
   AudioContextDataProps,
+  AudioPlayerDataProps,
   activePlayListProps,
 } from '../contexts/AudioContext'
 
@@ -67,21 +68,29 @@ export async function selectAudio(
       const index = audioPlayer.audioFiles.findIndex(
         ({ id }) => id === audio.id,
       )
-      audioPlayer.currentAudio = audio
-      audioPlayer.soundObj = status
-      audioPlayer.isPlaying = true
-      audioPlayer.currentAudioIndex = index
-      audioPlayer.activePlayList =
+
+      audioPlayer.playbackObj.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
+
+      const newState = audioPlayer
+
+      newState.currentAudio = audio
+      newState.soundObj = status
+      newState.isPlaying = true
+      newState.currentAudioIndex = index
+      newState.activePlayList =
         playListInfo && playListInfo.activePlayList
           ? playListInfo.activePlayList
           : ({} as activePlayListProps)
-      audioPlayer.isPlayListRunning =
+      newState.isPlayListRunning =
         playListInfo && playListInfo.isPlayListRunning
           ? playListInfo.isPlayListRunning
           : false
 
-      setAudioPlayer(audioPlayer)
-      audioPlayer.playbackObj.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
+      setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
+        ...audioPlayer,
+        ...newState,
+      }))
+
       // return storeAudioForNextOpening(audio, index)
       return
     }
@@ -93,11 +102,18 @@ export async function selectAudio(
       audioPlayer.currentAudio.id === audio.id
     ) {
       const status = await pause(audioPlayer.playbackObj)
-      audioPlayer.soundObj = status
-      audioPlayer.isPlaying = false
-      audioPlayer.playbackPosition =
+      const newState = audioPlayer
+
+      newState.soundObj = status
+      newState.isPlaying = false
+      newState.playbackPosition =
         status && status.isLoaded ? status.positionMillis : 0
-      setAudioPlayer(audioPlayer)
+
+      setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
+        ...audioPlayer,
+        ...newState,
+      }))
+
       return
     }
 
@@ -108,9 +124,16 @@ export async function selectAudio(
       audioPlayer.currentAudio.id === audio.id
     ) {
       const status = await resume(audioPlayer.playbackObj)
-      audioPlayer.soundObj = status
-      audioPlayer.isPlaying = true
-      setAudioPlayer(audioPlayer)
+      const newState = audioPlayer
+
+      newState.soundObj = status
+      newState.isPlaying = true
+
+      setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
+        ...audioPlayer,
+        ...newState,
+      }))
+
       return
     }
 
@@ -123,21 +146,27 @@ export async function selectAudio(
       const index = audioPlayer.audioFiles.findIndex(
         ({ id }) => id === audio.id,
       )
-      audioPlayer.currentAudio = audio
-      audioPlayer.soundObj = status
-      audioPlayer.isPlaying = true
-      audioPlayer.currentAudioIndex = index
-      audioPlayer.isPlayListRunning = false
-      audioPlayer.activePlayList = {} as activePlayListProps
-      audioPlayer.activePlayList =
+      const newState = audioPlayer
+
+      newState.currentAudio = audio
+      newState.soundObj = status
+      newState.isPlaying = true
+      newState.currentAudioIndex = index
+      newState.isPlayListRunning = false
+      newState.activePlayList = {} as activePlayListProps
+      newState.activePlayList =
         playListInfo && playListInfo.activePlayList
           ? playListInfo.activePlayList
           : ({} as activePlayListProps)
-      audioPlayer.isPlayListRunning =
+      newState.isPlayListRunning =
         playListInfo && playListInfo.isPlayListRunning
           ? playListInfo.isPlayListRunning
           : false
-      setAudioPlayer(audioPlayer)
+
+      setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
+        ...audioPlayer,
+        ...newState,
+      }))
       // return storeAudioForNextOpening(audio, index)
     }
   } catch (error) {

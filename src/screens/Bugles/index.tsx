@@ -1,5 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Heading, Box, Center, FlatList, HStack, useToast } from 'native-base'
+import {
+  Heading,
+  Box,
+  Center,
+  FlatList,
+  HStack,
+  useToast,
+  Text,
+} from 'native-base'
 
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
 
@@ -17,6 +25,7 @@ import { buglesUrls } from '../../storage/audiosInfos/bugles/urls'
 import { useAssets } from 'expo-asset'
 import { selectAudio } from '../../services/AudioController'
 import { AudioDTO } from '../../dtos/AudioDTO'
+import { AudioPlayerDataProps } from '../../contexts/AudioContext'
 
 export function Bugles() {
   const [filteredAudios, setFilteredAudios] = useState(buglesData)
@@ -53,8 +62,17 @@ export function Bugles() {
   function updateAudiosContext() {
     try {
       setIsloading(true)
-      audioPlayerContext.audioPlayer.audioFiles = buglesData
-      audioPlayerContext.setAudioPlayer(audioPlayerContext.audioPlayer)
+
+      const newState = audioPlayerContext.audioPlayer
+
+      newState.audioFiles = buglesData
+
+      audioPlayerContext.setAudioPlayer(
+        (audioPlayer: AudioPlayerDataProps) => ({
+          ...audioPlayer,
+          ...newState,
+        }),
+      )
     } catch (error) {
       toast.show({
         title: 'Não foi possível atualizar Toques.',
@@ -152,27 +170,36 @@ export function Bugles() {
       {isLoading ? (
         <Loading />
       ) : (
-        <FlatList
-          data={filteredAudios}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <AudioCard
-              name={item.name}
-              duration={item.duration}
-              onPlayPause={() => {
-                handlePlayPause(item)
-              }}
-            />
-          )}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={[
-            { paddingBottom: 100 },
-            filteredAudios.length === 0 && { flex: 1 },
-          ]}
-          ListEmptyComponent={() => (
-            <ListEmpty message="Não há toques cadastrados" />
-          )}
-        />
+        <Box>
+          <FlatList
+            data={filteredAudios}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={({ item }) => (
+              <AudioCard
+                audioId={item.id}
+                name={item.name}
+                duration={item.duration}
+                onPlayPause={() => {
+                  handlePlayPause(item)
+                }}
+              />
+            )}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={[
+              { paddingBottom: 100 },
+              filteredAudios.length === 0 && { flex: 1 },
+            ]}
+            ListEmptyComponent={() => (
+              <ListEmpty message="Não há toques cadastrados" />
+            )}
+          />
+          <Center>
+            <Heading mb={2} color="white">
+              {audioPlayerContext.audioPlayer.currentAudio.name} -
+              {audioPlayerContext.audioPlayer.currentAudio.duration}
+            </Heading>
+          </Center>
+        </Box>
       )}
     </Box>
   )

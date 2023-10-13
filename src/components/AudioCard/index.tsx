@@ -2,8 +2,10 @@ import { Box, HStack, Text, VStack } from 'native-base'
 import { IconButton } from '../IconButton'
 import { MaterialIcons } from '@expo/vector-icons'
 import { millisToMinutesAndSeconds } from '../../utils/dateTime'
+import { useAudioPlayer } from '../../hooks/useAudioPlayer'
 
 type Props = {
+  audioId: string
   name: string
   duration: number
   onPlayPause: () => void
@@ -11,17 +13,25 @@ type Props = {
 }
 
 export function AudioCard({
+  audioId,
   name,
   duration,
   onPlayPause,
   playing = false,
 }: Props) {
+  const audioPlayerContext = useAudioPlayer()
+
   return (
     <Box w="full" h={14} bg="gray.500" rounded="md" mt={2}>
       <HStack alignItems="center">
         <IconButton
           as={MaterialIcons}
-          name={playing ? 'pause' : 'play-arrow'}
+          name={
+            audioPlayerContext.audioPlayer.isPlaying &&
+            audioId === audioPlayerContext.audioPlayer.currentAudio.id
+              ? 'pause'
+              : 'play-arrow'
+          }
           size={8}
           alignItems="center"
           mx={1}
