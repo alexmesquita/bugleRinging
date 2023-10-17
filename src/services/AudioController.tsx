@@ -5,10 +5,42 @@ import {
   AudioPlayerDataProps,
   activePlayListProps,
 } from '../contexts/AudioContext'
+import { getAudioIdByPlaylist } from '../storage/audio/getAudioByPlaylist'
+import { Dispatch, SetStateAction } from 'react'
 
 type playListInfoProps = {
   activePlayList: activePlayListProps
   isPlayListRunning: Boolean
+}
+
+export function getAudiosByIds(audioFiles: AudioDTO[], ids: string[]) {
+  const filteredAudios: AudioDTO[] = audioFiles.filter((item) =>
+    ids.includes(item.id),
+  )
+
+  return filteredAudios
+}
+
+export async function getAudiosByPlaylist(
+  audioPlayerContext: AudioContextDataProps,
+  playListToSearch: string,
+  setLoading: Dispatch<SetStateAction<boolean>>,
+) {
+  let audiosPlaylist: AudioDTO[] = []
+  try {
+    setLoading(true)
+
+    const audiosIds: string[] = await getAudioIdByPlaylist(playListToSearch)
+    audiosPlaylist = getAudiosByIds(
+      audioPlayerContext.audioPlayer.audioFiles,
+      audiosIds,
+    )
+  } catch (error) {
+    console.log(error)
+  } finally {
+    setLoading(false)
+  }
+  return audiosPlaylist
 }
 
 // play audio

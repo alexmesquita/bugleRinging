@@ -58,6 +58,7 @@ export function Bugles() {
       const newState = audioPlayerContext.audioPlayer
 
       newState.audioFiles = buglesData
+      newState.isPlayNext = false
 
       audioPlayerContext.setAudioPlayer(
         (audioPlayer: AudioPlayerDataProps) => ({

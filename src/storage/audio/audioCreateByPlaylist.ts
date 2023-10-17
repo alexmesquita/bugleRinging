@@ -1,26 +1,25 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AUDIO_COLLECTION } from '../storageConfig'
-import { getAudioByPlaylist } from './getAudioByPlaylist'
+import { getAudioIdByPlaylist } from './getAudioByPlaylist'
 import { AppError } from '../../utils/AppError'
-import { AudioDTO } from './AudioDTO'
 
 export async function audioCreateByPlaylist(
-  newAudio: AudioDTO,
+  newAudioId: string,
   playlist: string,
 ) {
   // eslint-disable-next-line no-useless-catch
   try {
-    const storedAudios = await getAudioByPlaylist(playlist)
+    const storedAudios = await getAudioIdByPlaylist(playlist)
 
-    const audioExists = storedAudios.includes(newAudio)
+    const audioExists = storedAudios.includes(newAudioId)
 
     if (audioExists) {
       throw new AppError('Este toque já existe nessa playlist')
     }
-    const storage = JSON.stringify([...storedAudios, newAudio])
+    const storage = JSON.stringify([...storedAudios, newAudioId])
 
-    //@bugleRinging:audios-desfile 1:[{name: audio1, id: 0}]
-    //@bugleRinging:audios-desfile 2:[name: audio3, id:2]
+    // @bugleRinging:audios-desfile 1:[0]
+    // @bugleRinging:audios-desfile 2:[2, 0]
     await AsyncStorage.setItem(AUDIO_COLLECTION + '-' + playlist, storage)
   } catch (error) {
     throw error

@@ -82,7 +82,6 @@ export function AudioPlayer() {
       setPlay(true)
       return
     }
-    console.log(assets)
 
     const uri = assets ? assets[currentAudioIndex].uri : ''
 

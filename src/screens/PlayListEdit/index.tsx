@@ -16,14 +16,14 @@ import { ListEmpty } from '../../components/ListEmpty'
 import { Input } from '../../components/Input'
 
 import { audioCreateByPlaylist } from '../../storage/audio/audioCreateByPlaylist'
-import { getAudioByPlaylist } from '../../storage/audio/getAudioByPlaylist'
-import { AudioDTO } from '../../storage/audio/AudioDTO'
 import { audioRemoveByPlaylist } from '../../storage/audio/audioRemoveByPlaylist'
 
 import { AppError } from '../../utils/AppError'
 import { Loading } from '../../components/Loading'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
+import { AudioDTO } from '../../dtos/AudioDTO'
+import { getAudiosByPlaylist } from '../../services/AudioController'
 
 type RouteParamsProps = {
   playList: string
@@ -78,21 +78,6 @@ export function PlayListEdit() {
     setIsloadingExceptAudios(false)
   }
 
-  async function getAudiosByPlaylist(playListToSearch: string) {
-    try {
-      setIsloadingPlaylistAudios(true)
-
-      console.log('Buscando audios da playlist: ' + playListToSearch)
-      const data: AudioDTO[] = await getAudioByPlaylist(playListToSearch)
-      console.log('audios: ' + JSON.stringify(playListToSearch))
-      setAudiosPlaylist(data)
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setIsloadingPlaylistAudios(false)
-    }
-  }
-
   async function getAudios() {
     try {
       setIsloadingExceptAudios(true)
@@ -104,17 +89,25 @@ export function PlayListEdit() {
     }
   }
 
-  async function addAudio(item: AudioDTO, playListToAdd: string) {
-    const newAudio = {
-      name: item.name,
-      id: item.id,
-    }
+  async function loadAudios() {
+    await getAudios()
+    const audiosFinded = await getAudiosByPlaylist(
+      audioPlayerContext,
+      playList,
+      setIsloadingPlaylistAudios,
+    )
+    setAudiosPlaylist(audiosFinded)
+  }
 
+  async function addAudio(audio: AudioDTO, playListToAdd: string) {
     try {
-      console.log('add: ' + newAudio.name)
-      console.log('para: ' + playListToAdd)
-      await audioCreateByPlaylist(newAudio, playListToAdd)
-      await getAudiosByPlaylist(playListToAdd)
+      await audioCreateByPlaylist(audio.id, playListToAdd)
+      const audiosFinded = await getAudiosByPlaylist(
+        audioPlayerContext,
+        playListToAdd,
+        setIsloadingPlaylistAudios,
+      )
+      setAudiosPlaylist(audiosFinded)
       scrollToEnd()
     } catch (error) {
       if (error instanceof AppError) {
@@ -137,7 +130,12 @@ export function PlayListEdit() {
   async function removeAudio(item: AudioDTO, playListToRemove: string) {
     try {
       await audioRemoveByPlaylist(item.id, playListToRemove)
-      await getAudiosByPlaylist(playListToRemove)
+      const audiosFinded = await getAudiosByPlaylist(
+        audioPlayerContext,
+        playListToRemove,
+        setIsloadingPlaylistAudios,
+      )
+      setAudiosPlaylist(audiosFinded)
     } catch (error) {
       if (error instanceof AppError) {
         toast.show({
@@ -165,9 +163,7 @@ export function PlayListEdit() {
   useFocusEffect(
     useCallback(() => {
       setCurrentPlayList(playList)
-      getAudios()
-      getAudiosByPlaylist(playList)
-      console.log('chegou a playlist: ' + playList)
+      loadAudios()
     }, [route]),
   )
 
@@ -243,7 +239,7 @@ export function PlayListEdit() {
           </HStack>
 
           <Box flex={0.6} p={2} mt={1} bg="gray.500">
-            {isLoadingExceptAudios ? (
+            {isLoadingExceptAudios || isLoadingPlaylistAudios ? (
               <Loading />
             ) : (
               <FlatList

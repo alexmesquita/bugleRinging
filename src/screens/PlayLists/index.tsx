@@ -103,13 +103,17 @@ export function PlayLists() {
     ])
   }
 
+  async function detailPlaylist(name: string) {
+    navigation.navigate('PlayListDetail', { playList: name })
+    console.log(`detalhar playlist: ${name}`)
+  }
+
   async function editPlaylist(name: string) {
     navigation.navigate('PlayListEdit', { playList: name })
     console.log(`editar playlist: ${name}`)
   }
 
   const scrollToEnd = () => {
-    console.log('scroing to end')
     flatListRef.current?.scrollToEnd({ animated: true })
   }
 
@@ -159,6 +163,9 @@ export function PlayLists() {
           renderItem={({ item }) => (
             <PlaylistCard
               name={item}
+              onDetail={() => {
+                detailPlaylist(item)
+              }}
               onEdit={() => {
                 editPlaylist(item)
               }}
@@ -173,7 +180,7 @@ export function PlayLists() {
             playLists.length === 0 && { flex: 1 },
           ]}
           ListEmptyComponent={() => (
-            <ListEmpty message="Não há toques cadastrados" />
+            <ListEmpty message="Não há playlists cadastrados" />
           )}
         />
       )}
