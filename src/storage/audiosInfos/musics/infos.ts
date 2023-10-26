@@ -1,0 +1,42 @@
+export const musicsData = [
+  {
+    id: '0',
+    name: 'Hino Nacional Brasileiro',
+    duration: 213000,
+    artist: 'José',
+    uriAudio: '',
+    uriImg: '',
+  },
+  {
+    id: '1',
+    name: 'Canção do Soldado do Fogo',
+    duration: 176000,
+    artist: 'José',
+    uriAudio: '',
+    uriImg: '',
+  },
+  {
+    id: '2',
+    name: 'Hino da Bandeira Nacional',
+    duration: 254000,
+    artist: 'José',
+    uriAudio: '',
+    uriImg: '',
+  },
+  {
+    id: '3',
+    name: 'Hino da Independência do Brasil',
+    duration: 173000,
+    artist: 'José',
+    uriAudio: '',
+    uriImg: '',
+  },
+  {
+    id: '4',
+    name: 'Hino da Proclamação da República',
+    duration: 311000,
+    artist: 'José',
+    uriAudio: '',
+    uriImg: '',
+  },
+]

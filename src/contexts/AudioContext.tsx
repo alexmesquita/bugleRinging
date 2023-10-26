@@ -12,6 +12,7 @@ export type AudioPlayerDataProps = {
   playbackObj: Audio.Sound
   soundObj: AVPlaybackStatus | null | undefined
   audioFiles: Array<AudioDTO>
+  musicFiles: Array<AudioDTO>
   currentAudio: AudioDTO
   isPlaying: Boolean
   isPlayNext: Boolean
@@ -20,6 +21,7 @@ export type AudioPlayerDataProps = {
   currentAudioIndex: number | null
   playbackPosition: number | null
   playbackDuration: number | null | undefined
+  audioType: string
 }
 export type AudioContextDataProps = {
   audioPlayer: AudioPlayerDataProps
@@ -40,6 +42,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     playbackObj: new Audio.Sound(),
     soundObj: null,
     audioFiles: [] as Array<AudioDTO>,
+    musicFiles: [] as Array<AudioDTO>,
     currentAudio: {} as AudioDTO,
     isPlaying: false,
     isPlayNext: false,
@@ -48,6 +51,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     currentAudioIndex: null,
     playbackPosition: null,
     playbackDuration: null,
+    audioType: 'BUGLES',
   })
 
   async function cleanAudioPlayer() {
@@ -55,7 +59,10 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
 
     newState.playbackObj.unloadAsync()
     newState.soundObj = null
-    newState.currentAudio = newState.audioFiles[0]
+    newState.currentAudio =
+      newState.audioType === 'BUGLES'
+        ? newState.audioFiles[0]
+        : newState.musicFiles[0]
     newState.isPlaying = false
     newState.currentAudioIndex = 0
     newState.playbackPosition = null
@@ -71,6 +78,8 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     if (playbackStatus.isLoaded && playbackStatus.isPlaying) {
       const newState = audioPlayer
 
+      console.log('onPlaybackStatusUpdate: ' + playbackStatus.positionMillis)
+      console.log('onPlaybackStatusUpdate duration: ' + playbackStatus.durationMillis)
       newState.playbackPosition = playbackStatus.positionMillis
       newState.playbackDuration = playbackStatus.durationMillis
 
@@ -102,12 +111,15 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
           return
         }
 
-        const indexOnAllList = audioPlayer.audioFiles.findIndex(
-          ({ id }) => id === nextAudio.id,
+        const indexOnAllList =
+          audioPlayer.audioType === 'BUGLES'
+            ? audioPlayer.audioFiles.findIndex(({ id }) => id === nextAudio.id)
+            : audioPlayer.musicFiles.findIndex(({ id }) => id === nextAudio.id)
+
+        const status = await playNext(
+          audioPlayer.playbackObj,
+          nextAudio.uriAudio,
         )
-
-        const status = await playNext(audioPlayer.playbackObj, nextAudio.uri)
-
         const newState = audioPlayer
 
         newState.soundObj = status
@@ -123,13 +135,17 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
         return
       }
 
+      console.log('não entrou no 1 if')
       const nextAudioIndex = audioPlayer.currentAudioIndex
         ? audioPlayer.currentAudioIndex + 1
         : 1
       // there is no next audio to play or the current audio is the last
       if (
         !audioPlayer.isPlayNext ||
-        nextAudioIndex >= audioPlayer.audioFiles.length
+        nextAudioIndex >=
+          (audioPlayer.audioType === 'BUGLES'
+            ? audioPlayer.audioFiles.length
+            : audioPlayer.musicFiles.length)
       ) {
         cleanAudioPlayer()
         return
@@ -137,8 +153,11 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
         // return await storeAudioForNextOpening(audioFiles[0], 0)
       }
       // otherwise we want to select the next audio
-      const audio = audioPlayer.audioFiles[nextAudioIndex]
-      const status = await playNext(audioPlayer.playbackObj, audio.uri)
+      const audio =
+        audioPlayer.audioType === 'BUGLES'
+          ? audioPlayer.audioFiles[nextAudioIndex]
+          : audioPlayer.musicFiles[nextAudioIndex]
+      const status = await playNext(audioPlayer.playbackObj, audio.uriAudio)
 
       const newState = audioPlayer
 
@@ -151,7 +170,6 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
         ...audioPlayer,
         ...newState,
       }))
-
       // await storeAudioForNextOpening(audio, nextAudioIndex)
     }
   }

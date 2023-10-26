@@ -8,16 +8,16 @@ type Props = {
   audioId: string
   name: string
   duration: number
+  audioType: string
   onPlayPause: () => void
-  playing?: boolean
 }
 
 export function AudioCard({
   audioId,
   name,
   duration,
+  audioType,
   onPlayPause,
-  playing = false,
 }: Props) {
   const audioPlayerContext = useAudioPlayer()
 
@@ -28,7 +28,8 @@ export function AudioCard({
           as={MaterialIcons}
           name={
             audioPlayerContext.audioPlayer.isPlaying &&
-            audioId === audioPlayerContext.audioPlayer.currentAudio.id
+            audioId === audioPlayerContext.audioPlayer.currentAudio.id &&
+            audioPlayerContext.audioPlayer.audioType === audioType
               ? 'pause'
               : 'play-arrow'
           }

@@ -34,7 +34,7 @@ export function Bugles() {
       setIsloading(true)
       if (assets && assets.length === buglesData.length) {
         buglesData.forEach((value, index) => {
-          value.uri = assets[index].uri
+          value.uriAudio = assets[index].uri
         })
         updateAudiosContext()
       }
@@ -59,6 +59,7 @@ export function Bugles() {
 
       newState.audioFiles = buglesData
       newState.isPlayNext = false
+      newState.audioType = 'BUGLES'
 
       audioPlayerContext.setAudioPlayer(
         (audioPlayer: AudioPlayerDataProps) => ({
@@ -128,6 +129,9 @@ export function Bugles() {
         'useFocusEffect executou para buscar Atualizar os audios no contexto',
       )
       updateAudiosContext()
+      return () => {
+        // TODO unsubscribe, tentar pausar o audio se mudar de tela
+      }
     }, []),
   )
 
@@ -171,6 +175,7 @@ export function Bugles() {
               audioId={item.id}
               name={item.name}
               duration={item.duration}
+              audioType="BUGLES"
               onPlayPause={() => {
                 handlePlayPause(item)
               }}

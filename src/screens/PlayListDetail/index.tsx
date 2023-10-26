@@ -88,6 +88,7 @@ export function PlayListDetail() {
               audioId={item.id}
               name={item.name}
               duration={item.duration}
+              audioType="BUGLES"
               onPlayPause={() => {
                 handlePlayPause(item)
               }}

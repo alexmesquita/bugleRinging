@@ -1,4 +1,3 @@
-import { Platform } from 'react-native'
 import {
   BottomTabNavigationProp,
   createBottomTabNavigator,
@@ -6,7 +5,7 @@ import {
 import { PlayLists } from '../screens/PlayLists'
 import { PlayListDetail } from '../screens/PlayListDetail'
 import { Bugles } from '../screens/Bugles'
-import { AudioPlayer } from '../screens/AudioPlayer'
+import { MusicPlayer } from '../screens/MusicPlayer'
 import { PlayListEdit } from '../screens/PlayListEdit'
 import { WhatsRinging } from '../screens/WhatsRinging'
 import { Metronome } from '../screens/Metronome'
@@ -17,13 +16,15 @@ import {
   Entypo,
 } from '@expo/vector-icons'
 import { Icon, useTheme } from 'native-base'
+import { Musics } from '../screens/Musics'
 
 type AppRoutesTypes = {
   Bugles: undefined
+  Musics: undefined
   PlayLists: undefined
   PlayListDetail: { playList: string }
   PlayListEdit: { playList: string }
-  AudioPlayer: undefined
+  MusicPlayer: undefined
   WhatsRinging: undefined
   Metronome: undefined
 }
@@ -129,8 +130,8 @@ export function AppRoutes() {
         }}
       />
       <Screen
-        name="AudioPlayer"
-        component={AudioPlayer}
+        name="Musics"
+        component={Musics}
         options={{
           tabBarLabel: 'Canções',
           tabBarIcon: ({ color }) => (
@@ -144,6 +145,11 @@ export function AppRoutes() {
             />
           ),
         }}
+      />
+      <Screen
+        name="MusicPlayer"
+        component={MusicPlayer}
+        options={{ tabBarButton: () => null }}
       />
     </Navigator>
   )

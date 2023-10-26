@@ -5,15 +5,15 @@ import { Box, Center, HStack } from 'native-base'
 import { IconButton } from '../IconButton'
 
 type AudioControlProps = PropsWithChildren<{
-  playing: boolean
-  playSound: () => void
+  playing: Boolean
+  playPause: () => void
   skipToNext: () => void
   skipToPrevious: () => void
 }>
 
 export function AudioControl({
   playing,
-  playSound,
+  playPause,
   skipToNext,
   skipToPrevious,
 }: AudioControlProps) {
@@ -36,7 +36,7 @@ export function AudioControl({
             size={20}
             alignItems="center"
             mx={1}
-            onPress={playSound}
+            onPress={playPause}
             color="orange.100"
           />
           <IconButton

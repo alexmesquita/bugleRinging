@@ -4,10 +4,9 @@ import { Box, Center, HStack, Heading, Text } from 'native-base'
 type SongInfoProps = PropsWithChildren<{
   title: string
   artist: string
-  album: string
 }>
 
-export function AudioInfo({ title, artist, album }: SongInfoProps) {
+export function AudioInfo({ title, artist }: SongInfoProps) {
   return (
     <Center mt={4}>
       <HStack w="90%" justifyContent="center">
@@ -17,7 +16,7 @@ export function AudioInfo({ title, artist, album }: SongInfoProps) {
               {title}
             </Heading>
             <Text color="orange.300" fontSize="md" justifyContent="center">
-              {artist} - {album}
+              {artist}
             </Text>
           </Center>
         </Box>
