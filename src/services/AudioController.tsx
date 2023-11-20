@@ -213,7 +213,7 @@ export async function selectAudio(
       newState.isPlaying = true
       newState.currentAudioIndex = index
       newState.isPlayListRunning = false
-      newState.indexOnPlayList = 0
+      newState.indexOnPlayList = -1
       newState.activePlayList = {} as activePlayListProps
       newState.activePlayList =
         playListInfo && playListInfo.activePlayList

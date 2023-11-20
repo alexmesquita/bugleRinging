@@ -48,7 +48,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     isPlaying: false,
     isPlayNext: false,
     isPlayListRunning: false,
-    indexOnPlayList: 0,
+    indexOnPlayList: -1,
     activePlayList: {} as activePlayListProps,
     currentAudioIndex: null,
     playbackPosition: null,
@@ -61,10 +61,6 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
 
     newState.playbackObj.unloadAsync()
     newState.soundObj = null
-    newState.currentAudio =
-      newState.audioType === 'BUGLES'
-        ? newState.audioFiles[0]
-        : newState.musicFiles[0]
     newState.isPlaying = false
     newState.currentAudioIndex = 0
     newState.playbackPosition = null

@@ -23,36 +23,50 @@ export function AudioCard({
 }: Props) {
   const audioPlayerContext = useAudioPlayer()
 
-  function checkIconName() {
+  function checkCurrentAudio(checkIsPlaying = false) {
     const isPlaylist =
       !audioPlayerContext.audioPlayer.isPlayListRunning ||
       audioPlayerContext.audioPlayer.indexOnPlayList === indexOnPlaylist
 
-    return audioPlayerContext.audioPlayer.isPlaying &&
+    return (
+      (!checkIsPlaying || audioPlayerContext.audioPlayer.isPlaying) &&
       audioId === audioPlayerContext.audioPlayer.currentAudio.id &&
       audioPlayerContext.audioPlayer.audioType === audioType &&
       isPlaylist
-      ? 'pause'
-      : 'play-arrow'
+    )
   }
 
   return (
-    <Box w="full" h={14} bg="gray.500" rounded="md" mt={2}>
+    <Box
+      w="full"
+      h={14}
+      bg={checkCurrentAudio() ? 'gray.300' : 'gray.500'}
+      rounded="md"
+      mt={2}
+    >
       <HStack alignItems="center">
         <IconButton
           as={MaterialIcons}
-          name={checkIconName()}
+          name={checkCurrentAudio(true) ? 'pause' : 'play-arrow'}
           size={8}
           alignItems="center"
           mx={1}
           onPress={onPlayPause}
-          color="white"
+          color={checkCurrentAudio() ? 'gray.700' : 'white'}
         />
         <VStack flex={1} pl={1} pt={2}>
-          <Text color="gray.200" justifyContent="center" flex={1} fontSize="lg">
+          <Text
+            color={checkCurrentAudio() ? 'gray.700' : 'gray.200'}
+            justifyContent="center"
+            flex={1}
+            fontSize="lg"
+          >
             {name}
           </Text>
-          <Text color="gray.300" fontSize="xs">
+          <Text
+            color={checkCurrentAudio() ? 'gray.500' : 'gray.300'}
+            fontSize="xs"
+          >
             {millisToMinutesAndSeconds(duration)}
           </Text>
         </VStack>
