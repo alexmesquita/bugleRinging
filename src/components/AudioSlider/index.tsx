@@ -28,8 +28,7 @@ export function AudioSlider({
         minimumValue={0}
         maximumValue={durationMillis}
         onValueChange={(value) => {
-          onSliderChange(value * durationMillis)
-          console.log("changed: " + value)
+          onSliderChange(value)
         }}
         onSlidingComplete={(value) => onSlidingComplete(value)}
         onSlidingStart={async () => {

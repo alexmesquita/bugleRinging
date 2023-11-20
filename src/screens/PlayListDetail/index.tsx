@@ -32,13 +32,13 @@ export function PlayListDetail() {
   const [isLoading, setIsloading] = useState(false)
   const [playListAudios, setplayListAudios] = useState<AudioDTO[]>([])
 
-  async function handlePlayPause(bugle: AudioDTO) {
-    console.log(bugle)
+  async function handlePlayPause(bugle: AudioDTO, indexOnPlayList: number) {
     const activePlayList = { name: playList, audios: playListAudios }
 
     await selectAudio(bugle, audioPlayerContext, {
       activePlayList,
       isPlayListRunning: true,
+      indexOnPlayList,
     })
   }
 
@@ -55,7 +55,6 @@ export function PlayListDetail() {
   useFocusEffect(
     useCallback(() => {
       const newState = audioPlayerContext.audioPlayer
-      newState.isPlayNext = true
       audioPlayerContext.setAudioPlayer(
         (audioPlayer: AudioPlayerDataProps) => ({
           ...audioPlayer,
@@ -82,15 +81,16 @@ export function PlayListDetail() {
       ) : (
         <FlatList
           data={playListAudios}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
             <AudioCard
               audioId={item.id}
               name={item.name}
               duration={item.duration}
               audioType="BUGLES"
+              indexOnPlaylist={index}
               onPlayPause={() => {
-                handlePlayPause(item)
+                handlePlayPause(item, index)
               }}
             />
           )}

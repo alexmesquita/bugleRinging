@@ -129,7 +129,6 @@ export function MusicPlayer() {
   }
 
   function calculateSliderPositionMillis() {
-    console.log('calculateSliderPositionMillis: ' + audioPlayer.playbackPosition)
     return audioPlayer.playbackPosition ? audioPlayer.playbackPosition : 0
   }
   async function onSlidingStart() {
@@ -139,6 +138,13 @@ export function MusicPlayer() {
       await pause(audioPlayer.playbackObj)
     } catch (error) {
       console.log('error inside onSlidingStart callback', error)
+    }
+  }
+
+  async function setTrackPosition(positionMillis: number) {
+    if (audioPlayer.isPlaying && audioPlayer.playbackObj) {
+      await audioPlayer.playbackObj.setPositionAsync(Math.trunc(positionMillis))
+      setCurrentPosition(positionMillis)
     }
   }
 
@@ -212,7 +218,7 @@ export function MusicPlayer() {
       <AudioSlider
         calculateSliderPositionMillis={calculateSliderPositionMillis}
         durationMillis={audioPlayer.currentAudio.duration}
-        onSliderChange={setCurrentPosition}
+        onSliderChange={setTrackPosition}
         onSlidingStart={onSlidingStart}
         onSlidingComplete={onSlidingComplete}
       />
@@ -222,9 +228,6 @@ export function MusicPlayer() {
         skipToNext={handleNext}
         skipToPrevious={handlePrevious}
       />
-      <Text color="white">
-        {audioPlayer.playbackPosition} - {currentPosition}
-      </Text>
     </Box>
   )
 }

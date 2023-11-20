@@ -11,12 +11,17 @@ import { Dispatch, SetStateAction } from 'react'
 type playListInfoProps = {
   activePlayList: activePlayListProps
   isPlayListRunning: Boolean
+  indexOnPlayList: number
 }
 
+const UPDATE_TIME_IN_MILLIS = 1000
+
 export function getAudiosByIds(audioFiles: AudioDTO[], ids: string[]) {
-  const filteredAudios: AudioDTO[] = audioFiles.filter((item) =>
-    ids.includes(item.id),
-  )
+  const filteredAudios: AudioDTO[] = []
+  ids.forEach((id) => {
+    const audioDTO = audioFiles.find((audio) => audio.id === id)
+    if (audioDTO) filteredAudios.push(audioDTO)
+  })
 
   return filteredAudios
 }
@@ -53,11 +58,17 @@ export async function play(
     if (!lastPosition)
       return await playbackObj.loadAsync(
         { uri },
-        { shouldPlay: true, progressUpdateIntervalMillis: 1000 },
+        {
+          shouldPlay: true,
+          progressUpdateIntervalMillis: UPDATE_TIME_IN_MILLIS,
+        },
       )
 
     // but if there is lastPosition then we will play audio from the lastPosition
-    await playbackObj.loadAsync({ uri }, { progressUpdateIntervalMillis: 1000 })
+    await playbackObj.loadAsync(
+      { uri },
+      { progressUpdateIntervalMillis: UPDATE_TIME_IN_MILLIS },
+    )
 
     return await playbackObj.playFromPositionAsync(lastPosition)
   } catch (error) {
@@ -129,6 +140,10 @@ export async function selectAudio(
         playListInfo && playListInfo.isPlayListRunning
           ? playListInfo.isPlayListRunning
           : false
+      newState.indexOnPlayList =
+        playListInfo && playListInfo.isPlayListRunning
+          ? playListInfo.indexOnPlayList
+          : 0
 
       setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
         ...audioPlayer,
@@ -198,6 +213,7 @@ export async function selectAudio(
       newState.isPlaying = true
       newState.currentAudioIndex = index
       newState.isPlayListRunning = false
+      newState.indexOnPlayList = 0
       newState.activePlayList = {} as activePlayListProps
       newState.activePlayList =
         playListInfo && playListInfo.activePlayList
@@ -207,6 +223,10 @@ export async function selectAudio(
         playListInfo && playListInfo.isPlayListRunning
           ? playListInfo.isPlayListRunning
           : false
+      newState.indexOnPlayList =
+        playListInfo && playListInfo.isPlayListRunning
+          ? playListInfo.indexOnPlayList
+          : 0
 
       setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
         ...audioPlayer,

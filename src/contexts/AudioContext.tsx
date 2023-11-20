@@ -17,6 +17,7 @@ export type AudioPlayerDataProps = {
   isPlaying: Boolean
   isPlayNext: Boolean
   isPlayListRunning: Boolean
+  indexOnPlayList: number
   activePlayList: activePlayListProps
   currentAudioIndex: number | null
   playbackPosition: number | null
@@ -47,6 +48,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     isPlaying: false,
     isPlayNext: false,
     isPlayListRunning: false,
+    indexOnPlayList: 0,
     activePlayList: {} as activePlayListProps,
     currentAudioIndex: null,
     playbackPosition: null,
@@ -78,8 +80,6 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     if (playbackStatus.isLoaded && playbackStatus.isPlaying) {
       const newState = audioPlayer
 
-      console.log('onPlaybackStatusUpdate: ' + playbackStatus.positionMillis)
-      console.log('onPlaybackStatusUpdate duration: ' + playbackStatus.durationMillis)
       newState.playbackPosition = playbackStatus.positionMillis
       newState.playbackDuration = playbackStatus.durationMillis
 
@@ -99,7 +99,8 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
 
     if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
       console.log('Acabou a música')
-      if (audioPlayer.isPlayListRunning) {
+
+      if (audioPlayer.isPlayNext && audioPlayer.isPlayListRunning) {
         const indexOnPlayList = audioPlayer.activePlayList.audios.findIndex(
           ({ id }) => id === audioPlayer.currentAudio.id,
         )
@@ -135,7 +136,6 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
         return
       }
 
-      console.log('não entrou no 1 if')
       const nextAudioIndex = audioPlayer.currentAudioIndex
         ? audioPlayer.currentAudioIndex + 1
         : 1

@@ -10,8 +10,8 @@ export const musicsData = [
   {
     id: '1',
     name: 'Canção do Soldado do Fogo',
-    duration: 176000,
-    artist: 'José',
+    duration: 177000,
+    artist: 'Ten. Sergio Luiz de Matos - Banda CBMDF',
     uriAudio: '',
     uriImg: '',
   },

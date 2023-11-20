@@ -81,7 +81,6 @@ export function Bugles() {
   }
 
   async function handlePlayPause(bugle: AudioDTO) {
-    console.log(bugle)
     await selectAudio(bugle, audioPlayerContext)
   }
 

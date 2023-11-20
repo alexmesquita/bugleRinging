@@ -66,9 +66,8 @@ export function Musics() {
       const newState = audioPlayerContext.audioPlayer
 
       newState.musicFiles = musicsData
-      newState.isPlayNext = true
+      // newState.isPlayNext = true
       newState.audioType = 'MUSIC'
-      console.log(newState.musicFiles)
 
       audioPlayerContext.setAudioPlayer(
         (audioPlayer: AudioPlayerDataProps) => ({
@@ -91,7 +90,6 @@ export function Musics() {
   }
 
   async function goToMusicPlayer(music: AudioDTO) {
-    console.log(`MusicPlayer: ${music.id}-${music.name}`)
     navigation.navigate('MusicPlayer', { musicId: music.id })
   }
 

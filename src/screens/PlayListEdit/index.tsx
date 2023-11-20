@@ -39,18 +39,17 @@ export function PlayListEdit() {
   const flatListRef = React.useRef<FlatList>(null)
   const toast = useToast()
 
-  const [exceptAudios, setExceptAudios] = useState(audios)
   const [filteredAudios, setFilteredAudios] = useState(audios)
   const [searchText, setSearchText] = useState('')
   const [orderToSort, setOrderToSort] = useState(1)
   const [isLoadingPlaylistAudios, setIsloadingPlaylistAudios] = useState(false)
-  const [isLoadingExceptAudios, setIsloadingExceptAudios] = useState(false)
+  const [isLoadingFilteredAudios, setIsLoadingFilteredAudios] = useState(false)
   const audioPlayerContext = useAudioPlayer()
 
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   function orderList() {
-    setIsloadingExceptAudios(true)
+    setIsLoadingFilteredAudios(true)
 
     setFilteredAudios(
       filteredAudios.sort((a, b) =>
@@ -59,33 +58,33 @@ export function PlayListEdit() {
     )
 
     setOrderToSort(orderToSort * -1)
-    setIsloadingExceptAudios(false)
+    setIsLoadingFilteredAudios(false)
   }
 
   function filterList() {
-    setIsloadingExceptAudios(true)
+    setIsLoadingFilteredAudios(true)
 
     if (searchText === '') {
-      setFilteredAudios(exceptAudios)
+      setFilteredAudios(audios)
     } else {
       setFilteredAudios(
-        exceptAudios.filter(
+        audios.filter(
           (item) =>
             item.name.toUpperCase().indexOf(searchText.toUpperCase()) > -1,
         ),
       )
     }
-    setIsloadingExceptAudios(false)
+    setIsLoadingFilteredAudios(false)
   }
 
   async function getAudios() {
     try {
-      setIsloadingExceptAudios(true)
+      setIsLoadingFilteredAudios(true)
       setAudios(audioPlayerContext.audioPlayer.audioFiles)
     } catch (error) {
       console.log(error)
     } finally {
-      setIsloadingExceptAudios(false)
+      setIsLoadingFilteredAudios(false)
     }
   }
 
@@ -168,16 +167,14 @@ export function PlayListEdit() {
   )
 
   useEffect(() => {
-    setIsloadingExceptAudios(true)
-    setExceptAudios(
-      audios.filter((a) => !audiosPlaylist.map((b) => b.id).includes(a.id)),
-    )
-    setIsloadingExceptAudios(false)
+    setIsLoadingFilteredAudios(true)
+    setFilteredAudios(audios)
+    setIsLoadingFilteredAudios(false)
   }, [audios, audiosPlaylist])
 
   useEffect(() => {
     filterList()
-  }, [searchText, exceptAudios])
+  }, [searchText])
 
   return (
     <Box flex={1} bg="background" px={2} pb={2}>
@@ -197,7 +194,7 @@ export function PlayListEdit() {
             ) : (
               <FlatList
                 data={audiosPlaylist}
-                keyExtractor={(item) => item.id.toString()}
+                keyExtractor={(item, index) => index.toString()}
                 ref={flatListRef}
                 renderItem={({ item }) => (
                   <AudioPlaylistCard
@@ -239,7 +236,7 @@ export function PlayListEdit() {
           </HStack>
 
           <Box flex={0.6} p={2} mt={1} bg="gray.500">
-            {isLoadingExceptAudios || isLoadingPlaylistAudios ? (
+            {isLoadingFilteredAudios || isLoadingPlaylistAudios ? (
               <Loading />
             ) : (
               <FlatList

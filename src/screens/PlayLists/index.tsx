@@ -105,12 +105,10 @@ export function PlayLists() {
 
   async function detailPlaylist(name: string) {
     navigation.navigate('PlayListDetail', { playList: name })
-    console.log(`detalhar playlist: ${name}`)
   }
 
   async function editPlaylist(name: string) {
     navigation.navigate('PlayListEdit', { playList: name })
-    console.log(`editar playlist: ${name}`)
   }
 
   const scrollToEnd = () => {
