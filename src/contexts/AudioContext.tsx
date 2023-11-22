@@ -2,6 +2,7 @@ import { AVPlaybackStatus, Audio } from 'expo-av'
 import { ReactNode, createContext, useState } from 'react'
 import { AudioDTO } from '../dtos/AudioDTO'
 import { playNext } from '../services/AudioController'
+import { AudioType } from '../@types/audioTypes'
 
 export type activePlayListProps = {
   name: string
@@ -53,7 +54,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     currentAudioIndex: null,
     playbackPosition: null,
     playbackDuration: null,
-    audioType: 'BUGLES',
+    audioType: AudioType.BUGLE,
   })
 
   async function cleanAudioPlayer() {
@@ -109,7 +110,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
         }
 
         const indexOnAllList =
-          audioPlayer.audioType === 'BUGLES'
+          nextAudio.type === AudioType.BUGLE
             ? audioPlayer.audioFiles.findIndex(({ id }) => id === nextAudio.id)
             : audioPlayer.musicFiles.findIndex(({ id }) => id === nextAudio.id)
 
@@ -139,7 +140,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
       if (
         !audioPlayer.isPlayNext ||
         nextAudioIndex >=
-          (audioPlayer.audioType === 'BUGLES'
+          (audioPlayer.audioType === AudioType.BUGLE
             ? audioPlayer.audioFiles.length
             : audioPlayer.musicFiles.length)
       ) {
@@ -150,7 +151,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
       }
       // otherwise we want to select the next audio
       const audio =
-        audioPlayer.audioType === 'BUGLES'
+        audioPlayer.audioType === AudioType.BUGLE
           ? audioPlayer.audioFiles[nextAudioIndex]
           : audioPlayer.musicFiles[nextAudioIndex]
       const status = await playNext(audioPlayer.playbackObj, audio.uriAudio)

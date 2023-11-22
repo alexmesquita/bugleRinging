@@ -31,7 +31,7 @@ export function AudioCard({
     return (
       (!checkIsPlaying || audioPlayerContext.audioPlayer.isPlaying) &&
       audioId === audioPlayerContext.audioPlayer.currentAudio.id &&
-      audioPlayerContext.audioPlayer.audioType === audioType &&
+      audioPlayerContext.audioPlayer.currentAudio.type === audioType &&
       isPlaylist
     )
   }

@@ -19,6 +19,7 @@ import { useAssets } from 'expo-asset'
 import { selectAudio } from '../../services/AudioController'
 import { AudioDTO } from '../../dtos/AudioDTO'
 import { AudioPlayerDataProps } from '../../contexts/AudioContext'
+import { AudioType } from '../../@types/audioTypes'
 
 export function Musics() {
   const [filteredAudios, setFilteredAudios] = useState(musicsData)
@@ -67,7 +68,7 @@ export function Musics() {
 
       newState.musicFiles = musicsData
       // newState.isPlayNext = true
-      newState.audioType = 'MUSIC'
+      newState.audioType = AudioType.MUSIC
 
       audioPlayerContext.setAudioPlayer(
         (audioPlayer: AudioPlayerDataProps) => ({
@@ -183,7 +184,7 @@ export function Musics() {
               audioId={item.id}
               name={item.name}
               duration={item.duration}
-              audioType="MUSIC"
+              audioType={AudioType.MUSIC}
               onPlayPause={() => {
                 goToMusicPlayer(item)
               }}

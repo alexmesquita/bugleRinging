@@ -18,6 +18,7 @@ import { useAssets } from 'expo-asset'
 import { selectAudio } from '../../services/AudioController'
 import { AudioDTO } from '../../dtos/AudioDTO'
 import { AudioPlayerDataProps } from '../../contexts/AudioContext'
+import { AudioType } from '../../@types/audioTypes'
 
 export function Bugles() {
   const [filteredAudios, setFilteredAudios] = useState(buglesData)
@@ -59,7 +60,7 @@ export function Bugles() {
 
       newState.audioFiles = buglesData
       newState.isPlayNext = false
-      newState.audioType = 'BUGLES'
+      newState.audioType = AudioType.BUGLE
 
       audioPlayerContext.setAudioPlayer(
         (audioPlayer: AudioPlayerDataProps) => ({
@@ -174,7 +175,7 @@ export function Bugles() {
               audioId={item.id}
               name={item.name}
               duration={item.duration}
-              audioType="BUGLES"
+              audioType={AudioType.BUGLE}
               onPlayPause={() => {
                 handlePlayPause(item)
               }}

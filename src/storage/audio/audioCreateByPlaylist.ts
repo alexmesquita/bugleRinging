@@ -1,19 +1,30 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AUDIO_COLLECTION } from '../storageConfig'
 import { getAudioIdByPlaylist } from './getAudioByPlaylist'
+import { AudioType } from '../../@types/audioTypes'
+
+export type storageAudioInPlaylistProps = {
+  id: string
+  audioType: AudioType
+}
 
 export async function audioCreateByPlaylist(
-  newAudioId: string,
+  audioId: string,
+  audioType: AudioType,
   playlist: string,
 ) {
   // eslint-disable-next-line no-useless-catch
   try {
     const storedAudios = await getAudioIdByPlaylist(playlist)
 
-    const storage = JSON.stringify([...storedAudios, newAudioId])
+    const data = { id: audioId, audioType } as storageAudioInPlaylistProps
+    console.log(data)
 
-    // @bugleRinging:audios-desfile 1:[0]
-    // @bugleRinging:audios-desfile 2:[2, 0]
+    const storage = JSON.stringify([...storedAudios, data])
+    console.log(storage)
+
+    // @bugleRinging:audios-desfile 1:[{id: '0', audioType: 'BUGLE'}]
+    // @bugleRinging:audios-desfile 2:[{id: '2', audioType: 'MUSIC'}, {id: '0', audioType: 'BUGLE'}]
     await AsyncStorage.setItem(AUDIO_COLLECTION + '-' + playlist, storage)
   } catch (error) {
     throw error

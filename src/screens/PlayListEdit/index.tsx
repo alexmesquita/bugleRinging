@@ -80,7 +80,11 @@ export function PlayListEdit() {
   async function getAudios() {
     try {
       setIsLoadingFilteredAudios(true)
-      setAudios(audioPlayerContext.audioPlayer.audioFiles)
+      const allAudios = [] as AudioDTO[]
+      allAudios.push(...audioPlayerContext.audioPlayer.audioFiles)
+      allAudios.push(...audioPlayerContext.audioPlayer.musicFiles)
+      console.log("allAudios: " + JSON.stringify(allAudios))
+      setAudios(allAudios)
     } catch (error) {
       console.log(error)
     } finally {
@@ -100,7 +104,9 @@ export function PlayListEdit() {
 
   async function addAudio(audio: AudioDTO, playListToAdd: string) {
     try {
-      await audioCreateByPlaylist(audio.id, playListToAdd)
+      console.log(audio)
+      console.log(playListToAdd)
+      await audioCreateByPlaylist(audio.id, audio.type, playListToAdd)
       const audiosFinded = await getAudiosByPlaylist(
         audioPlayerContext,
         playListToAdd,

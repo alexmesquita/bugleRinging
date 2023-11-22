@@ -1,3 +1,5 @@
+import { AudioType } from '../@types/audioTypes'
+
 export type AudioDTO = {
   id: string
   name: string
@@ -5,4 +7,5 @@ export type AudioDTO = {
   duration: number
   artist: string
   uriImg: string
+  type: AudioType
 }

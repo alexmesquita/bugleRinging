@@ -7,6 +7,8 @@ import {
 } from '../contexts/AudioContext'
 import { getAudioIdByPlaylist } from '../storage/audio/getAudioByPlaylist'
 import { Dispatch, SetStateAction } from 'react'
+import { AudioType } from '../@types/audioTypes'
+import { storageAudioInPlaylistProps } from '../storage/audio/audioCreateByPlaylist'
 
 type playListInfoProps = {
   activePlayList: activePlayListProps
@@ -16,11 +18,20 @@ type playListInfoProps = {
 
 const UPDATE_TIME_IN_MILLIS = 1000
 
-export function getAudiosByIds(audioFiles: AudioDTO[], ids: string[]) {
+export function getAudiosByIds(
+  bugleFiles: AudioDTO[],
+  musicFiles: AudioDTO[],
+  audiosStoreged: storageAudioInPlaylistProps[],
+) {
   const filteredAudios: AudioDTO[] = []
-  ids.forEach((id) => {
-    const audioDTO = audioFiles.find((audio) => audio.id === id)
-    if (audioDTO) filteredAudios.push(audioDTO)
+  audiosStoreged.forEach((item) => {
+    if (item.audioType === AudioType.BUGLE) {
+      const audioDTO = bugleFiles.find((audio) => audio.id === item.id)
+      if (audioDTO) filteredAudios.push(audioDTO)
+    } else if (item.audioType === AudioType.MUSIC) {
+      const audioDTO = musicFiles.find((audio) => audio.id === item.id)
+      if (audioDTO) filteredAudios.push(audioDTO)
+    }
   })
 
   return filteredAudios
@@ -35,10 +46,12 @@ export async function getAudiosByPlaylist(
   try {
     setLoading(true)
 
-    const audiosIds: string[] = await getAudioIdByPlaylist(playListToSearch)
+    const audiosStored: storageAudioInPlaylistProps[] =
+      await getAudioIdByPlaylist(playListToSearch)
     audiosPlaylist = getAudiosByIds(
       audioPlayerContext.audioPlayer.audioFiles,
-      audiosIds,
+      audioPlayerContext.audioPlayer.musicFiles,
+      audiosStored,
     )
   } catch (error) {
     console.log(error)
@@ -120,7 +133,7 @@ export async function selectAudio(
     if (audioPlayer.soundObj === null || audioPlayer.soundObj === undefined) {
       const status = await play(audioPlayer.playbackObj, audio.uriAudio)
       const index =
-        audioPlayer.audioType === 'BUGLES'
+        audio.type === AudioType.BUGLE
           ? audioPlayer.audioFiles.findIndex(({ id }) => id === audio.id)
           : audioPlayer.musicFiles.findIndex(({ id }) => id === audio.id)
 
@@ -203,7 +216,7 @@ export async function selectAudio(
     ) {
       const status = await playNext(audioPlayer.playbackObj, audio.uriAudio)
       const index =
-        audioPlayer.audioType === 'BUGLES'
+        audio.type === AudioType.BUGLE
           ? audioPlayer.audioFiles.findIndex(({ id }) => id === audio.id)
           : audioPlayer.musicFiles.findIndex(({ id }) => id === audio.id)
       const newState = audioPlayer
@@ -265,7 +278,7 @@ async function selectAudioFromPlayList(
   if (!audio) audio = activePlayList.audios[defaultIndex]
 
   const indexOnAllList =
-    audioPlayer.audioType === 'BUGLES'
+    audio.type === AudioType.BUGLE
       ? audioPlayer.audioFiles.findIndex(({ id }) => id === audio.id)
       : audioPlayer.musicFiles.findIndex(({ id }) => id === audio.id)
 
@@ -299,7 +312,7 @@ export async function changeAudio(
     const { isLoaded } = await playbackObj.getStatusAsync()
     const isLastAudio =
       currentAudioIndex + 1 ===
-      (audioPlayer.audioType === 'BUGLES'
+      (audioPlayer.audioType === AudioType.BUGLE
         ? audioFiles.length
         : musicFiles.length)
 
@@ -311,7 +324,7 @@ export async function changeAudio(
     // for next
     if (selectedButton === 'next') {
       audio =
-        audioPlayer.audioType === 'BUGLES'
+        audioPlayer.audioType === AudioType.BUGLE
           ? audioFiles[currentAudioIndex + 1]
           : musicFiles[currentAudioIndex + 1]
       if (!isLoaded && !isLastAudio) {
@@ -328,7 +341,7 @@ export async function changeAudio(
       if (isLastAudio) {
         index = 0
         audio =
-          audioPlayer.audioType === 'BUGLES'
+          audioPlayer.audioType === AudioType.BUGLE
             ? audioFiles[index]
             : musicFiles[index]
         if (isLoaded) {
@@ -342,7 +355,7 @@ export async function changeAudio(
     // for previous
     if (selectedButton === 'previous') {
       audio =
-        audioPlayer.audioType === 'BUGLES'
+        audioPlayer.audioType === AudioType.BUGLE
           ? audioFiles[currentAudioIndex - 1]
           : musicFiles[currentAudioIndex - 1]
       if (!isLoaded && !isFirstAudio) {
@@ -357,7 +370,7 @@ export async function changeAudio(
       }
 
       if (isFirstAudio) {
-        if (audioPlayer.audioType === 'BUGLES') {
+        if (audioPlayer.audioType === AudioType.BUGLE) {
           index = audioFiles.length - 1
           audio = audioFiles[index]
         } else {

@@ -4,7 +4,7 @@ import {
   useRoute,
 } from '@react-navigation/native'
 
-import { Center, Heading, Box, FlatList } from 'native-base'
+import { Center, Heading, Box, FlatList, Text } from 'native-base'
 
 import { Header } from '../../components/Header'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
@@ -19,6 +19,7 @@ import { useCallback, useState } from 'react'
 import { Loading } from '../../components/Loading'
 import { AudioCard } from '../../components/AudioCard'
 import { ListEmpty } from '../../components/ListEmpty'
+import { AudioType } from '../../@types/audioTypes'
 
 type RouteParamsProps = {
   playList: string
@@ -83,16 +84,19 @@ export function PlayListDetail() {
           data={playListAudios}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
-            <AudioCard
-              audioId={item.id}
-              name={item.name}
-              duration={item.duration}
-              audioType="BUGLES"
-              indexOnPlaylist={index}
-              onPlayPause={() => {
-                handlePlayPause(item, index)
-              }}
-            />
+            <>
+              <Text>{index}</Text>
+              <AudioCard
+                audioId={item.id}
+                name={item.name}
+                duration={item.duration}
+                audioType={item.type}
+                indexOnPlaylist={index}
+                onPlayPause={() => {
+                  handlePlayPause(item, index)
+                }}
+              />
+            </>
           )}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={[

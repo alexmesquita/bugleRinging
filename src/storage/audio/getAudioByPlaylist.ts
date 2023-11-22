@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { AUDIO_COLLECTION } from '../storageConfig'
+import { storageAudioInPlaylistProps } from './audioCreateByPlaylist'
 
 export async function getAudioIdByPlaylist(playlist: string) {
   // eslint-disable-next-line no-useless-catch
@@ -8,7 +9,11 @@ export async function getAudioIdByPlaylist(playlist: string) {
       AUDIO_COLLECTION + '-' + playlist,
     )
 
-    const audios: string[] = storage ? JSON.parse(storage) : []
+    const audios: storageAudioInPlaylistProps[] = storage
+      ? JSON.parse(storage)
+      : []
+
+    console.log('audios do banco: ' + JSON.stringify(audios))
 
     return audios
   } catch (error) {
