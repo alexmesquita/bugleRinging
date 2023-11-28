@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Dimensions, FlatList } from 'react-native'
 
-import type { Sound } from 'expo-av/build/Audio/Sound'
-
 import { AudioInfo } from '../../components/AudioInfo'
 import { AudioControl } from '../../components/AudioControl'
 import { AudioSlider } from '../../components/AudioSlider'

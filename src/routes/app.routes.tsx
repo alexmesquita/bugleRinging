@@ -24,7 +24,7 @@ type AppRoutesTypes = {
   PlayLists: undefined
   PlayListDetail: { playList: string }
   PlayListEdit: { playList: string }
-  MusicPlayer: undefined
+  MusicPlayer: { musicId: string }
   WhatsRinging: undefined
   Metronome: undefined
 }

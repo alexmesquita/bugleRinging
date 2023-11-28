@@ -12,45 +12,20 @@ import { Loading } from '../../components/Loading'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 
-import { buglesData } from '../../storage/audiosInfos/bugles/infos'
-import { buglesUrls } from '../../storage/audiosInfos/bugles/urls'
-import { useAssets } from 'expo-asset'
 import { selectAudio } from '../../services/AudioController'
 import { AudioDTO } from '../../dtos/AudioDTO'
 import { AudioPlayerDataProps } from '../../contexts/AudioContext'
 import { AudioType } from '../../@types/audioTypes'
 
 export function Bugles() {
-  const [filteredAudios, setFilteredAudios] = useState(buglesData)
   const [searchText, setSearchText] = useState('')
   const [orderToSort, setOrderToSort] = useState(1)
   const [isLoading, setIsloading] = useState(false)
   const navigation = useNavigation<AppNavigatorRoutesProps>()
-  const [assets, assetError] = useAssets(buglesUrls)
   const toast = useToast()
   const audioPlayerContext = useAudioPlayer()
-
-  async function getAudiosUris() {
-    try {
-      setIsloading(true)
-      if (assets && assets.length === buglesData.length) {
-        buglesData.forEach((value, index) => {
-          value.uriAudio = assets[index].uri
-        })
-        updateAudiosContext()
-      }
-    } catch (error) {
-      toast.show({
-        title: 'Não foi possível buscar os Toques.',
-        placement: 'top',
-        bgColor: 'red.500',
-      })
-      console.log(error)
-      console.log('assetError: ' + assetError)
-    } finally {
-      setIsloading(false)
-    }
-  }
+  const { audioFiles } = audioPlayerContext.audioPlayer
+  const [filteredAudios, setFilteredAudios] = useState(audioFiles)
 
   function updateAudiosContext() {
     try {
@@ -58,8 +33,6 @@ export function Bugles() {
 
       const newState = audioPlayerContext.audioPlayer
 
-      newState.audioFiles = buglesData
-      newState.isPlayNext = false
       newState.audioType = AudioType.BUGLE
 
       audioPlayerContext.setAudioPlayer(
@@ -75,7 +48,6 @@ export function Bugles() {
         bgColor: 'red.500',
       })
       console.log(error)
-      console.log('assetError: ' + assetError)
     } finally {
       setIsloading(false)
     }
@@ -102,10 +74,10 @@ export function Bugles() {
       setIsloading(true)
 
       if (searchText === '') {
-        setFilteredAudios(buglesData)
+        setFilteredAudios(audioFiles)
       } else {
         setFilteredAudios(
-          buglesData.filter(
+          audioFiles.filter(
             (item) =>
               item.name.toUpperCase().indexOf(searchText.toUpperCase()) > -1,
           ),
@@ -118,16 +90,11 @@ export function Bugles() {
     }
   }, [searchText])
 
-  useEffect(() => {
-    getAudiosUris()
-  }, [assets])
-
   // TODO verificar se precisa atualizar o audioFiles do contexto quando trocar de tela
   useFocusEffect(
     useCallback(() => {
-      console.log(
-        'useFocusEffect executou para buscar Atualizar os audios no contexto',
-      )
+      console.log('audioFiles')
+      console.log(audioFiles)
       updateAudiosContext()
       return () => {
         // TODO unsubscribe, tentar pausar o audio se mudar de tela

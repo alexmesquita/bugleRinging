@@ -1,8 +1,16 @@
 import { AVPlaybackStatus, Audio } from 'expo-av'
-import { ReactNode, createContext, useState } from 'react'
+import { ReactNode, createContext, useEffect, useState } from 'react'
+import { useToast } from 'native-base'
 import { AudioDTO } from '../dtos/AudioDTO'
 import { playNext } from '../services/AudioController'
 import { AudioType } from '../@types/audioTypes'
+import { Asset, useAssets } from 'expo-asset'
+import { buglesUrls } from '../storage/audiosInfos/bugles/urls'
+import { buglesData } from '../storage/audiosInfos/bugles/infos'
+import { musicsData } from '../storage/audiosInfos/musics/infos'
+import { urlsMusics } from '../storage/audiosInfos/musics/urlsMusics'
+import { urlsImgs } from '../storage/audiosInfos/musics/urlsImgs'
+import { Loading } from '../components/Loading'
 
 export type activePlayListProps = {
   name: string
@@ -24,6 +32,7 @@ export type AudioPlayerDataProps = {
   playbackPosition: number | null
   playbackDuration: number | null | undefined
   audioType: string
+  urisUpdated: boolean
 }
 export type AudioContextDataProps = {
   audioPlayer: AudioPlayerDataProps
@@ -55,7 +64,54 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     playbackPosition: null,
     playbackDuration: null,
     audioType: AudioType.BUGLE,
+    urisUpdated: false,
   })
+
+  const toast = useToast()
+
+  async function updateAudiosUris() {
+    try {
+      if (audioPlayer.urisUpdated) return
+
+      const buglesAssets = await Asset.loadAsync(buglesUrls)
+      const musicsAssets = await Asset.loadAsync(urlsMusics)
+      const imgsAssets = await Asset.loadAsync(urlsImgs)
+
+      if (buglesAssets && buglesAssets.length === buglesData.length) {
+        buglesData.forEach((value, index) => {
+          value.uriAudio = buglesAssets[index].uri
+        })
+      }
+      if (musicsAssets && musicsAssets.length === musicsData.length) {
+        musicsData.forEach((value, index) => {
+          value.uriAudio = musicsAssets[index].uri
+        })
+      }
+      if (imgsAssets && imgsAssets.length === musicsData.length) {
+        musicsData.forEach((value, index) => {
+          value.uriImg = imgsAssets[index].uri
+        })
+      }
+
+      const newState = audioPlayer
+
+      newState.audioFiles = buglesData
+      newState.musicFiles = musicsData
+      newState.urisUpdated = true
+
+      setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
+        ...audioPlayer,
+        ...newState,
+      }))
+    } catch (error) {
+      toast.show({
+        title: 'Não foi possível buscar os áudios.',
+        placement: 'top',
+        bgColor: 'red.500',
+      })
+      console.log(error)
+    }
+  }
 
   async function cleanAudioPlayer() {
     const newState = audioPlayer
@@ -171,11 +227,21 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     }
   }
 
+  useEffect(() => {
+    updateAudiosUris()
+  }, [])
+
   return (
-    <AudioContext.Provider
-      value={{ audioPlayer, setAudioPlayer, onPlaybackStatusUpdate }}
-    >
-      {children}
-    </AudioContext.Provider>
+    <>
+      {audioPlayer.urisUpdated ? (
+        <AudioContext.Provider
+          value={{ audioPlayer, setAudioPlayer, onPlaybackStatusUpdate }}
+        >
+          {children}
+        </AudioContext.Provider>
+      ) : (
+        <Loading />
+      )}
+    </>
   )
 }

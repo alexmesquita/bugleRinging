@@ -12,53 +12,21 @@ import { Loading } from '../../components/Loading'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 
-import { musicsData } from '../../storage/audiosInfos/musics/infos'
-import { urlsMusics } from '../../storage/audiosInfos/musics/urlsMusics'
-import { urlsImgs } from '../../storage/audiosInfos/musics/urlsImgs'
-import { useAssets } from 'expo-asset'
-import { selectAudio } from '../../services/AudioController'
 import { AudioDTO } from '../../dtos/AudioDTO'
 import { AudioPlayerDataProps } from '../../contexts/AudioContext'
 import { AudioType } from '../../@types/audioTypes'
 
 export function Musics() {
-  const [filteredAudios, setFilteredAudios] = useState(musicsData)
+  const toast = useToast()
+  const audioPlayerContext = useAudioPlayer()
   const [searchText, setSearchText] = useState('')
   const [orderToSort, setOrderToSort] = useState(1)
   const [isLoading, setIsloading] = useState(false)
   const navigation = useNavigation<AppNavigatorRoutesProps>()
-  const [musicsAssets, musicsAssetError] = useAssets(urlsMusics)
-  const [imgsAssets, imgsAssetError] = useAssets(urlsImgs)
-  const toast = useToast()
-  const audioPlayerContext = useAudioPlayer()
 
-  async function getAudiosUris() {
-    try {
-      setIsloading(true)
-      if (musicsAssets && musicsAssets.length === musicsData.length) {
-        musicsData.forEach((value, index) => {
-          value.uriAudio = musicsAssets[index].uri
-        })
-      }
-      if (imgsAssets && imgsAssets.length === musicsData.length) {
-        musicsData.forEach((value, index) => {
-          value.uriImg = imgsAssets[index].uri
-        })
-      }
-      updateAudiosContext()
-    } catch (error) {
-      toast.show({
-        title: 'Não foi possível buscar os Hinos e Canções.',
-        placement: 'top',
-        bgColor: 'red.500',
-      })
-      console.log(error)
-      console.log('assetError: ' + musicsAssetError)
-      console.log('assetError: ' + imgsAssetError)
-    } finally {
-      setIsloading(false)
-    }
-  }
+  const { musicFiles } = audioPlayerContext.audioPlayer
+
+  const [filteredAudios, setFilteredAudios] = useState(musicFiles)
 
   function updateAudiosContext() {
     try {
@@ -66,8 +34,6 @@ export function Musics() {
 
       const newState = audioPlayerContext.audioPlayer
 
-      newState.musicFiles = musicsData
-      // newState.isPlayNext = true
       newState.audioType = AudioType.MUSIC
 
       audioPlayerContext.setAudioPlayer(
@@ -83,8 +49,6 @@ export function Musics() {
         bgColor: 'red.500',
       })
       console.log(error)
-      console.log('assetError: ' + musicsAssetError)
-      console.log('assetError: ' + imgsAssetError)
     } finally {
       setIsloading(false)
     }
@@ -111,10 +75,10 @@ export function Musics() {
       setIsloading(true)
 
       if (searchText === '') {
-        setFilteredAudios(musicsData)
+        setFilteredAudios(musicFiles)
       } else {
         setFilteredAudios(
-          musicsData.filter(
+          musicFiles.filter(
             (item) =>
               item.name.toUpperCase().indexOf(searchText.toUpperCase()) > -1,
           ),
@@ -127,16 +91,9 @@ export function Musics() {
     }
   }, [searchText])
 
-  useEffect(() => {
-    getAudiosUris()
-  }, [musicsAssets, imgsAssets])
-
   // TODO verificar se precisa atualizar o audioFiles do contexto quando trocar de tela
   useFocusEffect(
     useCallback(() => {
-      console.log(
-        'useFocusEffect executou para buscar Atualizar os audios no contexto',
-      )
       updateAudiosContext()
       return () => {
         // TODO unsubscribe, tentar pausar o audio se mudar de tela

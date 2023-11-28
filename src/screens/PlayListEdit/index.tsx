@@ -229,7 +229,7 @@ export function PlayListEdit() {
               bg="gray.500"
               value={searchText}
               onChangeText={setSearchText}
-              placeholder="Pesquise um toque de corneta"
+              placeholder="Pesquise um áudio"
               pl={2}
             />
             <IconButton
