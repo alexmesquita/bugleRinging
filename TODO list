@@ -1,4 +1,27 @@
+Game
+  Ter um botão de play/repetir
+  Ao responder, deixar o botão certo verde e o errado vermelho
+  ter um botão para a próxima pergunta
+  Ter um botão para resetar estatísticas
+  Salvar qtd de respostas, salvar qtd de acertos
+  sortear posição do array de bugles
+  sortear mais duas opções para o nome
+  
+Pausar música ao mudar de tela
+  tentar no return do usefocuseffect
+  tentar quando chegar na outra tela
+
+Arrumar o botão de voltar
+
+Metronomo
+  tela com um botão de play e pause
+  tentar repetir audio com sleep
+
+
+----------------------------------------------------------------
+
+
 OK - colocar o toque mais de uma vez na playList
 OK - playlist não tocar o proximo toque
 OK - deixar ultimo toque destacado
-colocar musica na playlists
+Ok - colocar musica na playlists

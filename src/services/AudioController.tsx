@@ -433,3 +433,36 @@ export async function moveAudio(
     console.log('error inside onSlidingComplete callback', error)
   }
 }
+
+export function updateAudioType(
+  audioPlayerContext: AudioContextDataProps,
+  type: AudioType,
+) {
+  const newState = audioPlayerContext.audioPlayer
+
+  newState.audioType = type
+
+  audioPlayerContext.setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
+    ...audioPlayer,
+    ...newState,
+  }))
+}
+
+export function isCurrentAudio(
+  audioPlayerContext: AudioContextDataProps,
+  audioId: string,
+  audioType: AudioType,
+  indexOnPlaylist: number = -1,
+  checkIsPlaying = false,
+) {
+  const isPlaylist =
+    !audioPlayerContext.audioPlayer.isPlayListRunning ||
+    audioPlayerContext.audioPlayer.indexOnPlayList === indexOnPlaylist
+
+  return (
+    (!checkIsPlaying || audioPlayerContext.audioPlayer.isPlaying) &&
+    audioId === audioPlayerContext.audioPlayer.currentAudio.id &&
+    audioPlayerContext.audioPlayer.currentAudio.type === audioType &&
+    isPlaylist
+  )
+}

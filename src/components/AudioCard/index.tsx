@@ -3,12 +3,14 @@ import { IconButton } from '../IconButton'
 import { MaterialIcons } from '@expo/vector-icons'
 import { millisToMinutesAndSeconds } from '../../utils/dateTime'
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
+import { isCurrentAudio } from '../../services/AudioController'
+import { AudioType } from '../../@types/audioTypes'
 
 type Props = {
   audioId: string
   name: string
   duration: number
-  audioType: string
+  audioType: AudioType
   onPlayPause: () => void
   indexOnPlaylist?: number
 }
@@ -24,15 +26,12 @@ export function AudioCard({
   const audioPlayerContext = useAudioPlayer()
 
   function checkCurrentAudio(checkIsPlaying = false) {
-    const isPlaylist =
-      !audioPlayerContext.audioPlayer.isPlayListRunning ||
-      audioPlayerContext.audioPlayer.indexOnPlayList === indexOnPlaylist
-
-    return (
-      (!checkIsPlaying || audioPlayerContext.audioPlayer.isPlaying) &&
-      audioId === audioPlayerContext.audioPlayer.currentAudio.id &&
-      audioPlayerContext.audioPlayer.currentAudio.type === audioType &&
-      isPlaylist
+    return isCurrentAudio(
+      audioPlayerContext,
+      audioId,
+      audioType,
+      indexOnPlaylist,
+      checkIsPlaying,
     )
   }
 

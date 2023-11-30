@@ -19,7 +19,6 @@ import { useCallback, useState } from 'react'
 import { Loading } from '../../components/Loading'
 import { AudioCard } from '../../components/AudioCard'
 import { ListEmpty } from '../../components/ListEmpty'
-import { AudioType } from '../../@types/audioTypes'
 
 type RouteParamsProps = {
   playList: string

@@ -12,7 +12,7 @@ import { Loading } from '../../components/Loading'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 
-import { selectAudio } from '../../services/AudioController'
+import { selectAudio, updateAudioType } from '../../services/AudioController'
 import { AudioDTO } from '../../dtos/AudioDTO'
 import { AudioPlayerDataProps } from '../../contexts/AudioContext'
 import { AudioType } from '../../@types/audioTypes'
@@ -27,20 +27,11 @@ export function Bugles() {
   const { audioFiles } = audioPlayerContext.audioPlayer
   const [filteredAudios, setFilteredAudios] = useState(audioFiles)
 
-  function updateAudiosContext() {
+  function updateAudioTypeInContext() {
     try {
       setIsloading(true)
 
-      const newState = audioPlayerContext.audioPlayer
-
-      newState.audioType = AudioType.BUGLE
-
-      audioPlayerContext.setAudioPlayer(
-        (audioPlayer: AudioPlayerDataProps) => ({
-          ...audioPlayer,
-          ...newState,
-        }),
-      )
+      updateAudioType(audioPlayerContext, AudioType.BUGLE)
     } catch (error) {
       toast.show({
         title: 'Não foi possível atualizar Toques.',
@@ -88,14 +79,12 @@ export function Bugles() {
     } finally {
       setIsloading(false)
     }
-  }, [searchText])
+  }, [searchText, audioFiles])
 
   // TODO verificar se precisa atualizar o audioFiles do contexto quando trocar de tela
   useFocusEffect(
     useCallback(() => {
-      console.log('audioFiles')
-      console.log(audioFiles)
-      updateAudiosContext()
+      updateAudioTypeInContext()
       return () => {
         // TODO unsubscribe, tentar pausar o audio se mudar de tela
       }

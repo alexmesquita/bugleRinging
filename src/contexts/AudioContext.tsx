@@ -1,10 +1,10 @@
 import { AVPlaybackStatus, Audio } from 'expo-av'
 import { ReactNode, createContext, useEffect, useState } from 'react'
-import { useToast } from 'native-base'
+import { Text, useToast } from 'native-base'
 import { AudioDTO } from '../dtos/AudioDTO'
 import { playNext } from '../services/AudioController'
 import { AudioType } from '../@types/audioTypes'
-import { Asset, useAssets } from 'expo-asset'
+import { Asset } from 'expo-asset'
 import { buglesUrls } from '../storage/audiosInfos/bugles/urls'
 import { buglesData } from '../storage/audiosInfos/bugles/infos'
 import { musicsData } from '../storage/audiosInfos/musics/infos'
@@ -71,27 +71,41 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
 
   async function updateAudiosUris() {
     try {
+      console.log('As Uris foram atualizadas?')
+      console.log(audioPlayer.urisUpdated)
       if (audioPlayer.urisUpdated) return
 
+      console.log(0)
       const buglesAssets = await Asset.loadAsync(buglesUrls)
+      console.log('loaded bugle')
+      console.log(buglesAssets)
       const musicsAssets = await Asset.loadAsync(urlsMusics)
+      console.log('loaded musics')
       const imgsAssets = await Asset.loadAsync(urlsImgs)
+      console.log('loaded images')
 
+      console.log('1')
       if (buglesAssets && buglesAssets.length === buglesData.length) {
         buglesData.forEach((value, index) => {
+          console.log(value.name)
           value.uriAudio = buglesAssets[index].uri
         })
       }
+      console.log('2')
+
       if (musicsAssets && musicsAssets.length === musicsData.length) {
         musicsData.forEach((value, index) => {
           value.uriAudio = musicsAssets[index].uri
         })
       }
+      console.log('3')
+
       if (imgsAssets && imgsAssets.length === musicsData.length) {
         musicsData.forEach((value, index) => {
           value.uriImg = imgsAssets[index].uri
         })
       }
+      console.log('4')
 
       const newState = audioPlayer
 
@@ -103,6 +117,8 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
         ...audioPlayer,
         ...newState,
       }))
+      console.log('As Uris foram atualizadas no final?')
+      console.log(audioPlayer.urisUpdated)
     } catch (error) {
       toast.show({
         title: 'Não foi possível buscar os áudios.',

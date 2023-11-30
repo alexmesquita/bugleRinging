@@ -1,6 +1,6 @@
 import { Button as NativeBaseButton, IButtonProps, Heading } from 'native-base'
 
-type ButtonStyleProps = 'PRIMARY' | 'SECONDARY'
+type ButtonStyleProps = 'PRIMARY' | 'SUCESS' | 'ERROR'
 
 type Props = IButtonProps & {
   title: string
@@ -14,9 +14,20 @@ export function Button({ title, type = 'PRIMARY', ...rest }: Props) {
       h={14}
       rounded="md"
       p={2}
-      bg={type === 'PRIMARY' ? 'green.700' : 'red.700'}
+      bg={
+        type === 'PRIMARY'
+          ? 'gray.300'
+          : type === 'SUCESS'
+          ? 'green.700'
+          : 'red.700'
+      }
       _pressed={{
-        bg: type === 'PRIMARY' ? 'green.900' : 'red.900',
+        bg:
+          type === 'PRIMARY'
+            ? 'gray.500'
+            : type === 'SUCESS'
+            ? 'green.900'
+            : 'red.900',
       }}
       {...rest}
     >
