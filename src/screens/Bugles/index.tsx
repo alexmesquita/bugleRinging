@@ -14,7 +14,6 @@ import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 
 import { selectAudio, updateAudioType } from '../../services/AudioController'
 import { AudioDTO } from '../../dtos/AudioDTO'
-import { AudioPlayerDataProps } from '../../contexts/AudioContext'
 import { AudioType } from '../../@types/audioTypes'
 
 export function Bugles() {

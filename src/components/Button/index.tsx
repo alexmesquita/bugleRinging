@@ -5,9 +5,15 @@ type ButtonStyleProps = 'PRIMARY' | 'SUCESS' | 'ERROR'
 type Props = IButtonProps & {
   title: string
   type?: ButtonStyleProps
+  fontSize?: string
 }
 
-export function Button({ title, type = 'PRIMARY', ...rest }: Props) {
+export function Button({
+  title,
+  type = 'PRIMARY',
+  fontSize = 'md',
+  ...rest
+}: Props) {
   return (
     <NativeBaseButton
       w="full"
@@ -31,7 +37,9 @@ export function Button({ title, type = 'PRIMARY', ...rest }: Props) {
       }}
       {...rest}
     >
-      <Heading color="white">{title}</Heading>
+      <Heading color="white" size={fontSize} w="full">
+        {title}
+      </Heading>
     </NativeBaseButton>
   )
 }

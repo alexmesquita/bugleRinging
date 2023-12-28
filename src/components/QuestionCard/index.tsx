@@ -1,4 +1,4 @@
-import { Box, Divider, FlatList, HStack, VStack } from 'native-base'
+import { Box, FlatList } from 'native-base'
 import { AudioDTO } from '../../dtos/AudioDTO'
 import { Button } from '../Button'
 import { ListEmpty } from '../ListEmpty'
@@ -37,32 +37,32 @@ export function QuestionCard({
   answerQuestion,
 }: Props) {
   return (
-    <Box w="full" h={14} rounded="md" mt={2}>
-      <HStack alignItems="center" space={3} divider={<Divider />} w="90%">
-        <FlatList
-          data={bugles}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => (
-            <VStack justifyContent="space-between">
-              <Button
-                type={checkType(item.id, status, answerId, shotId)}
-                title={item.name}
-                onPress={() => {
-                  answerQuestion(item)
-                }}
-              />
-            </VStack>
-          )}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={[
-            { paddingBottom: 100 },
-            bugles.length === 0 && { flex: 1 },
-          ]}
-          ListEmptyComponent={() => (
-            <ListEmpty message="Não foi possível carregar as alternativas" />
-          )}
-        />
-      </HStack>
+    <Box rounded="md" mt={2} >
+      <FlatList
+        data={bugles}
+        keyExtractor={(item) => item.id.toString()}
+        numColumns={2}
+        renderItem={({ item }) => (
+          <Button
+            w="47.5%"
+            fontSize="sm"
+            m={1}
+            type={checkType(item.id, status, answerId, shotId)}
+            title={item.name}
+            onPress={() => {
+              answerQuestion(item.id)
+            }}
+          />
+        )}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={[
+          { paddingBottom: 20 },
+          bugles.length === 0 && { flex: 1 },
+        ]}
+        ListEmptyComponent={() => (
+          <ListEmpty message="Não foi possível carregar as alternativas" />
+        )}
+      />
     </Box>
   )
 }

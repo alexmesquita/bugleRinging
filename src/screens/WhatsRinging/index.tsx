@@ -1,16 +1,6 @@
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 
-import {
-  Center,
-  Heading,
-  Box,
-  useToast,
-  Text,
-  VStack,
-  Divider,
-  HStack,
-  Icon,
-} from 'native-base'
+import { Center, Heading, Box, useToast, Icon } from 'native-base'
 
 import { Header } from '../../components/Header'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
@@ -27,6 +17,7 @@ import { Loading } from '../../components/Loading'
 import { MaterialIcons } from '@expo/vector-icons'
 import { IconButton } from '../../components/IconButton'
 import { QuestionCard } from '../../components/QuestionCard'
+import { Button } from '../../components/Button'
 
 export function WhatsRinging() {
   const QTD_QUESTIONS = 4
@@ -36,8 +27,8 @@ export function WhatsRinging() {
   const audioPlayerContext = useAudioPlayer()
   const toast = useToast()
   const [drawnBugles, setDrawnBugles] = useState([] as Array<AudioDTO>)
-  const [answerBugle, setAnswerBugle] = useState({} as AudioDTO)
-  const [shotBugle, setShotBugle] = useState({} as AudioDTO)
+  const [answerBugle, setAnswerBugle] = useState({ id: '-1' } as AudioDTO)
+  const [shotBugleId, setShotBugleId] = useState('-1')
   const [statusQuestion, setStatusQuestion] = useState(
     StatusQuestion.UNANSWERED,
   )
@@ -82,13 +73,11 @@ export function WhatsRinging() {
 
       do {
         index = Math.floor(Math.random() * buglesLength)
-        console.log('sorteou: ' + index)
       } while (buglesIndex.includes(index))
 
       buglesIndex.push(index)
     }
 
-    console.log(buglesIndex)
     return buglesIndex
   }
 
@@ -116,20 +105,20 @@ export function WhatsRinging() {
   function updateDrawnBugles() {
     try {
       setIsloadingQuestions(true)
+      setStatusQuestion(StatusQuestion.UNANSWERED)
+      setAnswerBugle({ id: '-1' } as AudioDTO)
+      setShotBugleId('-1')
+
       const drawnIndexes = randomBuglesIndex(
         QTD_QUESTIONS,
         audioPlayerContext.audioPlayer.audioFiles.length,
       )
-      console.log('Updating drawn')
-      console.log(drawnIndexes)
-      setDrawnBugles(getDrawnBugles(drawnIndexes))
-      console.log(JSON.stringify(drawnBugles))
+      const drawnBuglesObjects = getDrawnBugles(drawnIndexes)
+      setDrawnBugles(drawnBuglesObjects)
 
-      const answerIndex = Math.floor(Math.random() * drawnBugles.length)
-      console.log(answerIndex)
+      const answerIndex = Math.floor(Math.random() * drawnBuglesObjects.length)
 
-      setAnswerBugle(drawnBugles[answerIndex])
-      console.log(answerBugle)
+      setAnswerBugle(drawnBuglesObjects[answerIndex])
     } catch (error) {
       toast.show({
         title: 'Não foi possível sortear os toques.',
@@ -143,6 +132,7 @@ export function WhatsRinging() {
   }
 
   function answerQuestion(bugleId: string) {
+    setShotBugleId(bugleId)
     if (bugleId === answerBugle.id) {
       setStatusQuestion(StatusQuestion.HIT)
     } else setStatusQuestion(StatusQuestion.ERROR)
@@ -171,25 +161,46 @@ export function WhatsRinging() {
         {isLoadingScreen || isLoadingQuestions ? (
           <Loading />
         ) : (
-          <Box flex={1} justifyContent="center">
-            <Center>
-              <IconButton
-                as={MaterialIcons}
-                name={isPlaying() ? 'pause' : 'play-arrow'}
-                size={10}
-                alignItems="center"
-                mx={1}
-                onPress={() => handlePlayPause(answerBugle)}
-                color="white"
-              />
+          <Box h="full">
+            <Box rounded="md" flex={0.55} justifyContent="center" mb={1}>
+              <Center>
+                <IconButton
+                  as={MaterialIcons}
+                  name={isPlaying() ? 'pause' : 'play-arrow'}
+                  size={20}
+                  alignItems="center"
+                  mx={1}
+                  onPress={() => handlePlayPause(answerBugle)}
+                  color="white"
+                />
+              </Center>
+            </Box>
+
+            <Box mt={2} mb={8} flex={0.45}>
               <QuestionCard
                 bugles={drawnBugles}
                 answerId={answerBugle.id}
-                shotId={shotBugle.id}
+                shotId={shotBugleId}
                 status={statusQuestion}
                 answerQuestion={answerQuestion}
               />
-            </Center>
+              <Button
+                fontSize="sm"
+                m={1}
+                bg="orange.700"
+                title="Próximo"
+                variant="subtle"
+                endIcon={
+                  <Icon
+                    as={MaterialIcons}
+                    color="white"
+                    name="navigate-next"
+                    size="md"
+                  />
+                }
+                onPress={updateDrawnBugles}
+              />
+            </Box>
           </Box>
         )}
       </Center>
