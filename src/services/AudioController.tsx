@@ -1,4 +1,4 @@
-import { Audio } from 'expo-av'
+import { AVPlaybackStatus, Audio } from 'expo-av'
 import { AudioDTO } from '../dtos/AudioDTO'
 import {
   AudioContextDataProps,
@@ -9,10 +9,11 @@ import { getAudioIdByPlaylist } from '../storage/audio/getAudioByPlaylist'
 import { Dispatch, SetStateAction } from 'react'
 import { AudioType } from '../@types/audioTypes'
 import { storageAudioInPlaylistProps } from '../storage/audio/audioCreateByPlaylist'
+import { AppError } from '../utils/AppError'
 
 type playListInfoProps = {
   activePlayList: activePlayListProps
-  isPlayListRunning: Boolean
+  isPlayListRunning: boolean
   indexOnPlayList: number
 }
 
@@ -86,6 +87,17 @@ export async function play(
     return await playbackObj.playFromPositionAsync(lastPosition)
   } catch (error) {
     console.log('error inside play helper method', error)
+  }
+}
+
+export async function replay(
+  playbackObj: Audio.Sound,
+  soundObj: AVPlaybackStatus | null | undefined,
+) {
+  if (soundObj && soundObj.isLoaded) {
+    await playbackObj.replayAsync()
+  } else {
+    throw new AppError('Não foi possível reproduzir o metrônomo')
   }
 }
 
@@ -452,7 +464,7 @@ export function isCurrentAudio(
   audioPlayerContext: AudioContextDataProps,
   audioId: string,
   audioType: AudioType,
-  indexOnPlaylist: number = -1,
+  indexOnPlaylist = -1,
   checkIsPlaying = false,
 ) {
   const isPlaylist =

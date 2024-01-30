@@ -13,8 +13,6 @@ export async function getAudioIdByPlaylist(playlist: string) {
       ? JSON.parse(storage)
       : []
 
-    console.log('audios do banco: ' + JSON.stringify(audios))
-
     return audios
   } catch (error) {
     throw error

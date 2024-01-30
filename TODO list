@@ -1,17 +1,23 @@
-Game
-  Ter um botão para resetar estatísticas
-  Salvar qtd de respostas, salvar qtd de acertos
-  
-  
+colocar os toques
+publicar
+
+Bugs:
+  Quando da o play e depois pause em um toque, e da play em outro, não destaca o novo toque
+
 Pausar música ao mudar de tela
   tentar no return do usefocuseffect
   tentar quando chegar na outra tela
 
 Arrumar o botão de voltar
-
+  
 Metronomo
   tela com um botão de play e pause
   tentar repetir audio com sleep
+
+Game
+  Ter um botão para resetar estatísticas
+  Salvar qtd de respostas, salvar qtd de acertos
+
 
 
 ----------------------------------------------------------------
@@ -25,4 +31,4 @@ OK - Ter um botão de play/repetir
 OK - Ao responder, deixar o botão certo verde e o errado vermelho
 OK - ter um botão para a próxima pergunta
 OK - sortear posição do array de bugles
-OK - sortear mais duas opções para o nome  
+OK - sortear mais duas opções para o nome

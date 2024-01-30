@@ -1,7 +1,6 @@
 /* eslint-disable camelcase */
-import React from 'react'
 import { NativeBaseProvider } from 'native-base'
-import { StatusBar } from 'react-native'
+import { StatusBar, LogBox } from 'react-native'
 import { ThemeProvider } from 'styled-components'
 import {
   useFonts,
@@ -16,7 +15,7 @@ import { AudioContextProvider } from './src/contexts/AudioContext'
 
 export default function App() {
   const [fontsLoader] = useFonts({ Roboto_400Regular, Roboto_700Bold })
-
+  LogBox.ignoreLogs(['new NativeEventEmitter'])
   return (
     <NativeBaseProvider theme={THEME}>
       <ThemeProvider theme={THEME}>

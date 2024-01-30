@@ -83,7 +83,6 @@ export function PlayListEdit() {
       const allAudios = [] as AudioDTO[]
       allAudios.push(...audioPlayerContext.audioPlayer.audioFiles)
       allAudios.push(...audioPlayerContext.audioPlayer.musicFiles)
-      console.log("allAudios: " + JSON.stringify(allAudios))
       setAudios(allAudios)
     } catch (error) {
       console.log(error)

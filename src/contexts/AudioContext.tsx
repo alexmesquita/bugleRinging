@@ -1,6 +1,6 @@
 import { AVPlaybackStatus, Audio } from 'expo-av'
 import { ReactNode, createContext, useEffect, useState } from 'react'
-import { Text, useToast } from 'native-base'
+import { useToast } from 'native-base'
 import { AudioDTO } from '../dtos/AudioDTO'
 import { playNext } from '../services/AudioController'
 import { AudioType } from '../@types/audioTypes'
@@ -12,6 +12,8 @@ import { urlsMusics } from '../storage/audiosInfos/musics/urlsMusics'
 import { urlsImgs } from '../storage/audiosInfos/musics/urlsImgs'
 import { Loading } from '../components/Loading'
 
+const beat = require('../../assets/audios/bugles/beat.mp3')
+
 export type activePlayListProps = {
   name: string
   audios: Array<AudioDTO>
@@ -22,10 +24,11 @@ export type AudioPlayerDataProps = {
   soundObj: AVPlaybackStatus | null | undefined
   audioFiles: Array<AudioDTO>
   musicFiles: Array<AudioDTO>
+  beatFile: AudioDTO
   currentAudio: AudioDTO
-  isPlaying: Boolean
-  isPlayNext: Boolean
-  isPlayListRunning: Boolean
+  isPlaying: boolean
+  isPlayNext: boolean
+  isPlayListRunning: boolean
   indexOnPlayList: number
   activePlayList: activePlayListProps
   currentAudioIndex: number | null
@@ -54,6 +57,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     soundObj: null,
     audioFiles: [] as Array<AudioDTO>,
     musicFiles: [] as Array<AudioDTO>,
+    beatFile: {} as AudioDTO,
     currentAudio: {} as AudioDTO,
     isPlaying: false,
     isPlayNext: false,
@@ -75,42 +79,37 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
       console.log(audioPlayer.urisUpdated)
       if (audioPlayer.urisUpdated) return
 
-      console.log(0)
       const buglesAssets = await Asset.loadAsync(buglesUrls)
       console.log('loaded bugle')
-      console.log(buglesAssets)
       const musicsAssets = await Asset.loadAsync(urlsMusics)
       console.log('loaded musics')
+      const beatAsset = await Asset.loadAsync(beat)
+      console.log('loaded beat')
       const imgsAssets = await Asset.loadAsync(urlsImgs)
       console.log('loaded images')
 
-      console.log('1')
       if (buglesAssets && buglesAssets.length === buglesData.length) {
         buglesData.forEach((value, index) => {
-          console.log(value.name)
           value.uriAudio = buglesAssets[index].uri
         })
       }
-      console.log('2')
 
       if (musicsAssets && musicsAssets.length === musicsData.length) {
         musicsData.forEach((value, index) => {
           value.uriAudio = musicsAssets[index].uri
         })
       }
-      console.log('3')
 
       if (imgsAssets && imgsAssets.length === musicsData.length) {
         musicsData.forEach((value, index) => {
           value.uriImg = imgsAssets[index].uri
         })
       }
-      console.log('4')
-
       const newState = audioPlayer
 
       newState.audioFiles = buglesData
       newState.musicFiles = musicsData
+      newState.beatFile = { uriAudio: beatAsset[0].uri } as AudioDTO
       newState.urisUpdated = true
 
       setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
@@ -167,8 +166,6 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     // }
 
     if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
-      console.log('Acabou a música')
-
       if (audioPlayer.isPlayNext && audioPlayer.isPlayListRunning) {
         const indexOnPlayList = audioPlayer.activePlayList.audios.findIndex(
           ({ id }) => id === audioPlayer.currentAudio.id,

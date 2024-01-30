@@ -18,10 +18,8 @@ export async function audioCreateByPlaylist(
     const storedAudios = await getAudioIdByPlaylist(playlist)
 
     const data = { id: audioId, audioType } as storageAudioInPlaylistProps
-    console.log(data)
 
     const storage = JSON.stringify([...storedAudios, data])
-    console.log(storage)
 
     // @bugleRinging:audios-desfile 1:[{id: '0', audioType: 'BUGLE'}]
     // @bugleRinging:audios-desfile 2:[{id: '2', audioType: 'MUSIC'}, {id: '0', audioType: 'BUGLE'}]
