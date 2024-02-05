@@ -15,7 +15,7 @@ import { AudioContextProvider } from './src/contexts/AudioContext'
 
 export default function App() {
   const [fontsLoader] = useFonts({ Roboto_400Regular, Roboto_700Bold })
-  LogBox.ignoreLogs(['new NativeEventEmitter'])
+  LogBox.ignoreLogs(['new NativeEventEmitter()'])
   return (
     <NativeBaseProvider theme={THEME}>
       <ThemeProvider theme={THEME}>
