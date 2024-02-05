@@ -128,8 +128,8 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     }
   }
 
-  async function cleanAudioPlayer() {
-    const newState = audioPlayer
+  async function cleanAudioPlayer(audioPlayerToClean: AudioPlayerDataProps) {
+    const newState = audioPlayerToClean
 
     newState.playbackObj.unloadAsync()
     newState.soundObj = null
@@ -138,8 +138,8 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     newState.playbackPosition = null
     newState.playbackDuration = null
 
-    setAudioPlayer((audioPlayer) => ({
-      ...audioPlayer,
+    setAudioPlayer((audioPlayerToClean) => ({
+      ...audioPlayerToClean,
       ...newState,
     }))
   }
@@ -174,7 +174,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
         const nextAudio = audioPlayer.activePlayList.audios[nextIndex]
 
         if (!nextAudio) {
-          cleanAudioPlayer()
+          cleanAudioPlayer(audioPlayer)
           return
         }
 
@@ -213,7 +213,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
             ? audioPlayer.audioFiles.length
             : audioPlayer.musicFiles.length)
       ) {
-        cleanAudioPlayer()
+        cleanAudioPlayer(audioPlayer)
         return
         // TODO verificar se será preciso usar a função: storeAudioForNextOpening, tem em outros arquivos
         // return await storeAudioForNextOpening(audioFiles[0], 0)

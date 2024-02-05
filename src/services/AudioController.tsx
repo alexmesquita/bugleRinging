@@ -236,6 +236,7 @@ export async function selectAudio(
           : audioPlayer.musicFiles.findIndex(({ id }) => id === audio.id)
       const newState = audioPlayer
 
+      newState.playbackObj.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
       newState.currentAudio = audio
       newState.soundObj = status
       newState.isPlaying = true
@@ -260,7 +261,6 @@ export async function selectAudio(
         ...audioPlayer,
         ...newState,
       }))
-      // return storeAudioForNextOpening(audio, index)
     }
   } catch (error) {
     console.log('error inside select audio method.', error)
@@ -478,6 +478,12 @@ export function isCurrentAudio(
   //   'Current audio id: ' + audioPlayerContext.audioPlayer.currentAudio.id,
   // )
 
+  console.log(
+    'id: ' +
+      audioPlayerContext.audioPlayer.currentAudio.id +
+      '\nnome: ' +
+      audioPlayerContext.audioPlayer.currentAudio.name,
+  )
   return (
     (!checkIsPlaying || audioPlayerContext.audioPlayer.isPlaying) &&
     audioId === audioPlayerContext.audioPlayer.currentAudio.id &&
