@@ -151,7 +151,7 @@ export function WhatsRinging() {
 
   return (
     <Box flex={1} bg="background" px={2} pb={2}>
-      <Header showBackButton={navigation.canGoBack()} />
+      <Header showHomeButton={navigation.canGoBack()} />
 
       <Center>
         <Heading mb={2} color="white">
@@ -176,7 +176,7 @@ export function WhatsRinging() {
               </Center>
             </Box>
 
-            <Box mt={2} mb={8} flex={0.45}>
+            <Box mt={2} mb={10} flex={0.45}>
               <QuestionCard
                 bugles={drawnBugles}
                 answerId={answerBugle.id}
@@ -185,8 +185,8 @@ export function WhatsRinging() {
                 answerQuestion={answerQuestion}
               />
               <Button
-                fontSize="sm"
-                m={1}
+                fontSize={18}
+                mb={1}
                 bg="orange.700"
                 title="Próximo"
                 variant="subtle"
@@ -195,7 +195,7 @@ export function WhatsRinging() {
                     as={MaterialIcons}
                     color="white"
                     name="navigate-next"
-                    size="md"
+                    size="lg"
                   />
                 }
                 onPress={updateDrawnBugles}

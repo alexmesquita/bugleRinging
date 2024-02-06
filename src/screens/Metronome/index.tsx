@@ -109,7 +109,7 @@ export function Metronome() {
 
   return (
     <Box flex={1} bg="background" px={2} pb={2}>
-      <Header showBackButton={navigation.canGoBack()} />
+      <Header showHomeButton={navigation.canGoBack()} />
 
       <Center>
         <Heading mb={2} color="white">

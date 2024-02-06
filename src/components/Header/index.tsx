@@ -5,10 +5,10 @@ import { useNavigation } from '@react-navigation/native'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 
 type Props = {
-  showBackButton?: boolean
+  showHomeButton?: boolean
 }
 
-export function Header({ showBackButton = false }: Props) {
+export function Header({ showHomeButton = false }: Props) {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   function goBack() {
@@ -22,15 +22,10 @@ export function Header({ showBackButton = false }: Props) {
       mt={6}
       w="100%"
       alignItems="center"
-      justifyContent={showBackButton ? 'space-between' : 'center'}
+      justifyContent={showHomeButton ? 'space-between' : 'center'}
     >
-      {showBackButton && (
-        <IconButton
-          onPress={goBack}
-          name="arrow-back-ios"
-          color="white"
-          size={9}
-        />
+      {showHomeButton && (
+        <IconButton onPress={goBack} name="home" color="white" size={9} />
       )}
       <Image source={logoImg} w={12} h={16} alt="Bugle logo" />
     </HStack>

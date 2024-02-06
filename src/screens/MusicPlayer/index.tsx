@@ -199,15 +199,13 @@ export function MusicPlayer() {
 
   return (
     <Box flex={1} bg="background" px={2}>
-      <Header showBackButton={navigation.canGoBack()} />
+      <Header showHomeButton={navigation.canGoBack()} />
       <FlatList
         horizontal
         data={audioPlayer.musicFiles}
         renderItem={renderArtWork}
         keyExtractor={(song) => song.id.toString()}
       />
-
-      {loading && <Text>Carregando...</Text>}
 
       <AudioInfo
         artist={audioPlayer.currentAudio.artist}

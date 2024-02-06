@@ -1,23 +1,24 @@
 import { Button as NativeBaseButton, IButtonProps, Heading } from 'native-base'
+import { Text } from 'react-native'
 
 type ButtonStyleProps = 'PRIMARY' | 'SUCESS' | 'ERROR'
 
 type Props = IButtonProps & {
   title: string
   type?: ButtonStyleProps
-  fontSize?: string
+  fontSize?: number
 }
 
 export function Button({
   title,
   type = 'PRIMARY',
-  fontSize = 'md',
+  fontSize = 15,
   ...rest
 }: Props) {
   return (
     <NativeBaseButton
       w="full"
-      h={14}
+      h={16}
       rounded="md"
       p={2}
       bg={
@@ -37,9 +38,18 @@ export function Button({
       }}
       {...rest}
     >
-      <Heading color="white" size={fontSize} w="full">
+      <Text
+        style={{
+          color: 'white',
+          fontWeight: 'bold',
+          fontSize,
+          textAlign: 'center',
+        }}
+        numberOfLines={2}
+        ellipsizeMode="head"
+      >
         {title}
-      </Heading>
+      </Text>
     </NativeBaseButton>
   )
 }

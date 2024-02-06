@@ -37,7 +37,7 @@ export function QuestionCard({
   answerQuestion,
 }: Props) {
   return (
-    <Box rounded="md" mt={2} >
+    <Box rounded="md" mt={2}>
       <FlatList
         data={bugles}
         keyExtractor={(item) => item.id.toString()}
@@ -45,7 +45,7 @@ export function QuestionCard({
         renderItem={({ item }) => (
           <Button
             w="47.5%"
-            fontSize="sm"
+            fontSize={15}
             m={1}
             type={checkType(item.id, status, answerId, shotId)}
             title={item.name}

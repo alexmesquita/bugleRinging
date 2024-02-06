@@ -124,10 +124,8 @@ export async function resume(playbackObj: Audio.Sound) {
 // select another audio
 export async function playNext(playbackObj: Audio.Sound, uri: string) {
   try {
-    console.log('vai pausar o audio atual')
     await playbackObj.stopAsync()
     await playbackObj.unloadAsync()
-    console.log('parou...')
     return await play(playbackObj, uri)
   } catch (error) {
     console.log('error inside playNext helper method', error)
@@ -228,7 +226,6 @@ export async function selectAudio(
       audioPlayer.soundObj.isLoaded &&
       audioPlayer.currentAudio.id !== audio.id
     ) {
-      console.log('vai tocar outro audio')
       const status = await playNext(audioPlayer.playbackObj, audio.uriAudio)
       const index =
         audio.type === AudioType.BUGLE
@@ -345,7 +342,6 @@ export async function changeAudio(
       if (!isLoaded && !isLastAudio) {
         index = currentAudioIndex + 1
         status = await play(playbackObj, audio.uriAudio)
-        playbackObj.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
       }
 
       if (isLoaded && !isLastAudio) {
@@ -365,6 +361,7 @@ export async function changeAudio(
           status = await play(playbackObj, audio.uriAudio)
         }
       }
+      playbackObj.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
     }
 
     // for previous
@@ -478,12 +475,6 @@ export function isCurrentAudio(
   //   'Current audio id: ' + audioPlayerContext.audioPlayer.currentAudio.id,
   // )
 
-  console.log(
-    'id: ' +
-      audioPlayerContext.audioPlayer.currentAudio.id +
-      '\nnome: ' +
-      audioPlayerContext.audioPlayer.currentAudio.name,
-  )
   return (
     (!checkIsPlaying || audioPlayerContext.audioPlayer.isPlaying) &&
     audioId === audioPlayerContext.audioPlayer.currentAudio.id &&
