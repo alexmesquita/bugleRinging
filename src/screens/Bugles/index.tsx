@@ -85,6 +85,8 @@ export function Bugles() {
     useCallback(() => {
       updateAudioTypeInContext()
       return () => {
+        const { cleanAudioPlayer, audioPlayer } = audioPlayerContext
+        cleanAudioPlayer(audioPlayer)
         // TODO unsubscribe, tentar pausar o audio se mudar de tela
       }
     }, []),

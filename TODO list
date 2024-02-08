@@ -1,15 +1,9 @@
-colocar os toques
 publicar
-
-Bugs:
-  Quando da o play e depois pause em um toque, e da play em outro, não destaca o novo toque
 
 Pausar música ao mudar de tela
   tentar no return do usefocuseffect
   tentar quando chegar na outra tela
 
-Arrumar o botão de voltar
-  
 Metronomo
   tela com um botão de play e pause
   tentar repetir audio com sleep

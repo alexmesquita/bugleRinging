@@ -66,6 +66,15 @@ export function PlayListDetail() {
     }, [route]),
   )
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        const { cleanAudioPlayer, audioPlayer } = audioPlayerContext
+        cleanAudioPlayer(audioPlayer)
+      }
+    }, []),
+  )
+
   return (
     <Box flex={1} bg="background" px={2} pb={2}>
       <Header showHomeButton={navigation.canGoBack()} />

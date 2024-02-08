@@ -17,21 +17,21 @@ export function Metronome() {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   const [isPlaying, setIsPlaying] = useState(false)
-  const [isFirstTime, setIsFirtTime] = useState(true)
-  const [bpm, setBpm] = useState(100)
+  const [bpm, setBpm] = useState(60)
   const { colors } = useTheme()
   const audioPlayerContext = useAudioPlayer()
   const { audioPlayer } = audioPlayerContext
   const toast = useToast()
+  let isFirstTime = false
 
   const { playbackObj, beatFile, soundObj } = audioPlayer
 
   async function playBeat() {
     if (isFirstTime) {
+      isFirstTime = false
       play(playbackObj, beatFile.uriAudio)
-      setIsFirtTime(false)
     } else {
-      replay(playbackObj, soundObj)
+      replay(playbackObj)
     }
   }
   function handleInputChange(value: number) {
@@ -97,9 +97,11 @@ export function Metronome() {
 
   useFocusEffect(
     useCallback(() => {
-      setIsFirtTime(true)
+      isFirstTime = true
       clickTimer = null
       return () => {
+        const { cleanAudioPlayer, audioPlayer } = audioPlayerContext
+        cleanAudioPlayer(audioPlayer)
         if (clickTimer) {
           clearInterval(clickTimer)
         }

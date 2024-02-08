@@ -2,7 +2,7 @@ import { AVPlaybackStatus, Audio } from 'expo-av'
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { useToast } from 'native-base'
 import { AudioDTO } from '../dtos/AudioDTO'
-import { playNext } from '../services/AudioController'
+import { pause, playNext } from '../services/AudioController'
 import { AudioType } from '../@types/audioTypes'
 import { Asset } from 'expo-asset'
 import { buglesUrls } from '../storage/audiosInfos/bugles/urls'
@@ -41,6 +41,7 @@ export type AudioContextDataProps = {
   audioPlayer: AudioPlayerDataProps
   setAudioPlayer: (context: any) => void
   onPlaybackStatusUpdate: (playbackStatus: AVPlaybackStatus) => void
+  cleanAudioPlayer: (audioPlayer: AudioPlayerDataProps) => void
 }
 
 type AudioContextProviderProps = {
@@ -129,6 +130,14 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
   }
 
   async function cleanAudioPlayer(audioPlayerToClean: AudioPlayerDataProps) {
+    if (
+      audioPlayerToClean.isPlaying &&
+      audioPlayerToClean.soundObj &&
+      audioPlayerToClean.soundObj.isLoaded
+    ) {
+      await pause(audioPlayerToClean.playbackObj)
+    }
+
     const newState = audioPlayerToClean
 
     newState.playbackObj.unloadAsync()
@@ -248,7 +257,12 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     <>
       {audioPlayer.urisUpdated ? (
         <AudioContext.Provider
-          value={{ audioPlayer, setAudioPlayer, onPlaybackStatusUpdate }}
+          value={{
+            audioPlayer,
+            setAudioPlayer,
+            onPlaybackStatusUpdate,
+            cleanAudioPlayer,
+          }}
         >
           {children}
         </AudioContext.Provider>

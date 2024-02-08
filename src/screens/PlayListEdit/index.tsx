@@ -103,8 +103,6 @@ export function PlayListEdit() {
 
   async function addAudio(audio: AudioDTO, playListToAdd: string) {
     try {
-      console.log(audio)
-      console.log(playListToAdd)
       await audioCreateByPlaylist(audio.id, audio.type, playListToAdd)
       const audiosFinded = await getAudiosByPlaylist(
         audioPlayerContext,

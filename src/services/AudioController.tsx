@@ -90,15 +90,8 @@ export async function play(
   }
 }
 
-export async function replay(
-  playbackObj: Audio.Sound,
-  soundObj: AVPlaybackStatus | null | undefined,
-) {
-  if (soundObj && soundObj.isLoaded) {
-    await playbackObj.replayAsync()
-  } else {
-    throw new AppError('Não foi possível reproduzir o metrônomo')
-  }
+export async function replay(playbackObj: Audio.Sound) {
+  await playbackObj.replayAsync()
 }
 
 // pause audio
@@ -470,10 +463,6 @@ export function isCurrentAudio(
   const isPlaylist =
     !audioPlayerContext.audioPlayer.isPlayListRunning ||
     audioPlayerContext.audioPlayer.indexOnPlayList === indexOnPlaylist
-
-  // console.log(
-  //   'Current audio id: ' + audioPlayerContext.audioPlayer.currentAudio.id,
-  // )
 
   return (
     (!checkIsPlaying || audioPlayerContext.audioPlayer.isPlaying) &&

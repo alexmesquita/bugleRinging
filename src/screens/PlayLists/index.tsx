@@ -115,15 +115,6 @@ export function PlayLists() {
     flatListRef.current?.scrollToEnd({ animated: true })
   }
 
-  // TODO usar depois de colocar a navegação
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     console.log('useFocusEffect executou para buscar as playlists')
-  //     getPlaylists()
-  //   }, []),
-  // )
-
   useEffect(() => {
     getPlaylists()
   }, [])

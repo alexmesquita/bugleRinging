@@ -1,7 +1,7 @@
 export const urlsMusics = [
-  require('../../../../assets/audios/musics/hino_nacional_brasileiro.mp3'),
-  require('../../../../assets/audios/musics/cancao_do_soldado_do_fogo.mp3'),
-  require('../../../../assets/audios/musics/hino_da_bandeira_nacional.mp3'),
-  require('../../../../assets/audios/musics/hino_da_independencia_do_brasil.mp3'),
-  require('../../../../assets/audios/musics/hino_da_proclamacao_da_republica.mp3'),
+  require('../../../../assets/audios/musics/desfile_da_tropa.mp4'),
+  require('../../../../assets/audios/musics/exordio_cmt_geral_cbmdf.mp4'),
+  require('../../../../assets/audios/musics/exordio_governador.mp4'),
+  require('../../../../assets/audios/musics/incorporação_da_bandeira_nacional_-_alvorada_de_lo_schiavo.mpeg'),
+  require('../../../../assets/audios/musics/treinamento_do_desfile_-_bumbo-caixa-prato.mp4'),
 ]

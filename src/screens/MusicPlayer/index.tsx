@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Dimensions, FlatList } from 'react-native'
 
 import { AudioInfo } from '../../components/AudioInfo'
@@ -6,7 +6,7 @@ import { AudioControl } from '../../components/AudioControl'
 import { AudioSlider } from '../../components/AudioSlider'
 
 import { Header } from '../../components/Header'
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 import { Box, Center, Image, Text } from 'native-base'
 import {
@@ -173,6 +173,14 @@ export function MusicPlayer() {
   //   setTrackPosition(value)
   // }
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        const { cleanAudioPlayer, audioPlayer } = audioPlayerContext
+        cleanAudioPlayer(audioPlayer)
+      }
+    }, []),
+  )
   const renderArtWork = () => {
     const artwork = audioPlayer.currentAudio.uriImg
     const { width } = Dimensions.get('window')

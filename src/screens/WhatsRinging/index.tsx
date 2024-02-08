@@ -144,7 +144,8 @@ export function WhatsRinging() {
       updateAudioTypeInContext()
       updateDrawnBugles()
       return () => {
-        // TODO unsubscribe, tentar pausar o audio se mudar de tela
+        const { cleanAudioPlayer, audioPlayer } = audioPlayerContext
+        cleanAudioPlayer(audioPlayer)
       }
     }, []),
   )
