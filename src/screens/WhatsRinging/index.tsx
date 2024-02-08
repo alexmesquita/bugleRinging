@@ -104,6 +104,9 @@ export function WhatsRinging() {
 
   function updateDrawnBugles() {
     try {
+      const { cleanAudioPlayer, audioPlayer } = audioPlayerContext
+      cleanAudioPlayer(audioPlayer)
+      
       setIsloadingQuestions(true)
       setStatusQuestion(StatusQuestion.UNANSWERED)
       setAnswerBugle({ id: '-1' } as AudioDTO)
@@ -199,7 +202,7 @@ export function WhatsRinging() {
                     size="lg"
                   />
                 }
-                onPressIn={updateDrawnBugles}
+                onPress={updateDrawnBugles}
               />
             </Box>
           </Box>
