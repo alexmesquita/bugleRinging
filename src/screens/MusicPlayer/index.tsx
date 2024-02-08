@@ -6,7 +6,11 @@ import { AudioControl } from '../../components/AudioControl'
 import { AudioSlider } from '../../components/AudioSlider'
 
 import { Header } from '../../components/Header'
-import { useFocusEffect, useNavigation, useRoute } from '@react-navigation/native'
+import {
+  useFocusEffect,
+  useNavigation,
+  useRoute,
+} from '@react-navigation/native'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 import { Box, Center, Image, Text } from 'native-base'
 import {
@@ -30,31 +34,8 @@ export function MusicPlayer() {
   const audioPlayerContext = useAudioPlayer()
   const { audioPlayer, setAudioPlayer } = audioPlayerContext
 
-  const [playing, setPlay] = useState<Boolean>(false)
-  const [loading, setLoading] = useState(false)
+  const [playing, setPlay] = useState<boolean>(false)
   const navigation = useNavigation<AppNavigatorRoutesProps>()
-
-  // const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
-  //   if (status.isLoaded) {
-  //     if (status.isPlaying && !isDraggingSlider) {
-  //       setSliderPositionMillis(status.positionMillis)
-  //     }
-  //   }
-  // }
-
-  // const setOnPlaybackStatusUpdate = () => {
-  //   if (sound) {
-  //     sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
-  //   }
-  // }
-
-  // useEffect(() => {
-  //   return sound
-  //     ? () => {
-  //         sound.unloadAsync()
-  //       }
-  //     : undefined
-  // }, [sound])
 
   async function playAudio() {
     const index = audioPlayer.musicFiles.findIndex(({ id }) => id === musicId)
@@ -72,47 +53,8 @@ export function MusicPlayer() {
   }
 
   useEffect(() => {
-    // audioPlayerContext.loadPreviousAudio()
     playAudio()
   }, [])
-
-  // async function loadAudio(source: AVPlaybackSource) {
-  //   setLoading(true)
-
-  //   const { sound: soundCreated, status } = await Audio.Sound.createAsync(
-  //     source,
-  //   )
-  //   setSound(soundCreated)
-  //   setLoading(false)
-  //   setOnPlaybackStatusUpdate()
-
-  //   if (status.isLoaded && status.durationMillis) {
-  //     setDurationMillis(status.durationMillis)
-  //   }
-
-  //   soundCreated.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
-
-  //   await soundCreated.playAsync()
-  //   setPlay(true)
-  // }
-
-  // async function playSound() {
-  //   if (sound && playing) {
-  //     await sound.pauseAsync()
-  //     setPlay(false)
-  //     return
-  //   }
-
-  //   if (sound && !playing) {
-  //     await sound.playAsync()
-  //     setPlay(true)
-  //     return
-  //   }
-
-  //   const uri = assets ? assets[currentAudioIndex].uri : ''
-
-  //   await loadAudio({ uri })
-  // }
 
   async function handlePlayPause() {
     await selectAudio(audioPlayer.currentAudio, audioPlayerContext)
@@ -150,28 +92,6 @@ export function MusicPlayer() {
     await moveAudio(audioPlayerContext, value)
     setCurrentPosition(0)
   }
-
-  // const setTrackPosition = async (positionMillis: number) => {
-  //   if (sound) {
-  //     await sound.setPositionAsync(positionMillis)
-  //   }
-  // }
-
-  // const onSlidingComplete = () => {
-  //   if (currentAudioIndex + 1 >= playListUrl.length) {
-  //     setTrackPosition(0)
-  //     playSound()
-  //   } else {
-  //     skipToNext()
-  //   }
-  // }
-
-  // const onSliderChange = (value: number) => {
-  //   if (!isDraggingSlider) {
-  //     setIsDraggingSlider(true)
-  //   }
-  //   setTrackPosition(value)
-  // }
 
   useFocusEffect(
     useCallback(() => {

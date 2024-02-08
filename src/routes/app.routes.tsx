@@ -112,15 +112,15 @@ export function AppRoutes() {
           ),
         }}
       />
-      {/* <Screen
+      <Screen
         name="Metronome"
         component={Metronome}
         options={{
           tabBarLabel: 'Metrônomo',
           tabBarIcon: ({ color }) => (
             <Icon
-              as={Entypo}
-              name="gauge"
+              as={MaterialCommunityIcons}
+              name="metronome-tick"
               size={iconSize}
               color={color}
               alignItems="center"
@@ -128,7 +128,7 @@ export function AppRoutes() {
             />
           ),
         }}
-      /> */}
+      />
       <Screen
         name="Musics"
         component={Musics}

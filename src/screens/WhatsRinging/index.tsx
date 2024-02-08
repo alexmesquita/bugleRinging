@@ -171,7 +171,7 @@ export function WhatsRinging() {
                   size={20}
                   alignItems="center"
                   mx={1}
-                  onPress={() => handlePlayPause(answerBugle)}
+                  onPressIn={() => handlePlayPause(answerBugle)}
                   color="white"
                 />
               </Center>
@@ -199,7 +199,7 @@ export function WhatsRinging() {
                     size="lg"
                   />
                 }
-                onPress={updateDrawnBugles}
+                onPressIn={updateDrawnBugles}
               />
             </Box>
           </Box>

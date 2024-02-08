@@ -6,5 +6,5 @@ export enum AudioType {
 export enum StatusQuestion {
   UNANSWERED = 'UNANSWERED',
   HIT = 'HIT',
-  ERROR = 'ERROR'
+  ERROR = 'ERROR',
 }

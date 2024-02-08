@@ -13,7 +13,7 @@ export function PlaylistCard({ name, onDetail, onEdit, onRemove }: Props) {
   return (
     <Box w="full" h={14} bg="gray.500" rounded="md" mt={2}>
       <HStack alignItems="center">
-        <Pressable rounded="md" flex={1} onPress={onDetail}>
+        <Pressable rounded="md" flex={1} onPressIn={onDetail}>
           <HStack alignItems="center">
             <Icon
               as={MaterialIcons}
@@ -33,8 +33,8 @@ export function PlaylistCard({ name, onDetail, onEdit, onRemove }: Props) {
           </HStack>
         </Pressable>
 
-        <IconButton name="edit" color="white" onPress={onEdit} />
-        <IconButton name="delete" color="red.700" onPress={onRemove} />
+        <IconButton name="edit" color="white" onPressIn={onEdit} />
+        <IconButton name="delete" color="red.700" onPressIn={onRemove} />
       </HStack>
     </Box>
   )

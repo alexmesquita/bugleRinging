@@ -49,7 +49,7 @@ export function QuestionCard({
             m={1}
             type={checkType(item.id, status, answerId, shotId)}
             title={item.name}
-            onPress={() => {
+            onPressIn={() => {
               answerQuestion(item.id)
             }}
           />

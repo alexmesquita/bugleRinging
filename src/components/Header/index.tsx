@@ -25,7 +25,7 @@ export function Header({ showHomeButton = false }: Props) {
       justifyContent={showHomeButton ? 'space-between' : 'center'}
     >
       {showHomeButton && (
-        <IconButton onPress={goBack} name="home" color="white" size={9} />
+        <IconButton onPressIn={goBack} name="home" color="white" size={9} />
       )}
       <Image source={logoImg} w={12} h={16} alt="Bugle logo" />
     </HStack>

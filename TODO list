@@ -4,10 +4,6 @@ Pausar música ao mudar de tela
   tentar no return do usefocuseffect
   tentar quando chegar na outra tela
 
-Metronomo
-  tela com um botão de play e pause
-  tentar repetir audio com sleep
-
 Game
   Ter um botão para resetar estatísticas
   Salvar qtd de respostas, salvar qtd de acertos

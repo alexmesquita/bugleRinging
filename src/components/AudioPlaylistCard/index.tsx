@@ -27,7 +27,7 @@ export function AudioPlaylistCard({ name, type, action }: Props) {
         <IconButton
           name={type === 'ADD' ? 'add' : 'delete'}
           color={type === 'ADD' ? 'green.700' : 'red.700'}
-          onPress={action}
+          onPressIn={action}
         />
       </HStack>
     </Box>

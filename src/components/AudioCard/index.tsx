@@ -50,7 +50,7 @@ export function AudioCard({
           size={8}
           alignItems="center"
           mx={1}
-          onPress={onPlayPause}
+          onPressIn={onPlayPause}
           color={checkCurrentAudio() ? 'gray.700' : 'white'}
         />
         <VStack flex={1} pl={1} pt={2}>

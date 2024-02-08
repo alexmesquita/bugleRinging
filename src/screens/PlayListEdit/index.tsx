@@ -231,7 +231,7 @@ export function PlayListEdit() {
             />
             <IconButton
               bg="gray.500"
-              onPress={orderList}
+              onPressIn={orderList}
               name="sort-by-alpha"
               ml={2}
               color="white"

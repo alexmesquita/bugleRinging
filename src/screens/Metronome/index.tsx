@@ -7,9 +7,10 @@ import { Header } from '../../components/Header'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 import { useCallback, useState } from 'react'
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
-import { Button } from '../../components/Button'
 import { play, replay } from '../../services/AudioController'
 import { AppError } from '../../utils/AppError'
+import { IconButton } from '../../components/IconButton'
+import { MaterialIcons } from '@expo/vector-icons'
 
 let clickTimer: any = null
 
@@ -22,14 +23,14 @@ export function Metronome() {
   const audioPlayerContext = useAudioPlayer()
   const { audioPlayer } = audioPlayerContext
   const toast = useToast()
-  let isFirstTime = false
+  let isFirstTime = true
 
   const { playbackObj, beatFile, soundObj } = audioPlayer
 
   async function playBeat() {
     if (isFirstTime) {
       isFirstTime = false
-      play(playbackObj, beatFile.uriAudio)
+      play(playbackObj, beatFile.uriAudio, 0)
     } else {
       replay(playbackObj)
     }
@@ -69,32 +70,6 @@ export function Metronome() {
     }
   }
 
-  // function playClick() {
-  //   // alternate click sounds
-  //   if (count % beatsPerMeasure === 0) {
-  //     click2.play()
-  //   } else {
-  //     click1.play()
-  //   }
-
-  //   // keep track of which beat we're on
-  //   setCount((count + 1) % beatsPerMeasure)
-  // }
-
-  // function startStop() {
-  //   if (isPlaying) {
-  //     // stop the timer
-  //     clearInterval(this.timer)
-  //     setIsPlaying(false)
-  //   } else {
-  //     // start a timer with current bpm
-  //     this.timer = setInterval(playClick, (60 / bpm) * 1000)
-  //     setCount(0)
-  //     setIsPlaying(true)
-  //     // playClick()
-  //   }
-  // }
-
   useFocusEffect(
     useCallback(() => {
       isFirstTime = true
@@ -115,12 +90,14 @@ export function Metronome() {
 
       <Center>
         <Heading mb={2} color="white">
-          Metronome screen
+          Metrônomo
         </Heading>
       </Center>
-      <Box>
-        <Center>
-          <Text color="white">{bpm} BPM</Text>
+      <Box m={3} justifyContent="center" flex={1}>
+        <Center mb={2}>
+          <Text color="white" fontSize={'lg'}>
+            {bpm} BPM
+          </Text>
         </Center>
 
         <Slider
@@ -136,10 +113,15 @@ export function Metronome() {
           minimumTrackTintColor={colors.orange[700]}
           //   width: 350px;
         />
-        <Button
-          title={isPlaying ? 'Pause' : 'Play'}
-          onPress={handlePlayPause}
-        ></Button>
+        <IconButton
+          as={MaterialIcons}
+          name={isPlaying ? 'pause' : 'play-arrow'}
+          size={20}
+          alignItems="center"
+          mx={1}
+          onPressIn={handlePlayPause}
+          color="white"
+        />
       </Box>
     </Box>
   )

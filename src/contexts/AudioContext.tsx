@@ -12,6 +12,7 @@ import { urlsMusics } from '../storage/audiosInfos/musics/urlsMusics'
 import { urlsImgs } from '../storage/audiosInfos/musics/urlsImgs'
 import { Loading } from '../components/Loading'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const beat = require('../../assets/audios/bugles/beat.mp3')
 
 export type activePlayListProps = {

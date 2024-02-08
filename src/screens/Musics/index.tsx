@@ -91,13 +91,9 @@ export function Musics() {
     }
   }, [searchText])
 
-  // TODO verificar se precisa atualizar o audioFiles do contexto quando trocar de tela
   useFocusEffect(
     useCallback(() => {
       updateAudiosContext()
-      return () => {
-        // TODO unsubscribe, tentar pausar o audio se mudar de tela
-      }
     }, []),
   )
 
@@ -123,7 +119,7 @@ export function Musics() {
           />
           <IconButton
             bg="gray.500"
-            onPress={orderList}
+            onPressIn={orderList}
             name="sort-by-alpha"
             ml={2}
             color="white"

@@ -1,5 +1,5 @@
-import React, { useCallback, useState, useEffect } from 'react'
-import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import React, { useState, useEffect } from 'react'
+import { useNavigation } from '@react-navigation/native'
 import { Alert, FlatList, Keyboard } from 'react-native'
 
 import { Center, Heading, Box, HStack, useToast } from 'native-base'
@@ -138,7 +138,7 @@ export function PlayLists() {
             onSubmitEditing={createPlaylist}
             returnKeyType="done"
           />
-          <IconButton onPress={createPlaylist} name="playlist-add" />
+          <IconButton onPressIn={createPlaylist} name="playlist-add" />
         </HStack>
       </Box>
 

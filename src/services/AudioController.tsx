@@ -1,4 +1,4 @@
-import { AVPlaybackStatus, Audio } from 'expo-av'
+import { Audio } from 'expo-av'
 import { AudioDTO } from '../dtos/AudioDTO'
 import {
   AudioContextDataProps,
@@ -9,7 +9,6 @@ import { getAudioIdByPlaylist } from '../storage/audio/getAudioByPlaylist'
 import { Dispatch, SetStateAction } from 'react'
 import { AudioType } from '../@types/audioTypes'
 import { storageAudioInPlaylistProps } from '../storage/audio/audioCreateByPlaylist'
-import { AppError } from '../utils/AppError'
 
 type playListInfoProps = {
   activePlayList: activePlayListProps
@@ -62,7 +61,6 @@ export async function getAudiosByPlaylist(
   return audiosPlaylist
 }
 
-// play audio
 export async function play(
   playbackObj: Audio.Sound,
   uri: string,
@@ -262,8 +260,7 @@ async function selectAudioFromPlayList(
   selectedButton: string,
 ) {
   const { audioPlayer, setAudioPlayer } = audioPlayerContext
-  const { activePlayList, currentAudio, audioFiles, musicFiles, playbackObj } =
-    audioPlayer
+  const { activePlayList, currentAudio, playbackObj } = audioPlayer
   let defaultIndex = 0
   let nextIndex = 0
 
