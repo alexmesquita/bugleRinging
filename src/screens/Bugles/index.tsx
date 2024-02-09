@@ -80,14 +80,12 @@ export function Bugles() {
     }
   }, [searchText, audioFiles])
 
-  // TODO verificar se precisa atualizar o audioFiles do contexto quando trocar de tela
   useFocusEffect(
     useCallback(() => {
       updateAudioTypeInContext()
       return () => {
         const { cleanAudioPlayer, audioPlayer } = audioPlayerContext
         cleanAudioPlayer(audioPlayer)
-        // TODO unsubscribe, tentar pausar o audio se mudar de tela
       }
     }, []),
   )

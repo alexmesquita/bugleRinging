@@ -106,7 +106,7 @@ export function WhatsRinging() {
     try {
       const { cleanAudioPlayer, audioPlayer } = audioPlayerContext
       cleanAudioPlayer(audioPlayer)
-      
+
       setIsloadingQuestions(true)
       setStatusQuestion(StatusQuestion.UNANSWERED)
       setAnswerBugle({ id: '-1' } as AudioDTO)
@@ -141,7 +141,6 @@ export function WhatsRinging() {
     } else setStatusQuestion(StatusQuestion.ERROR)
   }
 
-  // TODO verificar se precisa atualizar o audioFiles do contexto quando trocar de tela
   useFocusEffect(
     useCallback(() => {
       updateAudioTypeInContext()

@@ -83,7 +83,6 @@ export function AppRoutes() {
             />
           ),
         }}
-        // MaterialIcons: queue-music, playlist-add, playlist-play, playlist-remove
       />
       <Screen
         name="PlayListDetail"

@@ -37,10 +37,8 @@ export function AudioSlider({
         thumbTintColor={colors.orange[700]}
         maximumTrackTintColor={colors.orange[300]}
         minimumTrackTintColor={colors.orange[700]}
-        //   width: 350px;
       />
       <HStack justifyContent="space-between">
-        {/* //   width: 340px; */}
         <Text color="orange.200">
           {millisToMinutesAndSeconds(calculateSliderPositionMillis())}
         </Text>

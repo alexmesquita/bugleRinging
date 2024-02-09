@@ -92,7 +92,6 @@ export async function replay(playbackObj: Audio.Sound) {
   await playbackObj.replayAsync()
 }
 
-// pause audio
 export async function pause(playbackObj: Audio.Sound) {
   try {
     return await playbackObj.setStatusAsync({
@@ -103,7 +102,6 @@ export async function pause(playbackObj: Audio.Sound) {
   }
 }
 
-// resume audio
 export async function resume(playbackObj: Audio.Sound) {
   try {
     return await playbackObj.playAsync()
@@ -112,7 +110,6 @@ export async function resume(playbackObj: Audio.Sound) {
   }
 }
 
-// select another audio
 export async function playNext(playbackObj: Audio.Sound, uri: string) {
   try {
     await playbackObj.stopAsync()
@@ -166,11 +163,9 @@ export async function selectAudio(
         ...newState,
       }))
 
-      // return storeAudioForNextOpening(audio, index)
       return
     }
 
-    // pause audio
     if (
       audioPlayer.soundObj.isLoaded &&
       audioPlayer.soundObj.isPlaying &&
@@ -192,7 +187,6 @@ export async function selectAudio(
       return
     }
 
-    // resume audio
     if (
       audioPlayer.soundObj.isLoaded &&
       !audioPlayer.soundObj.isPlaying &&
@@ -212,7 +206,6 @@ export async function selectAudio(
       return
     }
 
-    // select another audio
     if (
       audioPlayer.soundObj.isLoaded &&
       audioPlayer.currentAudio.id !== audio.id
@@ -323,7 +316,6 @@ export async function changeAudio(
     let index = audioPlayer.currentAudioIndex
     let status
 
-    // for next
     if (selectedButton === 'next') {
       audio =
         audioPlayer.audioType === AudioType.BUGLE
@@ -354,7 +346,6 @@ export async function changeAudio(
       playbackObj.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
     }
 
-    // for previous
     if (selectedButton === 'previous') {
       audio =
         audioPlayer.audioType === AudioType.BUGLE
@@ -398,7 +389,6 @@ export async function changeAudio(
       ...audioPlayer,
       ...newState,
     }))
-    // storeAudioForNextOpening(audio, index)
   } catch (error) {
     console.log('error inside cahnge audio method.', error)
   }

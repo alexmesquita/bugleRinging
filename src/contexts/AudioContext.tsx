@@ -77,18 +77,12 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
 
   async function updateAudiosUris() {
     try {
-      console.log('As Uris foram atualizadas?')
-      console.log(audioPlayer.urisUpdated)
       if (audioPlayer.urisUpdated) return
 
       const buglesAssets = await Asset.loadAsync(buglesUrls)
-      console.log('loaded bugle')
       const musicsAssets = await Asset.loadAsync(urlsMusics)
-      console.log('loaded musics')
       const beatAsset = await Asset.loadAsync(beat)
-      console.log('loaded beat')
       const imgsAssets = await Asset.loadAsync(urlsImgs)
-      console.log('loaded images')
 
       if (buglesAssets && buglesAssets.length === buglesData.length) {
         buglesData.forEach((value, index) => {
@@ -118,8 +112,6 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
         ...audioPlayer,
         ...newState,
       }))
-      console.log('As Uris foram atualizadas no final?')
-      console.log(audioPlayer.urisUpdated)
     } catch (error) {
       toast.show({
         title: 'Não foi possível buscar os áudios.',
@@ -166,14 +158,6 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
         ...newState,
       }))
     }
-
-    // if (playbackStatus.isLoaded && !playbackStatus.isPlaying) {
-    //   storeAudioForNextOpening(
-    //     this.state.currentAudio,
-    //     this.state.currentAudioIndex,
-    //     playbackStatus.positionMillis,
-    //   )
-    // }
 
     if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
       if (audioPlayer.isPlayNext && audioPlayer.isPlayListRunning) {
@@ -225,8 +209,6 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
       ) {
         cleanAudioPlayer(audioPlayer)
         return
-        // TODO verificar se será preciso usar a função: storeAudioForNextOpening, tem em outros arquivos
-        // return await storeAudioForNextOpening(audioFiles[0], 0)
       }
       // otherwise we want to select the next audio
       const audio =
@@ -246,7 +228,6 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
         ...audioPlayer,
         ...newState,
       }))
-      // await storeAudioForNextOpening(audio, nextAudioIndex)
     }
   }
 

@@ -111,7 +111,6 @@ export function Metronome() {
           thumbTintColor={colors.orange[700]}
           maximumTrackTintColor={colors.orange[300]}
           minimumTrackTintColor={colors.orange[700]}
-          //   width: 350px;
         />
         <IconButton
           as={MaterialIcons}

@@ -160,8 +160,6 @@ export function PlayListEdit() {
     flatListRef.current?.scrollToEnd({ animated: true })
   }
 
-  // TODO usar depois de colocar a navegação
-
   useFocusEffect(
     useCallback(() => {
       setCurrentPlayList(playList)
