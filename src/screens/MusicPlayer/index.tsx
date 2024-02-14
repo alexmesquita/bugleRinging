@@ -21,6 +21,7 @@ import {
 } from '../../services/AudioController'
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
 import { AudioPlayerDataProps } from '../../contexts/AudioContext'
+import { AudioType } from '../../@types/audioTypes'
 
 type RouteParamsProps = {
   musicId: string
@@ -32,7 +33,7 @@ export function MusicPlayer() {
   const [currentPosition, setCurrentPosition] = useState(0)
 
   const audioPlayerContext = useAudioPlayer()
-  const { audioPlayer, setAudioPlayer } = audioPlayerContext
+  const { audioPlayer, setAudioPlayer, playbackPosition } = audioPlayerContext
 
   const [playing, setPlay] = useState<boolean>(false)
   const navigation = useNavigation<AppNavigatorRoutesProps>()
@@ -69,7 +70,7 @@ export function MusicPlayer() {
   }
 
   function calculateSliderPositionMillis() {
-    return audioPlayer.playbackPosition ? audioPlayer.playbackPosition : 0
+    return playbackPosition != null ? playbackPosition : 0
   }
   async function onSlidingStart() {
     if (!audioPlayer.isPlaying) return
@@ -95,9 +96,22 @@ export function MusicPlayer() {
 
   useFocusEffect(
     useCallback(() => {
+      audioPlayerContext.setOnMusicPlayer(true)
+      const newState = audioPlayerContext.audioPlayer
+
+      newState.audioType = AudioType.MUSIC
+
+      audioPlayerContext.setAudioPlayer(
+        (audioPlayer: AudioPlayerDataProps) => ({
+          ...audioPlayer,
+          ...newState,
+        }),
+      )
       return () => {
-        const { cleanAudioPlayer, audioPlayer } = audioPlayerContext
+        const { cleanAudioPlayer, audioPlayer, setOnMusicPlayer } =
+          audioPlayerContext
         cleanAudioPlayer(audioPlayer)
+        setOnMusicPlayer(false)
       }
     }, []),
   )

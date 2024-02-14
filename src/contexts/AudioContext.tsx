@@ -33,8 +33,6 @@ export type AudioPlayerDataProps = {
   indexOnPlayList: number
   activePlayList: activePlayListProps
   currentAudioIndex: number | null
-  playbackPosition: number | null
-  playbackDuration: number | null | undefined
   audioType: string
   urisUpdated: boolean
 }
@@ -43,6 +41,9 @@ export type AudioContextDataProps = {
   setAudioPlayer: (context: any) => void
   onPlaybackStatusUpdate: (playbackStatus: AVPlaybackStatus) => void
   cleanAudioPlayer: (audioPlayer: AudioPlayerDataProps) => void
+  setOnMusicPlayer: (context: any) => void
+  playbackPosition: number | null
+  setPlaybackPosition: (context: any) => void
 }
 
 type AudioContextProviderProps = {
@@ -54,6 +55,9 @@ export const AudioContext = createContext<AudioContextDataProps>(
 )
 
 export function AudioContextProvider({ children }: AudioContextProviderProps) {
+  const [onMusicPlayer, setOnMusicPlayer] = useState<boolean>(false)
+  const [playbackPosition, setPlaybackPosition] = useState<number>(0)
+
   const [audioPlayer, setAudioPlayer] = useState<AudioPlayerDataProps>({
     playbackObj: new Audio.Sound(),
     soundObj: null,
@@ -67,8 +71,6 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     indexOnPlayList: -1,
     activePlayList: {} as activePlayListProps,
     currentAudioIndex: null,
-    playbackPosition: null,
-    playbackDuration: null,
     audioType: AudioType.BUGLE,
     urisUpdated: false,
   })
@@ -131,14 +133,14 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
       await pause(audioPlayerToClean.playbackObj)
     }
 
+    setPlaybackPosition(0)
+
     const newState = audioPlayerToClean
 
     newState.playbackObj.unloadAsync()
     newState.soundObj = null
     newState.isPlaying = false
     newState.currentAudioIndex = 0
-    newState.playbackPosition = null
-    newState.playbackDuration = null
 
     setAudioPlayer((audioPlayerToClean) => ({
       ...audioPlayerToClean,
@@ -147,16 +149,8 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
   }
 
   async function onPlaybackStatusUpdate(playbackStatus: AVPlaybackStatus) {
-    if (playbackStatus.isLoaded && playbackStatus.isPlaying) {
-      const newState = audioPlayer
-
-      newState.playbackPosition = playbackStatus.positionMillis
-      newState.playbackDuration = playbackStatus.durationMillis
-
-      setAudioPlayer((audioPlayer) => ({
-        ...audioPlayer,
-        ...newState,
-      }))
+    if (playbackStatus.isLoaded && playbackStatus.isPlaying && onMusicPlayer) {
+      setPlaybackPosition(playbackStatus.positionMillis)
     }
 
     if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
@@ -244,6 +238,9 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
             setAudioPlayer,
             onPlaybackStatusUpdate,
             cleanAudioPlayer,
+            setOnMusicPlayer,
+            playbackPosition,
+            setPlaybackPosition,
           }}
         >
           {children}

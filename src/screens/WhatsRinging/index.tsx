@@ -5,11 +5,7 @@ import { Center, Heading, Box, useToast, Icon } from 'native-base'
 import { Header } from '../../components/Header'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 import { AudioType, StatusQuestion } from '../../@types/audioTypes'
-import {
-  isCurrentAudio,
-  selectAudio,
-  updateAudioType,
-} from '../../services/AudioController'
+import { selectAudio, updateAudioType } from '../../services/AudioController'
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
 import { useCallback, useState } from 'react'
 import { AudioDTO } from '../../dtos/AudioDTO'
@@ -56,13 +52,7 @@ export function WhatsRinging() {
 
   function isPlaying() {
     if (!answerBugle || !answerBugle.id) return false
-    return isCurrentAudio(
-      audioPlayerContext,
-      answerBugle.id,
-      answerBugle.type,
-      -1,
-      true,
-    )
+    return audioPlayerContext.audioPlayer.isPlaying
   }
 
   function randomBuglesIndex(indexQtd: number, buglesLength: number) {

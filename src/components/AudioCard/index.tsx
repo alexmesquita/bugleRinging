@@ -3,7 +3,7 @@ import { IconButton } from '../IconButton'
 import { MaterialIcons } from '@expo/vector-icons'
 import { millisToMinutesAndSeconds } from '../../utils/dateTime'
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
-import { isCurrentAudio } from '../../services/AudioController'
+import { checkIsCurrentAudio } from '../../services/AudioController'
 import { AudioType } from '../../@types/audioTypes'
 
 type Props = {
@@ -15,6 +15,9 @@ type Props = {
   indexOnPlaylist?: number
 }
 
+let isCurrentAudio = false
+let isPlaying = false
+
 export function AudioCard({
   audioId,
   name,
@@ -25,14 +28,16 @@ export function AudioCard({
 }: Props) {
   const audioPlayerContext = useAudioPlayer()
 
-  function checkCurrentAudio(checkIsPlaying = false) {
-    return isCurrentAudio(
+  function checkCurrentAudio() {
+    isCurrentAudio = checkIsCurrentAudio(
       audioPlayerContext,
       audioId,
       audioType,
       indexOnPlaylist,
-      checkIsPlaying,
     )
+    isPlaying = audioPlayerContext.audioPlayer.isPlaying
+
+    return isCurrentAudio
   }
 
   return (
@@ -46,26 +51,23 @@ export function AudioCard({
       <HStack alignItems="center">
         <IconButton
           as={MaterialIcons}
-          name={checkCurrentAudio(true) ? 'pause' : 'play-arrow'}
+          name={isPlaying && isCurrentAudio ? 'pause' : 'play-arrow'}
           size={8}
           alignItems="center"
           mx={1}
           onPressIn={onPlayPause}
-          color={checkCurrentAudio() ? 'gray.700' : 'white'}
+          color={isCurrentAudio ? 'gray.700' : 'white'}
         />
         <VStack flex={1} pl={1} pt={2}>
           <Text
-            color={checkCurrentAudio() ? 'gray.700' : 'gray.200'}
+            color={isCurrentAudio ? 'gray.700' : 'gray.200'}
             justifyContent="center"
             flex={1}
             fontSize="lg"
           >
             {name}
           </Text>
-          <Text
-            color={checkCurrentAudio() ? 'gray.500' : 'gray.300'}
-            fontSize="xs"
-          >
+          <Text color={isCurrentAudio ? 'gray.500' : 'gray.300'} fontSize="xs">
             {millisToMinutesAndSeconds(duration)}
           </Text>
         </VStack>

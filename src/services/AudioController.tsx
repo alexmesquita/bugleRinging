@@ -176,8 +176,8 @@ export async function selectAudio(
 
       newState.soundObj = status
       newState.isPlaying = false
-      newState.playbackPosition =
-        status && status.isLoaded ? status.positionMillis : 0
+      // newState.playbackPosition =
+      //   status && status.isLoaded ? status.positionMillis : 0
 
       setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
         ...audioPlayer,
@@ -294,8 +294,12 @@ export async function changeAudio(
   audioPlayerContext: AudioContextDataProps,
   selectedButton: string,
 ) {
-  const { audioPlayer, setAudioPlayer, onPlaybackStatusUpdate } =
-    audioPlayerContext
+  const {
+    audioPlayer,
+    setAudioPlayer,
+    onPlaybackStatusUpdate,
+    setPlaybackPosition,
+  } = audioPlayerContext
   const { playbackObj, audioFiles, musicFiles, isPlayListRunning } = audioPlayer
   let { currentAudioIndex } = audioPlayer
   currentAudioIndex = currentAudioIndex === null ? 0 : currentAudioIndex
@@ -378,13 +382,14 @@ export async function changeAudio(
       }
     }
 
+    setPlaybackPosition(0)
+
     const newState = audioPlayer
     newState.currentAudio = audio
     newState.soundObj = status
     newState.isPlaying = true
     newState.currentAudioIndex = index
-    newState.playbackPosition = null
-    newState.playbackDuration = null
+
     setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
       ...audioPlayer,
       ...newState,
@@ -398,7 +403,8 @@ export async function moveAudio(
   audioPlayerContext: AudioContextDataProps,
   value: number,
 ) {
-  const { audioPlayer, setAudioPlayer } = audioPlayerContext
+  const { audioPlayer, setAudioPlayer, setPlaybackPosition } =
+    audioPlayerContext
   const { soundObj, isPlaying, playbackObj } = audioPlayer
   if (soundObj === null || soundObj === undefined || !isPlaying) return
 
@@ -411,9 +417,10 @@ export async function moveAudio(
 
       const updatedPosition =
         status.isLoaded && status.isPlaying ? status.positionMillis : 0
+
+      setPlaybackPosition(updatedPosition)
       const newState = audioPlayer
       newState.soundObj = status
-      newState.playbackPosition = updatedPosition
       setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
         ...audioPlayer,
         ...newState,
@@ -440,19 +447,17 @@ export function updateAudioType(
   }))
 }
 
-export function isCurrentAudio(
+export function checkIsCurrentAudio(
   audioPlayerContext: AudioContextDataProps,
   audioId: string,
   audioType: AudioType,
   indexOnPlaylist = -1,
-  checkIsPlaying = false,
 ) {
   const isPlaylist =
     !audioPlayerContext.audioPlayer.isPlayListRunning ||
     audioPlayerContext.audioPlayer.indexOnPlayList === indexOnPlaylist
 
   return (
-    (!checkIsPlaying || audioPlayerContext.audioPlayer.isPlaying) &&
     audioId === audioPlayerContext.audioPlayer.currentAudio.id &&
     audioPlayerContext.audioPlayer.currentAudio.type === audioType &&
     isPlaylist
