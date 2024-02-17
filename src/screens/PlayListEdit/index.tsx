@@ -237,7 +237,7 @@ export function PlayListEdit() {
           </HStack>
 
           <Box flex={0.6} p={2} mt={1} bg="gray.500">
-            {isLoadingFilteredAudios || isLoadingPlaylistAudios ? (
+            {isLoadingFilteredAudios ? (
               <Loading />
             ) : (
               <FlatList

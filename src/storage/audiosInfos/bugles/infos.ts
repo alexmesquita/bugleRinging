@@ -309,7 +309,7 @@ export const buglesData = [
   },
   {
     id: 'b_35',
-    name: 'STF Senado ou Cãmara dos Deputados',
+    name: 'STF Senado ou Câmara dos Deputados',
     duration: 8690,
     artist: 'ST Fonseca',
     uriAudio: '',

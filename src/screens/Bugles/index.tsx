@@ -125,6 +125,7 @@ export function Bugles() {
         <FlatList
           data={filteredAudios}
           keyExtractor={(item) => item.id.toString()}
+          initialNumToRender={15}
           renderItem={({ item }) => (
             <AudioCard
               audioId={item.id}
