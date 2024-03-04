@@ -11,6 +11,15 @@ export const buglesData = [
     type: AudioType.BUGLE,
   },
   {
+    id: 'b_41',
+    name: 'Alvorada',
+    duration: 43870,
+    artist: 'ST Fonseca',
+    uriAudio: '',
+    uriImg: '',
+    type: AudioType.BUGLE,
+  },
+  {
     id: 'b_2',
     name: 'Apresentar arma',
     duration: 9000,
@@ -308,6 +317,15 @@ export const buglesData = [
     type: AudioType.BUGLE,
   },
   {
+    id: 'b_42',
+    name: 'Silêncio',
+    duration: 31080,
+    artist: 'ST Fonseca',
+    uriAudio: '',
+    uriImg: '',
+    type: AudioType.BUGLE,
+  },
+  {
     id: 'b_35',
     name: 'STF Senado ou Câmara dos Deputados',
     duration: 8690,
@@ -344,6 +362,15 @@ export const buglesData = [
     type: AudioType.BUGLE,
   },
   {
+    id: 'b_43',
+    name: 'Toque do Veterano',
+    duration: 20230,
+    artist: 'ST Fonseca',
+    uriAudio: '',
+    uriImg: '',
+    type: AudioType.BUGLE,
+  },
+  {
     id: 'b_39',
     name: 'Última forma',
     duration: 6050,
@@ -361,4 +388,5 @@ export const buglesData = [
     uriImg: '',
     type: AudioType.BUGLE,
   },
+  // last id is b_43 (toque do veterano)
 ]

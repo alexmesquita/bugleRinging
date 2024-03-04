@@ -1,5 +1,6 @@
 export const buglesUrls = [
   require('../../../../assets/audios/bugles/alto.mp3'),
+  require('../../../../assets/audios/bugles/alvorada.mp3'),
   require('../../../../assets/audios/bugles/apresentar_arma.mp3'),
   require('../../../../assets/audios/bugles/avancar.mp3'),
   require('../../../../assets/audios/bugles/a_vontade.mp3'),
@@ -33,10 +34,12 @@ export const buglesUrls = [
   require('../../../../assets/audios/bugles/presidente_da_republica.mp3'),
   require('../../../../assets/audios/bugles/reunir.mp3'),
   require('../../../../assets/audios/bugles/sentido.mp3'),
+  require('../../../../assets/audios/bugles/silencio.mp3'),
   require('../../../../assets/audios/bugles/stf_senado_ou_camara_dos_deputados.mp3'),
   require('../../../../assets/audios/bugles/sub_comandante_cbmdf.mp3'),
   require('../../../../assets/audios/bugles/sub_comandante_pmdf.mp3'),
   require('../../../../assets/audios/bugles/termino_do_expediente.mp3'),
+  require('../../../../assets/audios/bugles/toque_do_veterano.mp3'),
   require('../../../../assets/audios/bugles/ultima_forma.mp3'),
   require('../../../../assets/audios/bugles/vice_presidente_da_republica.mp3'),
 ]
