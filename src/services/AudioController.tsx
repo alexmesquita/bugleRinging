@@ -131,85 +131,105 @@ export async function selectAudio(
   try {
     // playing audio for the first time.
     if (audioPlayer.soundObj === null || audioPlayer.soundObj === undefined) {
+      const startTime = performance.now()
+
       const status = await play(audioPlayer.playbackObj, audio.uriAudio)
+
+      const endPlay = performance.now()
+      console.log(`play function: ${endPlay - startTime} milliseconds`)
+
+      const startFind = performance.now()
       const index =
         audio.type === AudioType.BUGLE
           ? audioPlayer.audioFiles.findIndex(({ id }) => id === audio.id)
           : audioPlayer.musicFiles.findIndex(({ id }) => id === audio.id)
 
+      const endfind = performance.now()
+      console.log(`find: ${endfind - startFind} milliseconds`)
+
+      const setState = performance.now()
       audioPlayer.playbackObj.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
 
-      const newState = audioPlayer
-
-      newState.currentAudio = audio
-      newState.soundObj = status
-      newState.isPlaying = true
-      newState.currentAudioIndex = index
-      newState.activePlayList =
-        playListInfo && playListInfo.activePlayList
-          ? playListInfo.activePlayList
-          : ({} as activePlayListProps)
-      newState.isPlayListRunning =
-        playListInfo && playListInfo.isPlayListRunning
-          ? playListInfo.isPlayListRunning
-          : false
-      newState.indexOnPlayList =
-        playListInfo && playListInfo.isPlayListRunning
-          ? playListInfo.indexOnPlayList
-          : 0
-
-      setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
+      setAudioPlayer({
         ...audioPlayer,
-        ...newState,
-      }))
+        currentAudio: audio,
+        soundObj: status,
+        isPlaying: true,
+        currentAudioIndex: index,
+        activePlayList:
+          playListInfo && playListInfo.activePlayList
+            ? playListInfo.activePlayList
+            : ({} as activePlayListProps),
+        isPlayListRunning:
+          playListInfo && playListInfo.isPlayListRunning
+            ? playListInfo.isPlayListRunning
+            : false,
+        indexOnPlayList:
+          playListInfo && playListInfo.isPlayListRunning
+            ? playListInfo.indexOnPlayList
+            : 0,
+      })
+
+      const endTime = performance.now()
+      console.log(`set state: ${endTime - setState} milliseconds`)
+      console.log(
+        `play fot the first time: ${endTime - startTime} milliseconds`,
+      )
 
       return
     }
 
+    // pause audio
     if (
       audioPlayer.soundObj.isLoaded &&
       audioPlayer.soundObj.isPlaying &&
       audioPlayer.currentAudio.id === audio.id
     ) {
+      const startTime = performance.now()
       const status = await pause(audioPlayer.playbackObj)
-      const newState = audioPlayer
+      const endPauseExpoAV = performance.now()
+      console.log(`Pause Expo AV: ${endPauseExpoAV - startTime} milliseconds`)
 
-      newState.soundObj = status
-      newState.isPlaying = false
-      // newState.playbackPosition =
-      //   status && status.isLoaded ? status.positionMillis : 0
-
-      setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
+      const startSet = performance.now()
+      setAudioPlayer({
         ...audioPlayer,
-        ...newState,
-      }))
+        soundObj: status,
+        isPlaying: false,
+      })
 
+      const endTime = performance.now()
+      console.log(`SetStatus pause: ${endTime - startSet} milliseconds`)
       return
     }
 
+    // resume audio
     if (
       audioPlayer.soundObj.isLoaded &&
       !audioPlayer.soundObj.isPlaying &&
       audioPlayer.currentAudio.id === audio.id
     ) {
+      const startTime = performance.now()
+
       const status = await resume(audioPlayer.playbackObj)
-      const newState = audioPlayer
 
-      newState.soundObj = status
-      newState.isPlaying = true
-
-      setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
+      setAudioPlayer({
         ...audioPlayer,
-        ...newState,
-      }))
+        soundObj: status,
+        isPlaying: true,
+      })
 
+      const endTime = performance.now()
+      console.log(`Resume: ${endTime - startTime} milliseconds`)
       return
     }
 
+    // play next
     if (
       audioPlayer.soundObj.isLoaded &&
       audioPlayer.currentAudio.id !== audio.id
     ) {
+      const startTime = performance.now()
+
       const status = await playNext(audioPlayer.playbackObj, audio.uriAudio)
       const index =
         audio.type === AudioType.BUGLE
@@ -238,10 +258,12 @@ export async function selectAudio(
           ? playListInfo.indexOnPlayList
           : 0
 
-      setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
+      setAudioPlayer({
         ...audioPlayer,
-        ...newState,
-      }))
+        newState,
+      })
+      const endTime = performance.now()
+      console.log(`Next: ${endTime - startTime} milliseconds`)
     }
   } catch (error) {
     console.log('error inside select audio method.', error)

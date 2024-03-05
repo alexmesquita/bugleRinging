@@ -37,6 +37,7 @@ export function MusicPlayer() {
 
   const [playing, setPlay] = useState<boolean>(false)
   const navigation = useNavigation<AppNavigatorRoutesProps>()
+  const { width } = Dimensions.get('window')
 
   async function playAudio() {
     const index = audioPlayer.musicFiles.findIndex(({ id }) => id === musicId)
@@ -53,13 +54,14 @@ export function MusicPlayer() {
     }))
   }
 
-  useEffect(() => {
-    playAudio()
-  }, [])
-
   async function handlePlayPause() {
+    const startTime = performance.now()
+
     await selectAudio(audioPlayer.currentAudio, audioPlayerContext)
     setPlay(audioPlayer.isPlaying)
+
+    const endTime = performance.now()
+    console.log(`PlayPause: ${endTime - startTime} milliseconds`)
   }
 
   async function handleNext() {
@@ -94,6 +96,10 @@ export function MusicPlayer() {
     setCurrentPosition(0)
   }
 
+  useEffect(() => {
+    playAudio()
+  }, [])
+
   useFocusEffect(
     useCallback(() => {
       audioPlayerContext.setOnMusicPlayer(true)
@@ -115,39 +121,54 @@ export function MusicPlayer() {
       }
     }, []),
   )
-  const renderArtWork = () => {
-    const artwork = audioPlayer.currentAudio.uriImg
-    const { width } = Dimensions.get('window')
-    return (
-      <Center mx="-2">
-        <Box w={width}>
-          <Center>
-            <Box w={80} h={80}>
-              {artwork && (
-                // aula 03-04-32
-                <Image
-                  source={{ uri: artwork?.toString() }}
-                  alt="Album image"
-                  h="100%"
-                  rounded="md"
-                />
-              )}
-            </Box>
-          </Center>
-        </Box>
-      </Center>
-    )
-  }
+  // const renderArtWork = () => {
+  //   const artwork = audioPlayer.currentAudio.uriImg
+  //   const { width } = Dimensions.get('window')
+  //   return (
+  //     <Center mx="-2">
+  //       <Box w={width}>
+  //         <Center>
+  //           <Box w={80} h={80}>
+  //             {artwork && (
+  //               // aula 03-04-32
+  //               <Image
+  //                 source={{ uri: artwork?.toString() }}
+  //                 alt="Album image"
+  //                 h="100%"
+  //                 rounded="md"
+  //               />
+  //             )}
+  //           </Box>
+  //         </Center>
+  //       </Box>
+  //     </Center>
+  //   )
+  // }
 
   return (
     <Box flex={1} bg="background" px={2}>
       <Header showHomeButton={navigation.canGoBack()} />
-      <FlatList
+      {/* <FlatList
         horizontal
         data={audioPlayer.musicFiles}
         renderItem={renderArtWork}
         keyExtractor={(song) => song.id.toString()}
-      />
+      /> */}
+
+      <Center mx="-2">
+        <Box w={width}>
+          <Center>
+            <Box w={80} h={80}>
+              <Image
+                source={{ uri: audioPlayer.currentAudio.uriImg?.toString() }}
+                alt="Album image"
+                h="100%"
+                rounded="md"
+              />
+            </Box>
+          </Center>
+        </Box>
+      </Center>
 
       <AudioInfo
         artist={audioPlayer.currentAudio.artist}

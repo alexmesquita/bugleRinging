@@ -14,7 +14,6 @@ import {
   getAudiosByPlaylist,
   selectAudio,
 } from '../../services/AudioController'
-import { AudioPlayerDataProps } from '../../contexts/AudioContext'
 import { useCallback, useState } from 'react'
 import { Loading } from '../../components/Loading'
 import { AudioCard } from '../../components/AudioCard'

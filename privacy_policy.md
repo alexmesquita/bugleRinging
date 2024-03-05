@@ -40,12 +40,12 @@ Cada operação de tratamento de dados pessoais precisa ter um fundamento juríd
 Todas as Nossas atividades de tratamento de dados pessoais possuem uma base legal que as fundamenta, dentre as permitidas pela legislação. Mais informações sobre as bases legais que utilizamos para operações de tratamento de dados pessoais específicas podem ser obtidas a partir de nossos canais de contato, informados ao final desta Política.
 
 
-1. Como o titular pode exercer seus direitos
+5.1. Como o titular pode exercer seus direitos
 
 Para garantir que o usuário que pretende exercer seus direitos é, de fato, o titular dos dados pessoais objeto da requisição, poderemos solicitar documentos ou outras informações que possam auxiliar em sua correta identificação, a fim de resguardar nossos direitos e os direitos de terceiros. Isto somente será feito, porém, se for absolutamente necessário, e o requerente receberá todas as informações relacionadas.
 
 
-7. Medidas de segurança no tratamento de dados pessoais
+6. Medidas de segurança no tratamento de dados pessoais
 
 Empregamos medidas técnicas e organizativas aptas a proteger os dados pessoais de acessos não autorizados e de situações de destruição, perda, extravio ou alteração desses dados.
 
@@ -59,7 +59,7 @@ Ainda que adote tudo o que está ao seu alcance para evitar incidentes de segura
 
 De qualquer forma, caso ocorra qualquer tipo de incidente de segurança que possa gerar risco ou dano relevante para qualquer de nossos usuários, comunicaremos os afetados e a Autoridade Nacional de Proteção de Dados acerca do ocorrido, em conformidade com o disposto na Lei Geral de Proteção de Dados.
 
-9. Alterações nesta política
+7. Alterações nesta política
 
 A presente versão desta Política de Privacidade foi atualizada pela última vez em: 04/03/2024.
 
