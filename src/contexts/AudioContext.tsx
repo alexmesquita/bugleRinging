@@ -2,7 +2,7 @@ import { AVPlaybackStatus, Audio } from 'expo-av'
 import { ReactNode, createContext, useEffect, useState } from 'react'
 import { useToast } from 'native-base'
 import { AudioDTO } from '../dtos/AudioDTO'
-import { pause, playNext } from '../services/AudioController'
+import { pause } from '../services/AudioController'
 import { AudioType } from '../@types/audioTypes'
 import { Asset } from 'expo-asset'
 import { buglesUrls } from '../storage/audiosInfos/bugles/urls'
@@ -28,7 +28,6 @@ export type AudioPlayerDataProps = {
   beatFile: AudioDTO
   currentAudio: AudioDTO
   isPlaying: boolean
-  isPlayNext: boolean
   isPlayListRunning: boolean
   indexOnPlayList: number
   activePlayList: activePlayListProps
@@ -66,7 +65,6 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     beatFile: {} as AudioDTO,
     currentAudio: {} as AudioDTO,
     isPlaying: false,
-    isPlayNext: false,
     isPlayListRunning: false,
     indexOnPlayList: -1,
     activePlayList: {} as activePlayListProps,
@@ -149,79 +147,12 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
   }
 
   async function onPlaybackStatusUpdate(playbackStatus: AVPlaybackStatus) {
-    if (playbackStatus.isLoaded && playbackStatus.isPlaying && onMusicPlayer) {
+    if (onMusicPlayer && playbackStatus.isLoaded && playbackStatus.isPlaying) {
       setPlaybackPosition(playbackStatus.positionMillis)
     }
 
     if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
-      if (audioPlayer.isPlayNext && audioPlayer.isPlayListRunning) {
-        const indexOnPlayList = audioPlayer.activePlayList.audios.findIndex(
-          ({ id }) => id === audioPlayer.currentAudio.id,
-        )
-        const nextIndex = indexOnPlayList + 1
-        const nextAudio = audioPlayer.activePlayList.audios[nextIndex]
-
-        if (!nextAudio) {
-          cleanAudioPlayer(audioPlayer)
-          return
-        }
-
-        const indexOnAllList =
-          nextAudio.type === AudioType.BUGLE
-            ? audioPlayer.audioFiles.findIndex(({ id }) => id === nextAudio.id)
-            : audioPlayer.musicFiles.findIndex(({ id }) => id === nextAudio.id)
-
-        const status = await playNext(
-          audioPlayer.playbackObj,
-          nextAudio.uriAudio,
-        )
-        const newState = audioPlayer
-
-        newState.soundObj = status
-        newState.isPlaying = true
-        newState.currentAudio = nextAudio
-        newState.currentAudioIndex = indexOnAllList
-
-        setAudioPlayer((audioPlayer) => ({
-          ...audioPlayer,
-          ...newState,
-        }))
-
-        return
-      }
-
-      const nextAudioIndex = audioPlayer.currentAudioIndex
-        ? audioPlayer.currentAudioIndex + 1
-        : 1
-      // there is no next audio to play or the current audio is the last
-      if (
-        !audioPlayer.isPlayNext ||
-        nextAudioIndex >=
-          (audioPlayer.audioType === AudioType.BUGLE
-            ? audioPlayer.audioFiles.length
-            : audioPlayer.musicFiles.length)
-      ) {
-        cleanAudioPlayer(audioPlayer)
-        return
-      }
-      // otherwise we want to select the next audio
-      const audio =
-        audioPlayer.audioType === AudioType.BUGLE
-          ? audioPlayer.audioFiles[nextAudioIndex]
-          : audioPlayer.musicFiles[nextAudioIndex]
-      const status = await playNext(audioPlayer.playbackObj, audio.uriAudio)
-
-      const newState = audioPlayer
-
-      newState.soundObj = status
-      newState.currentAudio = audio
-      newState.isPlaying = true
-      newState.currentAudioIndex = nextAudioIndex
-
-      setAudioPlayer((audioPlayer) => ({
-        ...audioPlayer,
-        ...newState,
-      }))
+      cleanAudioPlayer(audioPlayer)
     }
   }
 
