@@ -24,7 +24,7 @@ export function Musics() {
   const [isLoading, setIsloading] = useState(false)
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
-  const { musicFiles } = audioPlayerContext.audioPlayer
+  const { musicFiles } = audioPlayerContext.audiosData
 
   const [filteredAudios, setFilteredAudios] = useState(musicFiles)
 

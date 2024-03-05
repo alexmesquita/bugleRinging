@@ -21,11 +21,12 @@ export function Metronome() {
   const [bpm, setBpm] = useState(60)
   const { colors } = useTheme()
   const audioPlayerContext = useAudioPlayer()
-  const { audioPlayer } = audioPlayerContext
+  const { audioPlayer, audiosData } = audioPlayerContext
   const toast = useToast()
   let isFirstTime = true
 
-  const { playbackObj, beatFile, soundObj } = audioPlayer
+  const { playbackObj } = audioPlayer
+  const { beatFile } = audiosData
 
   async function playBeat() {
     if (isFirstTime) {

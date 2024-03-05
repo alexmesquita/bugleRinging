@@ -23,7 +23,7 @@ export function Bugles() {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
   const toast = useToast()
   const audioPlayerContext = useAudioPlayer()
-  const { audioFiles } = audioPlayerContext.audioPlayer
+  const { audioFiles } = audioPlayerContext.audiosData
   const [filteredAudios, setFilteredAudios] = useState(audioFiles)
 
   function updateAudioTypeInContext() {

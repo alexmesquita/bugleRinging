@@ -23,9 +23,6 @@ export type activePlayListProps = {
 export type AudioPlayerDataProps = {
   playbackObj: Audio.Sound
   soundObj: AVPlaybackStatus | null | undefined
-  audioFiles: Array<AudioDTO>
-  musicFiles: Array<AudioDTO>
-  beatFile: AudioDTO
   currentAudio: AudioDTO
   isPlaying: boolean
   isPlayListRunning: boolean
@@ -33,14 +30,22 @@ export type AudioPlayerDataProps = {
   activePlayList: activePlayListProps
   currentAudioIndex: number | null
   audioType: string
+}
+
+export type AudiosDataPros = {
+  audioFiles: Array<AudioDTO>
+  musicFiles: Array<AudioDTO>
+  beatFile: AudioDTO
   urisUpdated: boolean
 }
+
 export type AudioContextDataProps = {
   audioPlayer: AudioPlayerDataProps
   setAudioPlayer: (context: any) => void
   onPlaybackStatusUpdate: (playbackStatus: AVPlaybackStatus) => void
   cleanAudioPlayer: (audioPlayer: AudioPlayerDataProps) => void
   setOnMusicPlayer: (context: any) => void
+  audiosData: AudiosDataPros
   playbackPosition: number | null
   setPlaybackPosition: (context: any) => void
 }
@@ -60,9 +65,6 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
   const [audioPlayer, setAudioPlayer] = useState<AudioPlayerDataProps>({
     playbackObj: new Audio.Sound(),
     soundObj: null,
-    audioFiles: [] as Array<AudioDTO>,
-    musicFiles: [] as Array<AudioDTO>,
-    beatFile: {} as AudioDTO,
     currentAudio: {} as AudioDTO,
     isPlaying: false,
     isPlayListRunning: false,
@@ -70,6 +72,12 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
     activePlayList: {} as activePlayListProps,
     currentAudioIndex: null,
     audioType: AudioType.BUGLE,
+  })
+
+  const [audiosData, setAudiosData] = useState<AudiosDataPros>({
+    audioFiles: [] as Array<AudioDTO>,
+    musicFiles: [] as Array<AudioDTO>,
+    beatFile: {} as AudioDTO,
     urisUpdated: false,
   })
 
@@ -77,7 +85,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
 
   async function updateAudiosUris() {
     try {
-      if (audioPlayer.urisUpdated) return
+      if (audiosData.urisUpdated) return
 
       const buglesAssets = await Asset.loadAsync(buglesUrls)
       const musicsAssets = await Asset.loadAsync(urlsMusics)
@@ -101,17 +109,13 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
           value.uriImg = imgsAssets[index].uri
         })
       }
-      const newState = audioPlayer
 
-      newState.audioFiles = buglesData
-      newState.musicFiles = musicsData
-      newState.beatFile = { uriAudio: beatAsset[0].uri } as AudioDTO
-      newState.urisUpdated = true
-
-      setAudioPlayer((audioPlayer: AudioPlayerDataProps) => ({
-        ...audioPlayer,
-        ...newState,
-      }))
+      setAudiosData({
+        audioFiles: buglesData,
+        musicFiles: musicsData,
+        beatFile: { uriAudio: beatAsset[0].uri } as AudioDTO,
+        urisUpdated: true,
+      })
     } catch (error) {
       toast.show({
         title: 'Não foi possível buscar os áudios.',
@@ -147,12 +151,13 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
   }
 
   async function onPlaybackStatusUpdate(playbackStatus: AVPlaybackStatus) {
-    if (onMusicPlayer && playbackStatus.isLoaded && playbackStatus.isPlaying) {
-      setPlaybackPosition(playbackStatus.positionMillis)
-    }
-
     if (playbackStatus.isLoaded && playbackStatus.didJustFinish) {
       cleanAudioPlayer(audioPlayer)
+      return
+    }
+
+    if (onMusicPlayer && playbackStatus.isLoaded && playbackStatus.isPlaying) {
+      setPlaybackPosition(playbackStatus.positionMillis)
     }
   }
 
@@ -162,13 +167,14 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
 
   return (
     <>
-      {audioPlayer.urisUpdated ? (
+      {audiosData.urisUpdated ? (
         <AudioContext.Provider
           value={{
             audioPlayer,
             setAudioPlayer,
             onPlaybackStatusUpdate,
             cleanAudioPlayer,
+            audiosData,
             setOnMusicPlayer,
             playbackPosition,
             setPlaybackPosition,

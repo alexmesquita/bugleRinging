@@ -73,7 +73,7 @@ export function WhatsRinging() {
 
   function getDrawnBugles(drawnIndexes: Array<number>) {
     const drawnBugles = [] as Array<AudioDTO>
-    const buglesLength = audioPlayerContext.audioPlayer.audioFiles.length
+    const buglesLength = audioPlayerContext.audiosData.audioFiles.length
 
     drawnIndexes.forEach((index) => {
       if (index >= buglesLength) {
@@ -86,7 +86,7 @@ export function WhatsRinging() {
           bgColor: 'red.500',
         })
       } else {
-        drawnBugles.push(audioPlayerContext.audioPlayer.audioFiles[index])
+        drawnBugles.push(audioPlayerContext.audiosData.audioFiles[index])
       }
     })
     return drawnBugles
@@ -104,7 +104,7 @@ export function WhatsRinging() {
 
       const drawnIndexes = randomBuglesIndex(
         QTD_QUESTIONS,
-        audioPlayerContext.audioPlayer.audioFiles.length,
+        audioPlayerContext.audiosData.audioFiles.length,
       )
       const drawnBuglesObjects = getDrawnBugles(drawnIndexes)
       setDrawnBugles(drawnBuglesObjects)

@@ -49,8 +49,8 @@ export async function getAudiosByPlaylist(
     const audiosStored: storageAudioInPlaylistProps[] =
       await getAudioIdByPlaylist(playListToSearch)
     audiosPlaylist = getAudiosByIds(
-      audioPlayerContext.audioPlayer.audioFiles,
-      audioPlayerContext.audioPlayer.musicFiles,
+      audioPlayerContext.audiosData.audioFiles,
+      audioPlayerContext.audiosData.musicFiles,
       audiosStored,
     )
   } catch (error) {
@@ -94,9 +94,7 @@ export async function replay(playbackObj: Audio.Sound) {
 
 export async function pause(playbackObj: Audio.Sound) {
   try {
-    return await playbackObj.setStatusAsync({
-      shouldPlay: false,
-    })
+    return await playbackObj.pauseAsync()
   } catch (error) {
     console.log('error inside pause helper method', error)
   }
@@ -125,29 +123,19 @@ export async function selectAudio(
   audioPlayerContext: AudioContextDataProps,
   playListInfo?: playListInfoProps,
 ) {
-  const { audioPlayer, setAudioPlayer, onPlaybackStatusUpdate } =
+  const { audioPlayer, audiosData, setAudioPlayer, onPlaybackStatusUpdate } =
     audioPlayerContext
 
   try {
     // playing audio for the first time.
     if (audioPlayer.soundObj === null || audioPlayer.soundObj === undefined) {
-      const startTime = performance.now()
-
       const status = await play(audioPlayer.playbackObj, audio.uriAudio)
 
-      const endPlay = performance.now()
-      console.log(`play function: ${endPlay - startTime} milliseconds`)
-
-      const startFind = performance.now()
       const index =
         audio.type === AudioType.BUGLE
-          ? audioPlayer.audioFiles.findIndex(({ id }) => id === audio.id)
-          : audioPlayer.musicFiles.findIndex(({ id }) => id === audio.id)
+          ? audiosData.audioFiles.findIndex(({ id }) => id === audio.id)
+          : audiosData.musicFiles.findIndex(({ id }) => id === audio.id)
 
-      const endfind = performance.now()
-      console.log(`find: ${endfind - startFind} milliseconds`)
-
-      const setState = performance.now()
       audioPlayer.playbackObj.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
 
       setAudioPlayer({
@@ -170,12 +158,6 @@ export async function selectAudio(
             : 0,
       })
 
-      const endTime = performance.now()
-      console.log(`set state: ${endTime - setState} milliseconds`)
-      console.log(
-        `play fot the first time: ${endTime - startTime} milliseconds`,
-      )
-
       return
     }
 
@@ -185,20 +167,13 @@ export async function selectAudio(
       audioPlayer.soundObj.isPlaying &&
       audioPlayer.currentAudio.id === audio.id
     ) {
-      const startTime = performance.now()
       const status = await pause(audioPlayer.playbackObj)
-      const endPauseExpoAV = performance.now()
-      console.log(`Pause Expo AV: ${endPauseExpoAV - startTime} milliseconds`)
 
-      const startSet = performance.now()
       setAudioPlayer({
         ...audioPlayer,
         soundObj: status,
         isPlaying: false,
       })
-
-      const endTime = performance.now()
-      console.log(`SetStatus pause: ${endTime - startSet} milliseconds`)
       return
     }
 
@@ -208,7 +183,6 @@ export async function selectAudio(
       !audioPlayer.soundObj.isPlaying &&
       audioPlayer.currentAudio.id === audio.id
     ) {
-      const startTime = performance.now()
 
       const status = await resume(audioPlayer.playbackObj)
 
@@ -218,8 +192,6 @@ export async function selectAudio(
         isPlaying: true,
       })
 
-      const endTime = performance.now()
-      console.log(`Resume: ${endTime - startTime} milliseconds`)
       return
     }
 
@@ -228,13 +200,11 @@ export async function selectAudio(
       audioPlayer.soundObj.isLoaded &&
       audioPlayer.currentAudio.id !== audio.id
     ) {
-      const startTime = performance.now()
-
       const status = await playNext(audioPlayer.playbackObj, audio.uriAudio)
       const index =
         audio.type === AudioType.BUGLE
-          ? audioPlayer.audioFiles.findIndex(({ id }) => id === audio.id)
-          : audioPlayer.musicFiles.findIndex(({ id }) => id === audio.id)
+          ? audiosData.audioFiles.findIndex(({ id }) => id === audio.id)
+          : audiosData.musicFiles.findIndex(({ id }) => id === audio.id)
       const newState = audioPlayer
 
       newState.playbackObj.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
@@ -262,8 +232,6 @@ export async function selectAudio(
         ...audioPlayer,
         newState,
       })
-      const endTime = performance.now()
-      console.log(`Next: ${endTime - startTime} milliseconds`)
     }
   } catch (error) {
     console.log('error inside select audio method.', error)
@@ -274,7 +242,7 @@ async function selectAudioFromPlayList(
   audioPlayerContext: AudioContextDataProps,
   selectedButton: string,
 ) {
-  const { audioPlayer, setAudioPlayer } = audioPlayerContext
+  const { audioPlayer, audiosData, setAudioPlayer } = audioPlayerContext
   const { activePlayList, currentAudio, playbackObj } = audioPlayer
   let defaultIndex = 0
   let nextIndex = 0
@@ -296,8 +264,8 @@ async function selectAudioFromPlayList(
 
   const indexOnAllList =
     audio.type === AudioType.BUGLE
-      ? audioPlayer.audioFiles.findIndex(({ id }) => id === audio.id)
-      : audioPlayer.musicFiles.findIndex(({ id }) => id === audio.id)
+      ? audiosData.audioFiles.findIndex(({ id }) => id === audio.id)
+      : audiosData.musicFiles.findIndex(({ id }) => id === audio.id)
 
   const status = await playNext(playbackObj, audio.uriAudio)
 
@@ -318,11 +286,13 @@ export async function changeAudio(
 ) {
   const {
     audioPlayer,
+    audiosData,
     setAudioPlayer,
     onPlaybackStatusUpdate,
     setPlaybackPosition,
   } = audioPlayerContext
-  const { playbackObj, audioFiles, musicFiles, isPlayListRunning } = audioPlayer
+  const { playbackObj, isPlayListRunning } = audioPlayer
+  const { audioFiles, musicFiles } = audiosData
   let { currentAudioIndex } = audioPlayer
   currentAudioIndex = currentAudioIndex === null ? 0 : currentAudioIndex
 

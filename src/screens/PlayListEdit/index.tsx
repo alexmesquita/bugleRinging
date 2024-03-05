@@ -81,8 +81,8 @@ export function PlayListEdit() {
     try {
       setIsLoadingFilteredAudios(true)
       const allAudios = [] as AudioDTO[]
-      allAudios.push(...audioPlayerContext.audioPlayer.audioFiles)
-      allAudios.push(...audioPlayerContext.audioPlayer.musicFiles)
+      allAudios.push(...audioPlayerContext.audiosData.audioFiles)
+      allAudios.push(...audioPlayerContext.audiosData.musicFiles)
       setAudios(allAudios)
     } catch (error) {
       console.log(error)

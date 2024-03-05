@@ -53,14 +53,6 @@ export function PlayListDetail() {
 
   useFocusEffect(
     useCallback(() => {
-      // const newState = audioPlayerContext.audioPlayer
-      // audioPlayerContext.setAudioPlayer(
-      //   (audioPlayer: AudioPlayerDataProps) => ({
-      //     ...audioPlayer,
-      //     ...newState,
-      //   }),
-      // )
-
       getAudios()
     }, [route]),
   )
