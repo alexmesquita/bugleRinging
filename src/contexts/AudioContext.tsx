@@ -6,14 +6,16 @@ import { pause } from '../services/AudioController'
 import { AudioType } from '../@types/audioTypes'
 import { Asset } from 'expo-asset'
 import { buglesUrls } from '../storage/audiosInfos/bugles/urls'
+import { beatsUrls } from '../storage/audiosInfos/beats/urls'
 import { buglesData } from '../storage/audiosInfos/bugles/infos'
 import { musicsData } from '../storage/audiosInfos/musics/infos'
+import { beatsData } from '../storage/audiosInfos/beats/infos'
 import { urlsMusics } from '../storage/audiosInfos/musics/urlsMusics'
+
 import { urlsImgs } from '../storage/audiosInfos/musics/urlsImgs'
 import { Loading } from '../components/Loading'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-const beat = require('../../assets/audios/bugles/beat.mp3')
 
 export type activePlayListProps = {
   name: string
@@ -35,7 +37,7 @@ export type AudioPlayerDataProps = {
 export type AudiosDataPros = {
   audioFiles: Array<AudioDTO>
   musicFiles: Array<AudioDTO>
-  beatFile: AudioDTO
+  beatFiles: Array<AudioDTO>
   urisUpdated: boolean
 }
 
@@ -77,7 +79,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
   const [audiosData, setAudiosData] = useState<AudiosDataPros>({
     audioFiles: [] as Array<AudioDTO>,
     musicFiles: [] as Array<AudioDTO>,
-    beatFile: {} as AudioDTO,
+    beatFiles: [] as Array<AudioDTO>,
     urisUpdated: false,
   })
 
@@ -89,12 +91,18 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
 
       const buglesAssets = await Asset.loadAsync(buglesUrls)
       const musicsAssets = await Asset.loadAsync(urlsMusics)
-      const beatAsset = await Asset.loadAsync(beat)
+      const beatsAssets = await Asset.loadAsync(beatsUrls)
       const imgsAssets = await Asset.loadAsync(urlsImgs)
 
       if (buglesAssets && buglesAssets.length === buglesData.length) {
         buglesData.forEach((value, index) => {
           value.uriAudio = buglesAssets[index].uri
+        })
+      }
+
+      if (beatsAssets && beatsAssets.length === beatsData.length) {
+        beatsData.forEach((value, index) => {
+          value.uriAudio = beatsAssets[index].uri
         })
       }
 
@@ -113,7 +121,7 @@ export function AudioContextProvider({ children }: AudioContextProviderProps) {
       setAudiosData({
         audioFiles: buglesData,
         musicFiles: musicsData,
-        beatFile: { uriAudio: beatAsset[0].uri } as AudioDTO,
+        beatFiles: beatsData,
         urisUpdated: true,
       })
     } catch (error) {

@@ -7,80 +7,54 @@ import { Header } from '../../components/Header'
 import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 import { useCallback, useState } from 'react'
 import { useAudioPlayer } from '../../hooks/useAudioPlayer'
-import { play, replay } from '../../services/AudioController'
-import { AppError } from '../../utils/AppError'
+import { selectAudio } from '../../services/AudioController'
 import { IconButton } from '../../components/IconButton'
 import { MaterialIcons } from '@expo/vector-icons'
-
-let clickTimer: any = null
 
 export function Metronome() {
   const navigation = useNavigation<AppNavigatorRoutesProps>()
 
   const [isPlaying, setIsPlaying] = useState(false)
-  const [bpm, setBpm] = useState(60)
+  const [bpm, setBpm] = useState(80)
+  const [bpmToShow, setBpmToShow] = useState(80)
   const { colors } = useTheme()
   const audioPlayerContext = useAudioPlayer()
-  const { audioPlayer, audiosData } = audioPlayerContext
+  const { audiosData } = audioPlayerContext
   const toast = useToast()
-  let isFirstTime = true
 
-  const { playbackObj } = audioPlayer
-  const { beatFile } = audiosData
+  const { beatFiles } = audiosData
 
-  async function playBeat() {
-    if (isFirstTime) {
-      isFirstTime = false
-      play(playbackObj, beatFile.uriAudio, 0)
-    } else {
-      replay(playbackObj)
+  async function handlePlayPause(bpmToFind: string) {
+    const audioDTO = beatFiles.find((audio) => audio.name === bpmToFind)
+
+    if (audioDTO) await selectAudio(audioDTO, audioPlayerContext)
+    else {
+      toast.show({
+        title: 'Não foi possível reproduzir o metrônomo',
+        placement: 'top',
+        bgColor: 'red.500',
+      })
+      console.log('Erro ao carregar beat')
     }
+  }
+
+  function playPauseBeat() {
+    setIsPlaying(!isPlaying)
+
+    handlePlayPause(bpm.toString())
   }
   function handleInputChange(value: number) {
-    if (isPlaying) {
-      // stop old timer and start a new one
-      if (clickTimer) clearInterval(clickTimer)
-      clickTimer = setInterval(playBeat, (60 / value) * 1000)
-    }
     setBpm(value)
-  }
 
-  function handlePlayPause() {
-    try {
-      if (!isPlaying) {
-        clickTimer = setInterval(playBeat, (60 / bpm) * 1000)
-      } else {
-        clearInterval(clickTimer)
-      }
-      setIsPlaying(!isPlaying)
-    } catch (error) {
-      if (error instanceof AppError) {
-        toast.show({
-          title: error.message,
-          placement: 'top',
-          bgColor: 'red.500',
-        })
-      } else {
-        toast.show({
-          title: 'Não foi possível reproduzir o metrônomo',
-          placement: 'top',
-          bgColor: 'red.500',
-        })
-        console.log(error)
-      }
-    }
+    if (isPlaying) handlePlayPause(value.toString())
   }
 
   useFocusEffect(
     useCallback(() => {
-      isFirstTime = true
-      clickTimer = null
+      setIsPlaying(false)
       return () => {
         const { cleanAudioPlayer, audioPlayer } = audioPlayerContext
         cleanAudioPlayer(audioPlayer)
-        if (clickTimer) {
-          clearInterval(clickTimer)
-        }
       }
     }, []),
   )
@@ -95,33 +69,41 @@ export function Metronome() {
         </Heading>
       </Center>
       <Box m={3} justifyContent="center" flex={1}>
-        <Center mb={2}>
-          <Text color="white" fontSize={'lg'}>
-            {bpm} BPM
+        <Center mb={12}>
+          <Text color="white" fontSize="5xl">
+            {bpmToShow} BPM
           </Text>
         </Center>
 
         <Slider
-          value={bpm}
-          minimumValue={50}
-          maximumValue={200}
-          step={1}
+          value={bpmToShow}
+          minimumValue={80}
+          maximumValue={140}
+          step={10}
           onValueChange={(value) => {
+            setBpmToShow(value)
+          }}
+          onSlidingComplete={(value) => {
             handleInputChange(value)
           }}
           thumbTintColor={colors.orange[700]}
           maximumTrackTintColor={colors.orange[300]}
           minimumTrackTintColor={colors.orange[700]}
         />
-        <IconButton
-          as={MaterialIcons}
-          name={isPlaying ? 'pause' : 'play-arrow'}
-          size={20}
-          alignItems="center"
-          mx={1}
-          onPressIn={handlePlayPause}
-          color="white"
-        />
+        <Box mt={8}>
+          <Center>
+            <IconButton
+              as={MaterialIcons}
+              name={isPlaying ? 'pause' : 'play-arrow'}
+              size={24}
+              mx={1}
+              onPressIn={() => {
+                playPauseBeat()
+              }}
+              color="white"
+            />
+          </Center>
+        </Box>
       </Box>
     </Box>
   )

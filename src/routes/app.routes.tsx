@@ -111,7 +111,7 @@ export function AppRoutes() {
           ),
         }}
       />
-      {/* <Screen
+      <Screen
         name="Metronome"
         component={Metronome}
         options={{
@@ -127,7 +127,7 @@ export function AppRoutes() {
             />
           ),
         }}
-      /> */}
+      />
       <Screen
         name="Musics"
         component={Musics}
