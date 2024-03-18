@@ -129,9 +129,9 @@ export function PlayListEdit() {
     }
   }
 
-  async function removeAudio(item: AudioDTO, playListToRemove: string) {
+  async function removeAudio(playListToRemove: string, index: number) {
     try {
-      await audioRemoveByPlaylist(item.id, playListToRemove)
+      await audioRemoveByPlaylist(index, playListToRemove)
       const audiosFinded = await getAudiosByPlaylist(
         audioPlayerContext,
         playListToRemove,
@@ -151,8 +151,8 @@ export function PlayListEdit() {
           placement: 'top',
           bgColor: 'red.500',
         })
-        console.log(error)
       }
+      console.log(error)
     }
   }
 
@@ -197,12 +197,12 @@ export function PlayListEdit() {
                 data={audiosPlaylist}
                 keyExtractor={(item, index) => index.toString()}
                 ref={flatListRef}
-                renderItem={({ item }) => (
+                renderItem={({ item, index }) => (
                   <AudioPlaylistCard
                     name={item.name}
                     type="REMOVE"
                     action={() => {
-                      removeAudio(item, currentPlayList)
+                      removeAudio(currentPlayList, index)
                     }}
                   />
                 )}
