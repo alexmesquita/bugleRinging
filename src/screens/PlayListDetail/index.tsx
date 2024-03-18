@@ -84,7 +84,6 @@ export function PlayListDetail() {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item, index }) => (
             <>
-              <Text>{index}</Text>
               <AudioCard
                 audioId={item.id}
                 name={item.name}

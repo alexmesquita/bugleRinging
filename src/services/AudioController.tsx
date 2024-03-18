@@ -183,7 +183,6 @@ export async function selectAudio(
       !audioPlayer.soundObj.isPlaying &&
       audioPlayer.currentAudio.id === audio.id
     ) {
-
       const status = await resume(audioPlayer.playbackObj)
 
       setAudioPlayer({

@@ -49,16 +49,22 @@ export function AudioCard({
       mt={2}
     >
       <HStack alignItems="center">
+        {indexOnPlaylist !== -1 ? (
+          <Text color="white" ml={2} mr={-1}>
+            {indexOnPlaylist + 1}
+          </Text>
+        ) : (
+          <></>
+        )}
         <IconButton
           as={MaterialIcons}
           name={isPlaying && isCurrentAudio ? 'pause' : 'play-arrow'}
           size={8}
           alignItems="center"
-          mx={1}
           onPressIn={onPlayPause}
           color={isCurrentAudio ? 'gray.700' : 'white'}
         />
-        <VStack flex={1} pl={1} pt={2}>
+        <VStack flex={1} pt={2}>
           <Text
             color={isCurrentAudio ? 'gray.700' : 'gray.200'}
             justifyContent="center"

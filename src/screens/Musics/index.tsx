@@ -15,6 +15,7 @@ import { AppNavigatorRoutesProps } from '../../routes/app.routes'
 import { AudioDTO } from '../../dtos/AudioDTO'
 import { AudioPlayerDataProps } from '../../contexts/AudioContext'
 import { AudioType } from '../../@types/audioTypes'
+import { selectAudio } from '../../services/AudioController'
 
 export function Musics() {
   const toast = useToast()
@@ -54,8 +55,12 @@ export function Musics() {
     }
   }
 
-  async function goToMusicPlayer(music: AudioDTO) {
-    navigation.navigate('MusicPlayer', { musicId: music.id })
+  // async function goToMusicPlayer(music: AudioDTO) {
+  //   navigation.navigate('MusicPlayer', { musicId: music.id })
+  // }
+
+  async function handlePlayPause(music: AudioDTO) {
+    await selectAudio(music, audioPlayerContext)
   }
 
   function orderList() {
@@ -139,7 +144,7 @@ export function Musics() {
               duration={item.duration}
               audioType={AudioType.MUSIC}
               onPlayPause={() => {
-                goToMusicPlayer(item)
+                handlePlayPause(item)
               }}
             />
           )}
