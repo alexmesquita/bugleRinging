@@ -21,7 +21,7 @@ export function AudioPlaylistCard({ name, type, action }: Props) {
           alignItems="center"
           mx={1}
         />
-        <Text color="gray.200" justifyContent="center" flex={1} fontSize="lg">
+        <Text color="gray.100" justifyContent="center" flex={1} fontSize="lg">
           {name}
         </Text>
         <IconButton

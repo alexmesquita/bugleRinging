@@ -66,7 +66,7 @@ export function AudioCard({
         />
         <VStack flex={1} pt={2}>
           <Text
-            color={isCurrentAudio ? 'gray.700' : 'gray.200'}
+            color={isCurrentAudio ? 'gray.700' : 'gray.100'}
             justifyContent="center"
             flex={1}
             fontSize="lg"

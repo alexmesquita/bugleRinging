@@ -17,6 +17,7 @@ import {
 } from '@expo/vector-icons'
 import { Icon, useTheme } from 'native-base'
 import { Musics } from '../screens/Musics'
+import { Informations } from '../screens/Informations'
 
 type AppRoutesTypes = {
   Bugles: undefined
@@ -27,6 +28,7 @@ type AppRoutesTypes = {
   MusicPlayer: { musicId: string }
   WhatsRinging: undefined
   Metronome: undefined
+  Informations: undefined
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutesTypes>
@@ -137,6 +139,23 @@ export function AppRoutes() {
             <Icon
               as={MaterialIcons}
               name="library-music"
+              size={iconSize}
+              color={color}
+              alignItems="center"
+              mx={1}
+            />
+          ),
+        }}
+      />
+      <Screen
+        name="Informations"
+        component={Informations}
+        options={{
+          tabBarLabel: 'Anexos',
+          tabBarIcon: ({ color }) => (
+            <Icon
+              as={MaterialIcons}
+              name="attach-file"
               size={iconSize}
               color={color}
               alignItems="center"

@@ -23,7 +23,7 @@ export function PlaylistCard({ name, onDetail, onEdit, onRemove }: Props) {
               mx={1}
             />
             <Text
-              color="gray.200"
+              color="gray.100"
               justifyContent="center"
               flex={1}
               fontSize="lg"
